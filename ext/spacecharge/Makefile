@@ -23,11 +23,11 @@ CXXFLAGS += -fPIC
 SHARED_LIB = -shared
 
 #tracker shared library
-lstripping_lib = laserstripping.so
+spacecharge_lib = spacecharge.so
 
 #========rules=========================
 compile: $(OBJS_WRAP) $(OBJS) $(INC)
-	$(CXX) -fPIC $(SHARED_LIB) -o ../../modules/$(lstripping_lib) $(OBJS) 
+	$(CXX) -fPIC $(SHARED_LIB) -o ../../modules/$(spacecharge_lib) $(OBJS) 
 
 ./obj/wrap_%.o : wrap_%.cc $(INC)
 	$(CXX) $(CXXFLAGS) $(WRAPPER_FLAGS) $(INCLUDES_LOCAL) $(INCLUDES) -c $< -o $@;
@@ -37,4 +37,4 @@ compile: $(OBJS_WRAP) $(OBJS) $(INC)
 
 clean:
 	rm -rf ./obj/*.o
-	rm -rf ../../modules/$(lstripping_lib)
+	rm -rf ../../modules/$(spacecharge_lib)
