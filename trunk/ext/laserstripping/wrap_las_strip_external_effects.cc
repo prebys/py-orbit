@@ -10,7 +10,7 @@
 #include "LasStripExternalEffects.hh"
 
 using namespace OrbitUtils;
-using namespace Tracker3DField;
+using namespace LaserStripping;
 
 namespace wrap_tracker3dfield_lasstrip_external_effects{
 

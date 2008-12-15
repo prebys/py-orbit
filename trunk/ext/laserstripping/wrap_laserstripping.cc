@@ -3,7 +3,7 @@
 #include "wrap_las_strip_external_effects.hh"
 #include "wrap_cpp_base_field_source.hh"
 
-static PyMethodDef trackerrk4Methods[] = { {NULL,NULL} };
+static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,9 +11,9 @@ extern "C" {
 
   void initlaserstripping(){
     //create new module
-    PyObject* module = Py_InitModule("laserstripping",trackerrk4Methods);
-		wrap_trackerrk4_las_strip_external_effects::initLasStripExternalEffects(module);
-		wrap_trackerrk4_cpp_base_field_source::initCppBaseFieldSource(module);
+    PyObject* module = Py_InitModule("laserstripping",laserStrippingMethods);
+		wrap_laserstripping_las_strip_external_effects::initLasStripExternalEffects(module);
+		wrap_laserstripping_cpp_base_field_source::initCppBaseFieldSource(module);
 
   }
 	

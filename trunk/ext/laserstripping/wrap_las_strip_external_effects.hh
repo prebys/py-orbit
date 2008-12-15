@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-  namespace wrap_tracker3dfield_las_strip_external_effects{
+  namespace wrap_laserstripping_las_strip_external_effects{
     void initLasStripExternalEffects(PyObject* module);
   }
 

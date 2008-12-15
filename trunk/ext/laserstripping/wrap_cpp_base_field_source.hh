@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-  namespace wrap_tracker3dfield_cpp_base_field_source{
+  namespace wrap_laserstripping_cpp_base_field_source{
     void initCppBaseFieldSource(PyObject* module);
   }
 

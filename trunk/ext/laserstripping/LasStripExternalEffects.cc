@@ -55,8 +55,9 @@
 
 typedef std::complex<double>	tcomplex;
 
-using namespace Tracker3DField;
+using namespace LaserStripping;
 using namespace OrbitUtils;
+
 
 LasStripExternalEffects::LasStripExternalEffects(double a,double b,double c,char* addressEG,int states)
 {
