@@ -10,7 +10,9 @@
 
 typedef std::complex<double>	tcomplex;
 
-namespace Tracker3DField{
+using namespace TrackerRK4;
+
+namespace LaserStripping{
 	
 	class  LasStripExternalEffects: public ExternalEffects
 	{

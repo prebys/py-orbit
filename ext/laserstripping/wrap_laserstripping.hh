@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-	void inittrackerrk4(void);
+	void initlaserstripping(void);
 	
 #ifdef __cplusplus
 }
