@@ -32,12 +32,12 @@ CppBaseFieldSource::~CppBaseFieldSource()
 
 void CppBaseFieldSource::getElectricField(double x, double y, double z, double t, double& f_x, double& f_y, double& f_z)
 {	  
-	 f_x = 0.0; f_y = 0.0; f_z = 0.0; 
+	 f_x = 3e7; f_y = 0.0; f_z = 0.0; 
 }
 
 void CppBaseFieldSource::getMagneticField(double x, double y, double z, double t, double& f_x, double& f_y, double& f_z)
 {
-	 f_x = 2.0; f_y = 0.0; f_z = 0.0; 
+	 f_x = 0.0; f_y = 0.0; f_z = 0.0; 
 	 
 
 }

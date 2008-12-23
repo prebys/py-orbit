@@ -8,6 +8,7 @@
 #include <string>
 
 #include "LasStripExternalEffects.hh"
+#include "BaseLaserFieldSource.hh"
 
 using namespace OrbitUtils;
 using namespace LaserStripping;
@@ -38,95 +39,25 @@ extern "C" {
   //this is implementation of the __init__ method
   static int LasStripExternalEffects_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
 	  
-	  double half_Angle;
-	  double Power;
-	  double Lambda;
-	  int states;
+
+	  int states=0;
 	  char* addressEG;
+	  PyObject*	pyBaseLaserField=NULL;
+
 	  
-		 if(!PyArg_ParseTuple(	args,"dddsi:",&half_Angle,&Power ,&Lambda,&addressEG,&states)){
-			 		          error("LaserExternalEfects(half_Angle,LaserPower,Lambda) - params. are needed");
+		 if(!PyArg_ParseTuple(	args,"Osi:",&pyBaseLaserField,&addressEG,&states)){
+			 		          error("LaserExternalEfects(LaserField,address,states) - params. are needed");
 			 			 		        }  
-			else self->cpp_obj =  new  LasStripExternalEffects(half_Angle,Power,Lambda,addressEG,states);
+		 else	{
+		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
+		 self->cpp_obj =  new  LasStripExternalEffects(lfs,addressEG,states);
+		 }
+	
+
     return 0;
   }
   
- /*
-	void	LasStripExternalEffects::setLaserHalfAngle(double a);
-	double	LasStripExternalEffects::getLaserHalfAngle();
-	void	LasStripExternalEffects::setLaserPower(double a);
-	double	LasStripExternalEffects::getLaserPower();
-	void	LasStripExternalEffects::setLaser_lambda(double a);
-	double	LasStripExternalEffects::getLaser_lambda();
-  */
-  
-static PyObject* LasStripExternalEffects_setLaserHalfAngle(PyObject *self, PyObject *args){
- 		LasStripExternalEffects* cpp_LasStripExternalEffects = (LasStripExternalEffects*)((pyORBIT_Object*) self)->cpp_obj;
- 		  double half_Angle;	       
- 		        if(!PyArg_ParseTuple(	args,"d:",&half_Angle)){
- 		          error("LaserExternalEfects - setLaserHalfAngle(half_Angle) - param. is needed");
- 		        }
- 		        else cpp_LasStripExternalEffects->setLaserHalfAngle(half_Angle);
- 		      
- 	   
- 		    Py_INCREF(Py_None);
- 		    return Py_None;	  
-  }		
-
-static PyObject* LasStripExternalEffects_setLaserPower(PyObject *self, PyObject *args){
-		LasStripExternalEffects* cpp_LasStripExternalEffects = (LasStripExternalEffects*)((pyORBIT_Object*) self)->cpp_obj;
-		  double LaserPower;	       
-		        if(!PyArg_ParseTuple(	args,"d:",&LaserPower)){
-		          error("LaserExternalEfects - setLaserPower(LaserPower) - param. is needed");
-		        }
-		        else cpp_LasStripExternalEffects->setLaserPower(LaserPower);
-		      
-	   
-		    Py_INCREF(Py_None);
-		    return Py_None;	  
-}
-
-static PyObject* LasStripExternalEffects_setLaser_lambda(PyObject *self, PyObject *args){
-		LasStripExternalEffects* cpp_LasStripExternalEffects = (LasStripExternalEffects*)((pyORBIT_Object*) self)->cpp_obj;
-		  double Laser_lambda;	       
-		        if(!PyArg_ParseTuple(	args,"d:",&Laser_lambda)){
-		          error("LaserExternalEfects - setLaser_lambda(Laser_lambda) - param. is needed");
-		        }
-		        else cpp_LasStripExternalEffects->setLaserPower(Laser_lambda);
-		      
-	   
-		    Py_INCREF(Py_None);
-		    return Py_None;	  
-}
-
-
-
-
-static PyObject* LasStripExternalEffects_getLaserHalfAngle(PyObject *self, PyObject *args){
-		LasStripExternalEffects* cpp_LasStripExternalEffects = (LasStripExternalEffects*)((pyORBIT_Object*) self)->cpp_obj;
-				       
-		  return Py_BuildValue("d",cpp_LasStripExternalEffects->getLaserHalfAngle()); 
-}		
-    
-
-static PyObject* LasStripExternalEffects_getLaserPower(PyObject *self, PyObject *args){
-		LasStripExternalEffects* cpp_LasStripExternalEffects = (LasStripExternalEffects*)((pyORBIT_Object*) self)->cpp_obj;
-				       
-		  return Py_BuildValue("d",cpp_LasStripExternalEffects->getLaserPower()); 
-}		    
-
-static PyObject* LasStripExternalEffects_getLaser_lambda(PyObject *self, PyObject *args){
-		LasStripExternalEffects* cpp_LasStripExternalEffects = (LasStripExternalEffects*)((pyORBIT_Object*) self)->cpp_obj;
-				       
-		  return Py_BuildValue("d",cpp_LasStripExternalEffects->getLaser_lambda()); 
-}		    
-
 		
-	  
- 		  
-
-
-  
   
 	// name([name]) - sets or returns the name of the External Effeects class 
   static PyObject* LasStripExternalEffects_name(PyObject *self, PyObject *args){
@@ -155,12 +86,7 @@ static PyObject* LasStripExternalEffects_getLaser_lambda(PyObject *self, PyObjec
 	// they will be vailable from python level
   static PyMethodDef LasStripExternalEffectsClassMethods[] = {
 		{ "name",         LasStripExternalEffects_name,         METH_VARARGS,"Sets or returns the name of effects."},
-		{ "setLaserHalfAngle",         LasStripExternalEffects_setLaserHalfAngle,         METH_VARARGS,"Sets or returns the name of effects."},
-		{ "setLaserPower",         LasStripExternalEffects_setLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},
-		{ "setLaser_lambda",         LasStripExternalEffects_setLaser_lambda,         METH_VARARGS,"Sets or returns the name of effects."},
-		{ "getLaserHalfAngle",         LasStripExternalEffects_getLaserHalfAngle,         METH_VARARGS,"Sets or returns the name of effects."},
-		{ "getLaserPower",         LasStripExternalEffects_getLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},
-		{ "getLaser_lambda",         LasStripExternalEffects_getLaser_lambda,         METH_VARARGS,"Sets or returns the name of effects."},
+
     {NULL}
   };
 
