@@ -41,16 +41,17 @@ extern "C" {
 	  
 
 	  int states=0;
+	  double par_res=0;
 	  char* addressEG;
 	  PyObject*	pyBaseLaserField=NULL;
 
 	  
-		 if(!PyArg_ParseTuple(	args,"Osi:",&pyBaseLaserField,&addressEG,&states)){
+		 if(!PyArg_ParseTuple(	args,"Osid:",&pyBaseLaserField,&addressEG,&states,&par_res)){
 			 		          error("LaserExternalEfects(LaserField,address,states) - params. are needed");
 			 			 		        }  
 		 else	{
 		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
-		 self->cpp_obj =  new  LasStripExternalEffects(lfs,addressEG,states);
+		 self->cpp_obj =  new  LasStripExternalEffects(lfs,addressEG,states,par_res);
 		 }
 	
 

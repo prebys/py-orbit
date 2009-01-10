@@ -15,30 +15,28 @@
 //
 //
 ///////////////////////////////////////////////////////////////////////////
-#include "CppBaseFieldSource.hh"
+#include "LSFieldSource.hh"
 
 #include "orbit_mpi.hh"
 #include <iostream>
 
 using namespace OrbitUtils;
 
-CppBaseFieldSource::CppBaseFieldSource()
+LSFieldSource::LSFieldSource()
 {
 }
 
-CppBaseFieldSource::~CppBaseFieldSource()
+LSFieldSource::~LSFieldSource()
 {
 }
 
-void CppBaseFieldSource::getElectricField(double x, double y, double z, double t, double& f_x, double& f_y, double& f_z)
+void LSFieldSource::getElectricMagneticField(double x, double y, double z, double t, 
+		double& E_x, double& E_y, double& E_z,
+		double& H_x, double& H_y, double& H_z)
+
 {	  
-	 f_x = 3e7; f_y = 0.0; f_z = 0.0; 
+	 E_x = 3e7; E_y = 0.0; E_z = 0.0; 
+	 H_x = 0.0; H_y = 0.0; H_z = 0.0; 
 }
 
-void CppBaseFieldSource::getMagneticField(double x, double y, double z, double t, double& f_x, double& f_y, double& f_z)
-{
-	 f_x = 0.0; f_y = 0.0; f_z = 0.0; 
-	 
-
-}
 
