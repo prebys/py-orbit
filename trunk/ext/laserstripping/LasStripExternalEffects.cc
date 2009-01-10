@@ -31,6 +31,7 @@
 #include <iomanip>
 #include <cmath>
 #include <fstream>
+#include "MathPolinomial.hh"
 
 
 #include "LasStripExternalEffects.hh"
@@ -62,16 +63,21 @@ using namespace LaserStripping;
 using namespace OrbitUtils;
 
 
-LasStripExternalEffects::LasStripExternalEffects(BaseLaserFieldSource*	BaseLaserField,char* addressEG,int states)
+LasStripExternalEffects::LasStripExternalEffects(BaseLaserFieldSource*	BaseLaserField,char* addressEG,int states,double par_res)
 {
 	setName("unnamed");
 	
-	
+//	for(int i=0;i<11;i++)
+//	for(int j=0;j<11;j++)
+//	cout<<MathPolinomial::Factorial(i)<<"\n";
+
 	LaserField=BaseLaserField;
+	Parameter_resonance=par_res;
+	levels=states*(1+states)*(1+2*states)/6;
 
 	HydrogenStarkParam::ReadData(addressEG,states);
 
-	levels=states*(1+states)*(1+2*states)/6;
+	
 	
 	
 //allocating memory for koefficients of 4-th order Runge-Kutta method and other koeeficients of the master equation
@@ -96,7 +102,6 @@ LasStripExternalEffects::~LasStripExternalEffects()
 	delete [] E_i;
 	delete [] Gamma_i;
 	for (int i=0;i<levels+1;i++)	delete	[]	gamma_ij[i];	delete	[]	gamma_ij;
-	for (int i=0;i<levels+1;i++)	delete	[]	mu_Elas[i];		delete	[]	mu_Elas;
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
 
 }
@@ -154,7 +159,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 	
 			
 			
-			ofstream file("data_ampl.txt",ios::app);
+			ofstream file("/home/tg4/workspace/PyOrbit/ext/laserstripping/working_dir/data_ampl.txt",ios::app);
 			file<<t<<"\t";
 			for(int n=1;n<levels+1;n++)	file<<Re(i,n,n)<<"\t";
 			double sum=0;	for(int n=1;n<levels+1;n++)	sum+=Re(i,n,n);
@@ -226,19 +231,17 @@ return E;
 
 void LasStripExternalEffects::GetFrameParticleFields(int i,double t,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
 	
-	double** xyz = bunch->coordArr(),Ez;
+	double** xyz = bunch->coordArr();
+	double Ez;
 	
-		fieldSource->getElectricField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat);
-		fieldSource->getMagneticField(x0(i),y0(i),z0(i),t,Bx_stat,By_stat,Bz_stat);			
+		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
 		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);
-				
-		
+					
 	for (int j=0; j<3;j++)	{
-															
-		LaserField->getLaserElectricField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,t,Ex_las[j],Ey_las[j],Ez_las[j]);
-		LaserField->getLaserMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,t,Bx_las[j],By_las[j],Bz_las[j]);
-	
-		
+							
+		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
+				t,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
+			
 	LorentzTransformationEM::complex_transform(bunch->getMass(),
 											px0(i),py0(i),pz0(i),
 																		 Ex_las[j],Ey_las[j],Ez_las[j],
@@ -334,7 +337,7 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 				for(int j=0; j<3;j++)
 					mu_Elas[n][m][j]=mu_x*conj(Ex_las[j])+mu_y*conj(Ey_las[j])+mu_z*conj(Ez_las[j]);	
 				
-				cond[n][m]=fabs(fabs(E_i[n]-E_i[m])-omega_part)<10*abs(mu_Elas[n][m][1]);	///THIS CRITERII SHOULD BE CHANGED
+				cond[n][m]=fabs(fabs(E_i[n]-E_i[m])-omega_part)<Parameter_resonance*abs(mu_Elas[n][m][1]);	///THIS CRITERII SHOULD BE CHANGED
 				HydrogenStarkParam::GetRelax(n,m,gamma_ij[n][m]);
 			
 			}

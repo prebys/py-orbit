@@ -18,7 +18,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor. */
-			LasStripExternalEffects(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, char *addressEG,int states);
+			LasStripExternalEffects(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, char *addressEG,int states, double par_res);
 			
 			/** Destructor. */
 			~LasStripExternalEffects();
@@ -60,15 +60,11 @@ namespace LaserStripping{
 
 			  
 			  int levels;
+			  double Parameter_resonance;
 			  
 		  
-			  //Parameters of orientation of laser in space
-			  double param1;
-			  double param2;
-			  double param3;
-			  double param4;
-			  
-			 
+
+			  			 
 			  //time and frequensy of laser in frame of particle
 			  double omega_part;
 			  double part_t_step;
@@ -92,7 +88,6 @@ namespace LaserStripping{
 			  double By_stat;
 			  double Bz_stat;
 			  			 
-
 			  
 			  			  	
 				/**Solver for Amplitudes**/
