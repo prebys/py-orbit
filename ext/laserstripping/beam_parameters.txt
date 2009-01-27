@@ -1,3 +1,0 @@
-dE/E=1e-4	
-E=1 GeV
-beam vertical size=0.4 mm (rms)

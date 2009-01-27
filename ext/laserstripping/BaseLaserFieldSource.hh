@@ -33,7 +33,7 @@ namespace OrbitUtils{
 				tcomplex& E_x, tcomplex& E_y, tcomplex& E_z,
 				tcomplex& H_x, tcomplex& H_y, tcomplex& H_z);
 
-		virtual double getFrequencyOmega(double x, double y, double z, double px, double py, double pz, double t);
+		virtual double getFrequencyOmega(double m,double x, double y, double z, double px, double py, double pz, double t);
 		
 		
 

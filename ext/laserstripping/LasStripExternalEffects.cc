@@ -272,9 +272,10 @@ void	LasStripExternalEffects::GetFrameParticleParameters(int i, double t,double 
 		
 	double ta=2.418884326505e-17;			//atomic unit of time
 	double Ea=5.14220642e11;				//Atomic unit of electric field
+	double m=bunch->getMass();
 
 //This line calculates relyativistic factor-Gamma
-double gamma=sqrt(bunch->getMass()*bunch->getMass()+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/bunch->getMass();
+double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
 
 
 
@@ -292,7 +293,7 @@ Ez_stat/=Ea;
 
 part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
 t_part=time(i);					//time  in frame of particle (in atomic units). 
-omega_part=ta*LaserField->getFrequencyOmega(x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
+omega_part=ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
 
 HydrogenStarkParam::SetE(Ez_stat);	
 	
@@ -379,7 +380,7 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 			k_RungeKutt[n][m][j]*=J/2.;
 			
 
-
+/*
 
 			if(n==m){
 			for(int k=m+1;k<levels+1;k++)	k_RungeKutt[n][m][j]+=gamma_ij[k][m]*(dm(i,k,k)+k_RungeKutt[k][k][j-1]*dt);
@@ -390,7 +391,7 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 			for(int k=1;k<m;k++)			k_RungeKutt[n][m][j]-=gamma_ij[m][k]*(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)/2.;
 			for(int k=1;k<n;k++)			k_RungeKutt[n][m][j]-=gamma_ij[n][k]*(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)/2.;
 			}
-		
+*/		
 			
 			k_RungeKutt[n][m][j]-=(Gamma_i[n]+Gamma_i[m])*(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)/2.;
 

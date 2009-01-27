@@ -19,43 +19,36 @@
 //               debugging only.
 //
 ///////////////////////////////////////////////////////////////////////////
-#ifndef GAUSSIANLASERFIELD_HH_
-#define GAUSSIANLASERFIELD_HH_
+#ifndef LASERFIELDCONTAINER_HH_
+#define LASERFIELDCONTAINER_HH_
+
+
 
 #include "Python.h"
 
 #include "BaseLaserFieldSource.hh"
 
-#include <complex>
-typedef std::complex<double>	tcomplex;
 
 namespace OrbitUtils{
 	
-	class  GaussianLaserField: public BaseLaserFieldSource{
+	class  LaserFieldContainer: public BaseLaserFieldSource{
 		public:
 		
-			GaussianLaserField();
-			~GaussianLaserField();
+			LaserFieldContainer();
+			~LaserFieldContainer();
 		
 			void getLaserElectricField(double x, double y, double z, double t, tcomplex& f_x, tcomplex& f_y, tcomplex& f_z);
 			void getLaserMagneticField(double x, double y, double z, double t, tcomplex& f_x, tcomplex& f_y, tcomplex& f_z);
+	
 			double getFrequencyOmega(double x, double y, double z, double px, double py, double pz, double t);
-			
-			
-			/** It defines parameters of the laser beam**/
-			void	setLaserHalfAngle(double a);
-			double	getLaserHalfAngle();
-			void	setLaserPower(double a);
-			double	getLaserPower();
-			void	setLaser_omega(double a);
-			double	getLaser_omega();
+		
 			
 		private:
 			
 			  //Laser parameters
-			  double Laser_omega;
-			  double LaserPower;
-			  double Laser_half_angle;
+		//	  double Laser_omega;
+		//	  double LaserPower;
+		//	  double Laser_half_angle;
 			
 
 	};
@@ -63,4 +56,7 @@ namespace OrbitUtils{
 
 
 
-#endif /*GAUSSIANLASERFIELD_HH_*/
+#endif /*LASERFIELDCONTAINER_HH_*/
+
+
+

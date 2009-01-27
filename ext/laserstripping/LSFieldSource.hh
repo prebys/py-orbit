@@ -19,8 +19,8 @@
 //               debugging only.
 //
 ///////////////////////////////////////////////////////////////////////////
-#ifndef CPPBASEFIELDSOURCE_HH_
-#define CPPBASEFIELDSOURCE_HH_
+#ifndef LSFIELDSOURCE_HH_
+#define LSFIELDSOURCE_HH_
 
 #include "Python.h"
 
@@ -28,15 +28,14 @@
 
 namespace OrbitUtils{
 	
-	class  CppBaseFieldSource: public BaseFieldSource
+	class  LSFieldSource: public BaseFieldSource
 	{
 		public:
 		
-			CppBaseFieldSource();
-			~CppBaseFieldSource();
+			LSFieldSource();
+			~LSFieldSource();
 		
-			void getElectricField(double x, double y, double z, double t, double& f_x, double& f_y, double& f_z);
-			void getMagneticField(double x, double y, double z, double t, double& f_x, double& f_y, double& f_z);
+			void getElectricMagneticField(double x, double y, double z, double t, double& E_x, double& E_y, double& E_z, double& H_x, double& H_y, double& H_z);
 
 	};
 };
@@ -44,7 +43,7 @@ namespace OrbitUtils{
 
 
 
-#endif /*CPPBASEFIELDSOURCE_HH_*/
+#endif /*LSFIELDSOURCE_HH_*/
 
 
 
