@@ -2,17 +2,17 @@
 #include "pyORBIT_Object.hh"
 
 #include "wrap_utils.hh"
-#include "wrap_cpp_base_field_source.hh"
+#include "wrap_ls_field_source.hh"
 
 #include <iostream>
 #include <string>
 
-#include "CppBaseFieldSource.hh"
+#include "LSFieldSource.hh"
 
 using namespace OrbitUtils;
 using namespace wrap_orbit_utils;
 
-namespace wrap_laserstripping_cpp_base_field_source{
+namespace wrap_laserstripping_ls_field_source{
 
   void error(const char* msg){ ORBIT_MPI_Finalize(msg); }
 
@@ -26,7 +26,7 @@ extern "C" {
 
 	//constructor for python class wrapping CppBaseFieldSource instance
 	//It never will be called directly
-	static PyObject* CppBaseFieldSource_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+	static PyObject* LSFieldSource_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 	{
 		pyORBIT_Object* self;
 		self = (pyORBIT_Object *) type->tp_alloc(type, 0);
@@ -36,40 +36,40 @@ extern "C" {
 
   //initializator for python  CppBaseFieldSource class
   //this is implementation of the __init__ method
-  static int CppBaseFieldSource_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
-		self->cpp_obj = new CppBaseFieldSource();
+  static int LSFieldSource_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
+		self->cpp_obj = new LSFieldSource();
     return 0;
   }
 
   //-----------------------------------------------------
   //destructor for python PyBaseFieldSource class (__del__ method).
   //-----------------------------------------------------
-  static void CppBaseFieldSource_del(pyORBIT_Object* self){
-		//std::cerr<<"The CppBaseFieldSource __del__ has been called!"<<std::endl;
-		delete ((CppBaseFieldSource*)self->cpp_obj);
+  static void LSFieldSource_del(pyORBIT_Object* self){
+		//std::cerr<<"The LSFieldSource __del__ has been called!"<<std::endl;
+		delete ((LSFieldSource*)self->cpp_obj);
 		self->ob_type->tp_free((PyObject*)self);
   }
 
 	// defenition of the methods of the python PyBaseFieldSource wrapper class
 	// they will be vailable from python level
-  static PyMethodDef CppBaseFieldSourceClassMethods[] = {
+  static PyMethodDef LSFieldSourceClassMethods[] = {
     {NULL}
   };
 
 	// defenition of the memebers of the python PyBaseFieldSource wrapper class
 	// they will be vailable from python level
-	static PyMemberDef CppBaseFieldSourceClassMembers [] = {
+	static PyMemberDef LSFieldSourceClassMembers [] = {
 		{NULL}
 	};
 
 	//new python PyBaseFieldSource wrapper type definition
-	static PyTypeObject pyORBIT_CppBaseFieldSource_Type = {
+	static PyTypeObject pyORBIT_LSFieldSource_Type = {
 		PyObject_HEAD_INIT(NULL)
 		0, /*ob_size*/
-		"CppBaseFieldSource", /*tp_name*/
+		"LSFieldSource", /*tp_name*/
 		sizeof(pyORBIT_Object), /*tp_basicsize*/
 		0, /*tp_itemsize*/
-		(destructor) CppBaseFieldSource_del , /*tp_dealloc*/
+		(destructor) LSFieldSource_del , /*tp_dealloc*/
 		0, /*tp_print*/
 		0, /*tp_getattr*/
 		0, /*tp_setattr*/
@@ -85,34 +85,34 @@ extern "C" {
 		0, /*tp_setattro*/
 		0, /*tp_as_buffer*/
 		Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
-		"The CppBaseFieldSource python wrapper", /* tp_doc */
+		"The LSFieldSource python wrapper", /* tp_doc */
 		0, /* tp_traverse */
 		0, /* tp_clear */
 		0, /* tp_richcompare */
 		0, /* tp_weaklistoffset */
 		0, /* tp_iter */
 		0, /* tp_iternext */
-		CppBaseFieldSourceClassMethods, /* tp_methods */
-		CppBaseFieldSourceClassMembers, /* tp_members */
+		LSFieldSourceClassMethods, /* tp_methods */
+		LSFieldSourceClassMembers, /* tp_members */
 		0, /* tp_getset */
 		0, /* tp_base */
 		0, /* tp_dict */
 		0, /* tp_descr_get */
 		0, /* tp_descr_set */
 		0, /* tp_dictoffset */
-		(initproc) CppBaseFieldSource_init, /* tp_init */
+		(initproc) LSFieldSource_init, /* tp_init */
 		0, /* tp_alloc */
-		CppBaseFieldSource_new, /* tp_new */
+		LSFieldSource_new, /* tp_new */
 	};	
 
 	//--------------------------------------------------
 	//Initialization function of the pyPyBaseFieldSource class
 	//It will be called from Bunch wrapper initialization
 	//--------------------------------------------------
-  void initCppBaseFieldSource(PyObject* module){
-		if (PyType_Ready(&pyORBIT_CppBaseFieldSource_Type) < 0) return;
-		Py_INCREF(&pyORBIT_CppBaseFieldSource_Type);
-		PyModule_AddObject(module, "CppBaseFieldSource", (PyObject *)&pyORBIT_CppBaseFieldSource_Type);
+  void initLSFieldSource(PyObject* module){
+		if (PyType_Ready(&pyORBIT_LSFieldSource_Type) < 0) return;
+		Py_INCREF(&pyORBIT_LSFieldSource_Type);
+		PyModule_AddObject(module, "LSFieldSource", (PyObject *)&pyORBIT_LSFieldSource_Type);
 	}
 
 #ifdef __cplusplus

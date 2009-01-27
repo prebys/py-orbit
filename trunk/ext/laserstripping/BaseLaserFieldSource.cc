@@ -35,7 +35,7 @@ void BaseLaserFieldSource::getLaserElectricMagneticField(double x, double y, dou
 }
 
 
-double BaseLaserFieldSource::getFrequencyOmega(double x, double y, double z,double px, double py, double pz, double t)
+double BaseLaserFieldSource::getFrequencyOmega(double m,double x, double y, double z,double px, double py, double pz, double t)
 {	
 		return 0.;
 }
