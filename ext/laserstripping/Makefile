@@ -37,4 +37,4 @@ compile: $(OBJS_WRAP) $(OBJS) $(INC)
 
 clean:
 	rm -rf ./obj/*.o
-	rm -rf ../../modules/$(lstripping_lib)
+	rm -rf ../../lib/$(lstripping_lib)
