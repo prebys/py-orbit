@@ -49,4 +49,5 @@ compile: $(OBJS_WRAP) $(OBJS) $(INC)
 clean:
 	rm -rf ./obj/*.o
 	rm -rf ./obj/*.os
+	rm -rf ../../lib/$(lstripping_lib)
 
