@@ -12,6 +12,8 @@ LOWER_DIRS = $(foreach dir,$(UPPER_DIRS),$(patsubst %/, ../../src/$(dir)/%,$(fil
 
 INCLUDES_LOCAL = $(patsubst %, -I../../src/%, $(UPPER_DIRS))
 INCLUDES_LOCAL += $(filter-out %obj,$(patsubst %, -I%, $(LOWER_DIRS)))
+INCLUDES_LOCAL += $(patsubst %, -I./%, $(filter %/,$(shell ls -F ./)))
+INCLUDES_LOCAL += -I./
 
 INC  = $(wildcard *.hh)
 INC += $(wildcard *.h)
