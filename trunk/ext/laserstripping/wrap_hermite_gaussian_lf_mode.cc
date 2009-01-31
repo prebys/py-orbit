@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <string>
+#include <cmath>
+
 
 #include "HermiteGaussianLFmode.hh"
 
@@ -78,15 +80,16 @@ extern "C" {
    		double nEy;
    		double nEz;
    		double flag=true;
-   		
+
    		        if(!PyArg_ParseTuple(	args,"dddddddddddd:",&x0, &y0, &z0, &kx, &ky, &kz, &mx, &my, &mz, &nEx, &nEy, &nEz))
    		          {error("LaserExternalEfects - setLaserHalfAngle(comments is not written yet) - param. is needed");flag=false;}
-   		        if(kx*mx+ky*my+kz*mz!=0)
+  		        
+   		        if(fabs(kx*mx+ky*my+kz*mz)/sqrt(kx*kx+ky*ky+kz*kz)/sqrt(mx*mx+my*my+mz*mz)>1.e-15)
    		          {error("Please be shure that kx*mx+ky*my+kz*mz==0");flag=false;}
-   		        if(kx*nEx+ky*nEy+kz*nEz!=0)
+   		        if(fabs(kx*nEx+ky*nEy+kz*nEz)/sqrt(kx*kx+ky*ky+kz*kz)/sqrt(nEx*nEx+nEy*nEy+nEz*nEz)>1.e-15)
    		          {error("Please be shure that kx*Ex+ky*Ey+kz*Ez==0");flag=false;}
-   		          
-   		        
+	
+		        
    		        if(flag)	
    		        	LaserField->setLaserFieldOrientation(x0,y0, z0, kx, ky, kz, mx, my, mz, nEx, nEy, nEz);
    		      

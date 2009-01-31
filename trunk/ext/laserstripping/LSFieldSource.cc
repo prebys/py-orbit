@@ -35,8 +35,8 @@ void LSFieldSource::getElectricMagneticField(double x, double y, double z, doubl
 		double& H_x, double& H_y, double& H_z)
 
 {	  
-	 E_x = 3e7; E_y = 0.0; E_z = 0.0; 
-	 H_x = 0.0; H_y = 0.0; H_z = 0.0; 
+	 E_x = 0.0; E_y = 0.0; E_z = 0.0; 
+	 H_x = 300.0/10000; H_y = 0.0; H_z = 0.0; 
 }
 
 
