@@ -27,16 +27,19 @@
 
 using namespace OrbitUtils;
 
-HermiteGaussianLFmode::HermiteGaussianLFmode(double Cnm,int n,int m,double wx,double wy,double f_x,double f_y,double la)
+HermiteGaussianLFmode::HermiteGaussianLFmode(double Cnm,int n,int m,double w_x,double w_y,double f_x,double f_y,double la)
 {
-	
-	Unm=Cnm*sqrt(2*OrbitConst::c)*sqrt(pow(wx,2*n+1)*pow(wy,2*m+1)*MathPolinomial::Factorial(n)*MathPolinomial::Factorial(m)*pow(2,n+m+1)/(MathPolinomial::Factorial(2*n)*MathPolinomial::Factorial(2*m)*OrbitConst::PI));
+	Unm=Cnm*sqrt(2*OrbitConst::c*OrbitConst::permeability)*sqrt(pow(w_x,2*n+1)*pow(w_y,2*m+1)*MathPolinomial::Factorial(n)*MathPolinomial::Factorial(m)*pow(2,n+m+1)/(MathPolinomial::Factorial(2*n)*MathPolinomial::Factorial(2*m)*OrbitConst::PI));
+
 	Laser_lambda=la;
 	fx=f_x;
 	fy=f_y;
+	wx=w_x;
+	wy=w_y;
 	n_moda=n;
 	m_moda=m;
 	
+
 	//default orientation of laser field
 	nEx=1;nEy=0;nEz=0;
 	nHx=0;nHy=1;nHz=0;
@@ -142,8 +145,7 @@ double HermiteGaussianLFmode::HermiteGaussianOmega(double m,double x, double y, 
 	double k=2*OrbitConst::PI/Laser_lambda;
 
 double ax=k*k*pow(wx,4)+4*pow(fx-z,2);
-double ay=k*k*pow(wx,4)+4*pow(fy-z,2);
-
+double ay=k*k*pow(wy,4)+4*pow(fy-z,2);
 
 
 	return 	k*(OrbitConst::c-vz-4*k*k*vz*(pow(wx*wx*x/ax,2)+pow(wy*wy*y/ay,2)) + (vz*(wx*wx+ 2*x*x) + 4*vx*x*(fx - z))/ax + (vz*(wy*wy + 2*y*y) + 4*vy*y*(fy - z))/ay);
@@ -169,12 +171,13 @@ void HermiteGaussianLFmode::getLaserElectricMagneticField(double x, double y, do
 	
 	LaserFieldOrientation::OrientCoordinates(x,y,z,x0,y0,z0,kx,ky,kz,mx,my,mz);
 
-//tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
-tcomplex	E=E_FroissartStora(x,y,z,t);
+tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
+
+//tcomplex	E=E_FroissartStora(x,y,z,t);
 
 tcomplex	H=E/OrbitConst::c;
-	
-///E=FroissartStoraTestElectric(x,y,z,t);
+
+
 
 	E_x=E*nEx;	E_y=E*nEy;	E_z=E*nEz;
 	H_x=H*nHx;	H_y=H*nHy;	H_z=H*nHz;
@@ -191,11 +194,12 @@ double HermiteGaussianLFmode::getFrequencyOmega(double m, double x, double y, do
 
 	
 	LaserFieldOrientation::OrientCoordinates(x,y,z,x0,y0,z0,kx,ky,kz,mx,my,mz);
-	LaserFieldOrientation::OrientCoordinates(px,py,pz,0,0,0,kx,ky,kz,mx,my,mz);
+	LaserFieldOrientation::OrientCoordinates(px,py,pz,0.,0.,0.,kx,ky,kz,mx,my,mz);
 	
-//	return HermiteGaussianOmega(m,x,y,z,px,py,pz,t);
-	return FroissartStoraTestOmega(x,y,z,px,py,pz,t);
-	
+
+	return HermiteGaussianOmega(m,x,y,z,px,py,pz,t);
+//	return FroissartStoraTestOmega(x,y,z,px,py,pz,t);
+
 }
 
 

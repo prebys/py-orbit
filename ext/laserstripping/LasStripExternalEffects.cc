@@ -110,7 +110,7 @@ LasStripExternalEffects::~LasStripExternalEffects()
 
 
 void LasStripExternalEffects::setupEffects(Bunch* bunch){
-	
+
 	for (int i=0; i<bunch->getSizeGlobal();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
 		y0(i)=bunch->coordArr()[i][2];
@@ -292,8 +292,9 @@ Ez_stat/=Ea;
 
 
 part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
-t_part=time(i);					//time  in frame of particle (in atomic units). 
-omega_part=ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
+t_part=time(i);					//time  in frame of particle (in atomic units) 
+omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
+
 
 HydrogenStarkParam::SetE(Ez_stat);	
 	
@@ -340,11 +341,11 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 				
 				cond[n][m]=fabs(fabs(E_i[n]-E_i[m])-omega_part)<Parameter_resonance*abs(mu_Elas[n][m][1]);	///THIS CRITERII SHOULD BE CHANGED
 				HydrogenStarkParam::GetRelax(n,m,gamma_ij[n][m]);
-			
+//				cout<<"delta_res= "<<Ez_las[1]<<"\n";
 			}
 			
-				
 
+//			cout<<"delta_res= "<<0*omega_part-(E_i[7]-E_i[1])<<"\n";
 
 
 
@@ -374,13 +375,13 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 
 			k_RungeKutt[n][m][j]*=0.;
 			for(int k=1;k<n;k++)			if (cond[n][k]) 	k_RungeKutt[n][m][j]+=exp_mu_El[n][k][j]*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt);	
-			for(int k=n+1;k<levels+1;k++)	if (cond[k][n]) 	k_RungeKutt[n][m][j]+=conj(exp_mu_El[k][n][j])*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt);
-			for(int k=1;k<m;k++)			if (cond[m][k]) 	k_RungeKutt[n][m][j]-=conj(exp_mu_El[m][k][j])*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt);
-			for(int k=m+1;k<levels+1;k++)	if (cond[k][m]) 	k_RungeKutt[n][m][j]-=exp_mu_El[k][m][j]*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt);
+			for(int k=n+1;k<levels+1;k++)	if (cond[k][n]) 	k_RungeKutt[n][m][j]+=conj(exp_mu_El[k][n][j])*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt); 
+			for(int k=1;k<m;k++)			if (cond[m][k]) 	k_RungeKutt[n][m][j]-=conj(exp_mu_El[m][k][j])*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
+			for(int k=m+1;k<levels+1;k++)	if (cond[k][m]) 	k_RungeKutt[n][m][j]-=exp_mu_El[k][m][j]*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
 			k_RungeKutt[n][m][j]*=J/2.;
 			
 
-/*
+
 
 			if(n==m){
 			for(int k=m+1;k<levels+1;k++)	k_RungeKutt[n][m][j]+=gamma_ij[k][m]*(dm(i,k,k)+k_RungeKutt[k][k][j-1]*dt);
@@ -391,7 +392,7 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 			for(int k=1;k<m;k++)			k_RungeKutt[n][m][j]-=gamma_ij[m][k]*(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)/2.;
 			for(int k=1;k<n;k++)			k_RungeKutt[n][m][j]-=gamma_ij[n][k]*(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)/2.;
 			}
-*/		
+	
 			
 			k_RungeKutt[n][m][j]-=(Gamma_i[n]+Gamma_i[m])*(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)/2.;
 
