@@ -17,20 +17,33 @@ typedef std::complex<double>	tcomplex;
 
 			
 		public:
-			/*this method gives koefficient of autoionization as a function of field  */
-		static	void GetEnergyAutoionization(int k,double& E, double& Gamma);
-			
-			/*this method gives frequendy transitions as a function of field */
-		static	void GetDipoleTransition(int k,int ks,tcomplex& mu_x,tcomplex& mu_y,tcomplex& mu_z);	
-			
-			/*this method gives frequendy transitions as a function of field */
-		static	void GetRelax(int k,int ks,double& relax);
+		/*constructor*/	
+		HydrogenStarkParam(char* addressEG,int states);
 		
+		/*destructor*/	
+		~HydrogenStarkParam();
+			
+			/*this method gives koefficient of autoionization as a function of field  */
+		void GetEnergyAutoionization(int k,double& E, double& Gamma);
+			
 			/*this method gives frequendy transitions as a function of field */
-		static	void ReadData(char* addressEG,int states);
+		void GetDipoleTransition(int k,int ks,tcomplex& mu_x,tcomplex& mu_y,tcomplex& mu_z);	
+			
+			/*this method gives frequendy transitions as a function of field */
+		void GetRelax(int k,int ks,double& relax);
+		
+//			/*this method gives frequendy transitions as a function of field */
+		double getStarkEnergy(
+				double mass, int n1, int n2, int m, 
+				double Ex,double Ey,double Ez,
+				double Bx,double By,double Bz,
+				double px,double py,double pz);
 		
 			/*this method setups electrostatic field */
-		static	void SetE(double E);
+		void SetE(double E);
+		
+		/*Allows to obtain maximum general quantum number n*/
+		int getStates();
 		
 		
 		
@@ -39,16 +52,18 @@ typedef std::complex<double>	tcomplex;
 		private:  
 		  //parameters of dipole transition, energy, lifetime, spontaneous relaxation, 
 		  
-		 static double*** dipole_transition_x;
-		 static double*** dipole_transition_y;
-		 static double*** dipole_transition_z;
-		 static double*** gamma_spontaneous_relax;
-		 static double** energy;
-		 static double** gamma_autoionization;
+		 double*** dipole_transition_x;
+		 double*** dipole_transition_y;
+		 double*** dipole_transition_z;
+		 double*** gamma_spontaneous_relax;
+		 double** energy;
+		 double** gamma_autoionization;
 		  
-		 static double delta_F;
-		 static int n_data;
-		 static double Ez_stat;
+		 double delta_F;
+		 int n_data;
+		 double Ez_stat;
+		 int st;
+		 int levels;
 		
 		};
 

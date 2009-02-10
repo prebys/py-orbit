@@ -38,7 +38,7 @@
 #include "RungeKuttaTracker.hh"
 #include "OrbitConst.hh"
 #include "LorentzTransformationEM.hh"
-#include "HydrogenStarkParam.hh"
+//#include "HydrogenStarkParam.hh"
 
 
 
@@ -63,21 +63,18 @@ using namespace LaserStripping;
 using namespace OrbitUtils;
 
 
-LasStripExternalEffects::LasStripExternalEffects(BaseLaserFieldSource*	BaseLaserField,char* addressEG,int states,double par_res)
+LasStripExternalEffects::LasStripExternalEffects(BaseLaserFieldSource*	BaseLaserField, HydrogenStarkParam* Stark,double par_res)
 {
 	setName("unnamed");
 	
-//	for(int i=0;i<11;i++)
-//	for(int j=0;j<11;j++)
-//	cout<<MathPolinomial::Factorial(i)<<"\n";
 
+	StarkEffect=Stark;
 	LaserField=BaseLaserField;
 	Parameter_resonance=par_res;
-	levels=states*(1+states)*(1+2*states)/6;
+	levels=	StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
 
-	HydrogenStarkParam::ReadData(addressEG,states);
 
-	
+
 	
 	
 //allocating memory for koefficients of 4-th order Runge-Kutta method and other koeeficients of the master equation
@@ -109,7 +106,7 @@ LasStripExternalEffects::~LasStripExternalEffects()
 
 
 
-void LasStripExternalEffects::setupEffects(Bunch* bunch){
+void LasStripExternalEffects::setupEffects(Bunch* bunch){		
 
 	for (int i=0; i<bunch->getSizeGlobal();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
@@ -131,8 +128,11 @@ void LasStripExternalEffects::setupEffects(Bunch* bunch){
 	
 void LasStripExternalEffects::finalizeEffects(Bunch* bunch){
 	
-
 }
+
+
+
+
 
 
 
@@ -158,7 +158,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 			GetFrameParticleParameters(i,t,t_step,bunch);	
 	
 			
-			
+	
 			ofstream file("/home/tg4/workspace/PyOrbit/ext/laserstripping/working_dir/data_ampl.txt",ios::app);
 			file<<t<<"\t";
 			for(int n=1;n<levels+1;n++)	file<<Re(i,n,n)<<"\t";
@@ -166,7 +166,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 			file<<sum<<"\n";
 			file.close();			
 		
-				
+
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
 		
@@ -236,7 +236,7 @@ void LasStripExternalEffects::GetFrameParticleFields(int i,double t,  Bunch* bun
 	
 		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
 		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);
-					
+
 	for (int j=0; j<3;j++)	{
 							
 		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
@@ -271,7 +271,7 @@ void	LasStripExternalEffects::GetFrameParticleParameters(int i, double t,double 
 	
 		
 	double ta=2.418884326505e-17;			//atomic unit of time
-	double Ea=5.14220642e11;				//Atomic unit of electric field
+	double Ea=5.14220642e011;				//Atomic unit of electric field
 	double m=bunch->getMass();
 
 //This line calculates relyativistic factor-Gamma
@@ -296,7 +296,7 @@ t_part=time(i);					//time  in frame of particle (in atomic units)
 omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
 
 
-HydrogenStarkParam::SetE(Ez_stat);	
+StarkEffect->SetE(Ez_stat);	
 	
 }
 
@@ -327,25 +327,25 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 	
 	
 			for(int n=1; n<levels+1;n++)	
-				HydrogenStarkParam::GetEnergyAutoionization(n,E_i[n], Gamma_i[n]);
+				StarkEffect->GetEnergyAutoionization(n,E_i[n], Gamma_i[n]);
 			
 
 					
 			for(int n=2; n<levels+1;n++)
 			for(int m=1; m<n;m++)	{
 				
-				HydrogenStarkParam::GetDipoleTransition(n,m,mu_x,mu_y,mu_z);
+				StarkEffect->GetDipoleTransition(n,m,mu_x,mu_y,mu_z);
 				
 				for(int j=0; j<3;j++)
 					mu_Elas[n][m][j]=mu_x*conj(Ex_las[j])+mu_y*conj(Ey_las[j])+mu_z*conj(Ez_las[j]);	
 				
 				cond[n][m]=fabs(fabs(E_i[n]-E_i[m])-omega_part)<Parameter_resonance*abs(mu_Elas[n][m][1]);	///THIS CRITERII SHOULD BE CHANGED
-				HydrogenStarkParam::GetRelax(n,m,gamma_ij[n][m]);
+				StarkEffect->GetRelax(n,m,gamma_ij[n][m]);
 //				cout<<"delta_res= "<<Ez_las[1]<<"\n";
 			}
 			
 
-//			cout<<"delta_res= "<<0*omega_part-(E_i[7]-E_i[1])<<"\n";
+			//cout<<"delta_res= "<<omega_part-(E_i[7]-E_i[1])<<"\n";
 
 
 
@@ -436,6 +436,22 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

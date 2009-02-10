@@ -169,8 +169,7 @@ void HermiteGaussianLFmode::getLaserElectricMagneticField(double x, double y, do
 	
 
 	
-	LaserFieldOrientation::OrientCoordinates(x,y,z,x0,y0,z0,kx,ky,kz,mx,my,mz);
-
+LaserFieldOrientation::OrientCoordinates(x,y,z,x0,y0,z0,kx,ky,kz,mx,my,mz);
 tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
 
 //tcomplex	E=E_FroissartStora(x,y,z,t);

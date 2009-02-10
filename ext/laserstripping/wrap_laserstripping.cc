@@ -4,6 +4,7 @@
 #include "wrap_ls_field_source.hh"
 #include "wrap_hermite_gaussian_lf_mode.hh"
 #include "wrap_las_field_container.hh"
+#include "wrap_hydrogen_stark_param.hh"
 
 static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
@@ -18,7 +19,8 @@ extern "C" {
 		wrap_laserstripping_ls_field_source::initLSFieldSource(module);
 		wrap_hermite_gaussian_lf_mode::initHermiteGaussianLFmode(module);
 		wrap_las_field_container::initLaserFieldContainer(module);
-
+		wrap_hydrogen_stark_param::initHydrogenStarkParam(module);
+		
   }
 	
 #ifdef __cplusplus
