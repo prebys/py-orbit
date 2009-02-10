@@ -9,6 +9,7 @@
 
 #include "LasStripExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
+#include "HydrogenStarkParam.hh"
 
 using namespace OrbitUtils;
 using namespace LaserStripping;
@@ -40,18 +41,19 @@ extern "C" {
   static int LasStripExternalEffects_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
 	  
 
-	  int states=0;
-	  double par_res=0;
-	  char* addressEG;
-	  PyObject*	pyBaseLaserField=NULL;
 
-	  
-		 if(!PyArg_ParseTuple(	args,"Osid:",&pyBaseLaserField,&addressEG,&states,&par_res)){
-			 		          error("LaserExternalEfects(LaserField,address,states) - params. are needed");
+	  double par_res=0;
+
+	  PyObject*	pyBaseLaserField=NULL;
+	  PyObject*	pyStarkEffect=NULL;
+
+		 if(!PyArg_ParseTuple(	args,"OOd:",&pyBaseLaserField,&pyStarkEffect,&par_res)){
+			 		          error("LaserExternalEfects(LaserField,StarkEffect,states) - params. are needed");
 			 			 		        }  
 		 else	{
 		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
-		 self->cpp_obj =  new  LasStripExternalEffects(lfs,addressEG,states,par_res);
+		 HydrogenStarkParam* Stark = (HydrogenStarkParam*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
+		 self->cpp_obj =  new  LasStripExternalEffects(lfs,Stark, par_res);
 		 }
 	
 
@@ -73,6 +75,12 @@ extern "C" {
 		}
 		return Py_BuildValue("s",cpp_LasStripExternalEffects->getName().c_str());
   }	
+  
+  
+
+  
+  
+  
 	
   //-----------------------------------------------------
   //destructor for python PyExternalEffects class (__del__ method).
@@ -86,7 +94,7 @@ extern "C" {
 	// defenition of the methods of the python PyExternalEffects wrapper class
 	// they will be vailable from python level
   static PyMethodDef LasStripExternalEffectsClassMethods[] = {
-		{ "name",         LasStripExternalEffects_name,         METH_VARARGS,"Sets or returns the name of effects."},
+		{ "name",        			 LasStripExternalEffects_name,        		METH_VARARGS,"Sets or returns the name of effects."},
 
     {NULL}
   };
@@ -101,7 +109,7 @@ extern "C" {
 	static PyTypeObject pyORBIT_LasStripExternalEffects_Type = {
 		PyObject_HEAD_INIT(NULL)
 		0, /*ob_size*/
-		"CppExternalEffects", /*tp_name*/
+		"LasStripExternalEffects", /*tp_name*/
 		sizeof(pyORBIT_Object), /*tp_basicsize*/
 		0, /*tp_itemsize*/
 		(destructor) LasStripExternalEffects_del , /*tp_dealloc*/

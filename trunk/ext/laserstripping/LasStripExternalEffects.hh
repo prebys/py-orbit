@@ -7,6 +7,7 @@
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
+#include "HydrogenStarkParam.hh"
 
 
 using namespace TrackerRK4;
@@ -18,7 +19,8 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor. */
-			LasStripExternalEffects(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, char *addressEG,int states, double par_res);
+			LasStripExternalEffects(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, HydrogenStarkParam* Stark,double par_res);
+		
 			
 			/** Destructor. */
 			~LasStripExternalEffects();
@@ -36,7 +38,12 @@ namespace LaserStripping{
 														  OrbitUtils::BaseFieldSource* fieldSource,
 															RungeKuttaTracker* tracker);	
 		
-
+	  	/*This method provides value of Stark Energy*/
+	  	double getStarkEnergy(
+	  			double mass,int n1, int n2, int m, 
+	  			double Ex,double Ey,double Ez,
+	  			double Bx,double By,double Bz,
+	  			double px,double py,double pz);
 		
 	
 		
@@ -48,6 +55,7 @@ namespace LaserStripping{
 		  
 			  
 			  OrbitUtils::BaseLaserFieldSource*	LaserField;
+			  HydrogenStarkParam* StarkEffect;
 			  
 			  //this array is used on each step of solution of density matrix equation at definite field  
 			  tcomplex*** exp_mu_El;
@@ -88,8 +96,8 @@ namespace LaserStripping{
 			  double By_stat;
 			  double Bz_stat;
 			  			 
-			  
-			  			  	
+
+			  	
 				/**Solver for Amplitudes**/
 				void AmplSolver4step(int i,Bunch* bunch);
 							

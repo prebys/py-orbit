@@ -33,10 +33,29 @@ namespace OrbitUtils{
 		public:
 		
 			LSFieldSource();
+			LSFieldSource(double E_x,double E_y,double E_z,double B_x,double B_y,double B_z);
 			~LSFieldSource();
 		
 			void getElectricMagneticField(double x, double y, double z, double t, double& E_x, double& E_y, double& E_z, double& H_x, double& H_y, double& H_z);
 
+		private:
+			
+			void getConstField(double& E_x, double& E_y, double& E_z, double& H_x, double& H_y, double& H_z);
+			void getLSfield(double x, double y, double z, double t,double& E_x, double& E_y, double& E_z, double& H_x, double& H_y, double& H_z);
+
+			
+			bool flag_Const_field;
+			bool flag_LSfield;
+			
+		
+			double ExConst;
+			double EyConst;
+			double EzConst;
+			double BxConst;
+			double ByConst;
+			double BzConst;
+			
+			
 	};
 };
 
