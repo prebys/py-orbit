@@ -40,7 +40,7 @@ namespace OrbitUtils{
 			void getLaserElectricField(double x, double y, double z, double t, tcomplex& f_x, tcomplex& f_y, tcomplex& f_z);
 			void getLaserMagneticField(double x, double y, double z, double t, tcomplex& f_x, tcomplex& f_y, tcomplex& f_z);
 	
-			double getFrequencyOmega(double x, double y, double z, double px, double py, double pz, double t);
+			double getFrequencyOmega(double m,double x, double y, double z, double px, double py, double pz, double t);
 		
 			
 		private:

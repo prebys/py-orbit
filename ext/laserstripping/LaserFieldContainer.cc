@@ -49,7 +49,7 @@ void LaserFieldContainer::getLaserMagneticField(double x, double y, double z, do
 			
 }
 
-double LaserFieldContainer::getFrequencyOmega(double x, double y, double z, double px, double py, double pz, double t){
+double LaserFieldContainer::getFrequencyOmega(double m,double x, double y, double z, double px, double py, double pz, double t){
 	
 	return 0;
 }
