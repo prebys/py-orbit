@@ -158,7 +158,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 			GetFrameParticleParameters(i,t,t_step,bunch);	
 	
 			
-	
+
 			ofstream file("/home/tg4/workspace/PyOrbit/ext/laserstripping/working_dir/data_ampl.txt",ios::app);
 			file<<t<<"\t";
 			for(int n=1;n<levels+1;n++)	file<<Re(i,n,n)<<"\t";
