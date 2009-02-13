@@ -68,11 +68,11 @@ dipole_transition_z=new double**[levels+1];	for (int i=0;i<levels+1;i++)	dipole_
 	for(int n=1;n<states+1;n++)
 	for(int m=-(n-1);m<(n-1)+1;m++)
 	for(int n1=0;n1<n-abs(m)-1+1;n1++)	{
-		
+		std::ifstream file_in;
 		k=convert3to1level(n,n1,m);
 		
 sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));		
-file.open(nameEG);for (fi=0; fi<n_data; fi++)	{file>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file.close();
+file_in.open(nameEG);for (fi=0; fi<n_data; fi++)	{file_in>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file_in.close();
 
 	}
 	
@@ -87,13 +87,13 @@ file.open(nameEG);for (fi=0; fi<n_data; fi++)	{file>>F>>energy[k][fi]>>gamma_aut
 	for(int ns=1;ns<states+1;ns++)
 	for(int ms=-(ns-1);ms<(ns-1)+1;ms++)
 	for(int n1s=0;n1s<ns-abs(ms)-1+1;n1s++)		{
-			
+			std::ifstream file_in;
 			k=convert3to1level(n,n1,m);
 			ks=convert3to1level(ns,n1s,ms);
 			
 	sprintf(nameEG,"%s%i%i%i---%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,m,n1s,ns-n1s-abs(ms)-1,ms);
-	file.open(nameEG);
-	for (fi=0; fi<n_data; fi++)	{file>>F>>dipole_transition_x[k][ks][fi]>>dipole_transition_y[k][ks][fi]>>dipole_transition_z[k][ks][fi];
+	file_in.open(nameEG);
+	for (fi=0; fi<n_data; fi++)	{file_in>>F>>dipole_transition_x[k][ks][fi]>>dipole_transition_y[k][ks][fi]>>dipole_transition_z[k][ks][fi];
 	
 	// this condition assumes that probability of spontaneous (see next line) and indused tansition  between levels with the same principal quantum number n is sero
 	if(ns==n)	{dipole_transition_x[k][ks][fi]=0;dipole_transition_y[k][ks][fi]=0;dipole_transition_z[k][ks][fi]=0;}
@@ -102,7 +102,7 @@ file.open(nameEG);for (fi=0; fi<n_data; fi++)	{file>>F>>energy[k][fi]>>gamma_aut
 	gamma_spontaneous_relax[k][ks][fi]=fabs((4*alpha*alpha*alpha/3)*pow(energy[k][fi]-energy[ks][fi],3)*(pow(dipole_transition_x[k][ks][fi],2)+pow(dipole_transition_y[k][ks][fi],2)+pow(dipole_transition_z[k][ks][fi],2)));
 	
 	}
-	file.close();
+	file_in.close();
 	
 
 //		cout<<setprecision(20)<<n1<<n-n1-abs(m)-1<<m<<"---"<<n1s<<ns-n1s-abs(ms)-1<<ms<<"  dx="<<dipole_transition_x[k][ks][1]<<"  dy="<<dipole_transition_y[k][ks][1]<<"  dz="<<dipole_transition_z[k][ks][1]<<"\n";
