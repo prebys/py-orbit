@@ -157,7 +157,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 			//in atomic units in frame of particle		
 			GetFrameParticleParameters(i,t,t_step,bunch);	
 	
-			
+/*			
 
 			ofstream file("/home/tg4/workspace/PyOrbit/ext/laserstripping/working_dir/data_ampl.txt",ios::app);
 			file<<t<<"\t";
@@ -165,7 +165,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 			double sum=0;	for(int n=1;n<levels+1;n++)	sum+=Re(i,n,n);
 			file<<sum<<"\n";
 			file.close();			
-		
+*/		
 
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
