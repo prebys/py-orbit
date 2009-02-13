@@ -100,6 +100,7 @@ for power,wx,fxy in [(power,wx,fxy)
                     for wx in [60.0e-6 ,80.0e-6,100.0e-6,120.0e-6,140.0e-6,160.0e-6,180.0e-6,200.0e-6] 
                     for fxy in [-0.00,-0.02,-0.04,-0.06,-0.08,-0.1,-0.12,-0.14,-0.16,-0.18,-0.2]]:
 
+	
 	bunch_target.deleteAllParticles()
 	bunch.copyBunchTo(bunch_target)
 
@@ -130,6 +131,6 @@ for power,wx,fxy in [(power,wx,fxy)
 	#file.write('%f'%population+"\n")
 	#file.close() 
 	bunch_target.deleteAllParticles()
+	print  "W = %4.1f  wx [um] = %4.1f  dist[cm]= %4.1f  Population: %7.3f "%(power,1.0e+6*wx,fxy*100,population)
 
-print  "Population: %7.3f "%population
 
