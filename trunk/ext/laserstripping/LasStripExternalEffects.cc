@@ -108,7 +108,7 @@ LasStripExternalEffects::~LasStripExternalEffects()
 
 void LasStripExternalEffects::setupEffects(Bunch* bunch){		
 
-	for (int i=0; i<bunch->getSizeGlobal();i++)		{
+	for (int i=0; i<bunch->getSize();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
 		y0(i)=bunch->coordArr()[i][2];
 		z0(i)=bunch->coordArr()[i][4];
@@ -146,7 +146,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 
 
 	
-		for (int i=0; i<bunch->getSizeGlobal();i++)	{
+		for (int i=0; i<bunch->getSize();i++)	{
 
 			
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
