@@ -157,7 +157,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 			//in atomic units in frame of particle		
 			GetFrameParticleParameters(i,t,t_step,bunch);	
 	
-/*			
+			
 
 			ofstream file("/home/tg4/workspace/PyOrbit/ext/laserstripping/working_dir/data_ampl.txt",ios::app);
 			file<<t<<"\t";
@@ -165,7 +165,7 @@ void LasStripExternalEffects::applyEffects(Bunch* bunch, int index,
 			double sum=0;	for(int n=1;n<levels+1;n++)	sum+=Re(i,n,n);
 			file<<sum<<"\n";
 			file.close();			
-*/		
+		
 
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
@@ -374,10 +374,10 @@ void LasStripExternalEffects::AmplSolver4step(int i, Bunch* bunch)	{
 			if (j==4)	dt=part_t_step;	else dt=part_t_step/2.;
 
 			k_RungeKutt[n][m][j]*=0.;
-			for(int k=1;k<n;k++)			if (cond[n][k]) 	k_RungeKutt[n][m][j]+=exp_mu_El[n][k][j]*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt);	
-			for(int k=n+1;k<levels+1;k++)	if (cond[k][n]) 	k_RungeKutt[n][m][j]+=conj(exp_mu_El[k][n][j])*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt); 
-			for(int k=1;k<m;k++)			if (cond[m][k]) 	k_RungeKutt[n][m][j]-=conj(exp_mu_El[m][k][j])*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
-			for(int k=m+1;k<levels+1;k++)	if (cond[k][m]) 	k_RungeKutt[n][m][j]-=exp_mu_El[k][m][j]*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
+			for(int k=1;k<n;k++)			if (cond[n][k])		 k_RungeKutt[n][m][j]+=exp_mu_El[n][k][j]*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt);	
+			for(int k=n+1;k<levels+1;k++)	if (cond[k][n]) 	 k_RungeKutt[n][m][j]+=conj(exp_mu_El[k][n][j])*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt); 
+			for(int k=1;k<m;k++)			if (cond[m][k]) 	 k_RungeKutt[n][m][j]-=conj(exp_mu_El[m][k][j])*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
+			for(int k=m+1;k<levels+1;k++)	if (cond[k][m]) 	 k_RungeKutt[n][m][j]-=exp_mu_El[k][m][j]*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
 			k_RungeKutt[n][m][j]*=J/2.;
 			
 
