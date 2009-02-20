@@ -16,7 +16,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////
 #include "HermiteGaussianLFmode.hh"
-#include "MathPolinomial.hh"
+#include "MathPolynomial.hh"
 
 #include "orbit_mpi.hh"
 #include "OrbitConst.hh"
@@ -29,7 +29,7 @@ using namespace OrbitUtils;
 
 HermiteGaussianLFmode::HermiteGaussianLFmode(double Cnm,int n,int m,double w_x,double w_y,double f_x,double f_y,double la)
 {
-	Unm=Cnm*sqrt(2*OrbitConst::c*OrbitConst::permeability)*sqrt(pow(w_x,2*n+1)*pow(w_y,2*m+1)*MathPolinomial::Factorial(n)*MathPolinomial::Factorial(m)*pow(2,n+m+1)/(MathPolinomial::Factorial(2*n)*MathPolinomial::Factorial(2*m)*OrbitConst::PI));
+	Unm=Cnm*sqrt(2*OrbitConst::c*OrbitConst::permeability)*sqrt(pow(w_x,2*n+1)*pow(w_y,2*m+1)*MathPolynomial::Factorial(n)*MathPolynomial::Factorial(m)*pow(2,n+m+1)/(MathPolynomial::Factorial(2*n)*MathPolynomial::Factorial(2*m)*OrbitConst::PI));
 
 	Laser_lambda=la;
 	fx=f_x;
@@ -220,7 +220,7 @@ tcomplex HermiteGaussianLFmode::getNonOrientedU(int n, int m, double x, double y
 	tcomplex xf=x/funx;
 	tcomplex yf=y/funy;
 	
-	return	pow(funx,-n-1)*pow(funy,-m-1)*exp(-xf*xf-yf*yf-J*(k*z-t*k*OrbitConst::c))*MathPolinomial::ComplexHermite(n,xf)*MathPolinomial::ComplexHermite(m,yf);
+	return	pow(funx,-n-1)*pow(funy,-m-1)*exp(-xf*xf-yf*yf-J*(k*z-t*k*OrbitConst::c))*MathPolynomial::ComplexHermite(n,xf)*MathPolynomial::ComplexHermite(m,yf);
 	
 }
 

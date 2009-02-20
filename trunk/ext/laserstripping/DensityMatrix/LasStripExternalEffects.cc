@@ -31,7 +31,7 @@
 #include <iomanip>
 #include <cmath>
 #include <fstream>
-#include "MathPolinomial.hh"
+#include "MathPolynomial.hh"
 
 
 #include "LasStripExternalEffects.hh"
