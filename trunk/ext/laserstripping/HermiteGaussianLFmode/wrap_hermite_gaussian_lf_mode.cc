@@ -14,7 +14,7 @@
 using namespace OrbitUtils;
 using namespace wrap_orbit_utils;
 
-namespace wrap_gasussian_laser_field{
+namespace wrap_hermite_gaussian_lf_mode{
 
   void error(const char* msg){ ORBIT_MPI_Finalize(msg); }
 

@@ -168,9 +168,10 @@ void HermiteGaussianLFmode::getLaserElectricMagneticField(double x, double y, do
 		tcomplex& H_x, tcomplex& H_y, tcomplex& H_z){
 	
 
-	
+
 LaserFieldOrientation::OrientCoordinates(x,y,z,x0,y0,z0,kx,ky,kz,mx,my,mz);
 tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
+
 
 //tcomplex	E=E_FroissartStora(x,y,z,t);
 
@@ -212,21 +213,34 @@ double HermiteGaussianLFmode::getFrequencyOmega(double m, double x, double y, do
 
 
 tcomplex HermiteGaussianLFmode::getNonOrientedU(int n, int m, double x, double y, double z, double t){
+
+	
+	if (n==0&&m==0)	{
+		
+		double a=Laser_lambda/OrbitConst::PI;
+		tcomplex k=tcomplex(0.,2*(z-t*OrbitConst::c)/a);
+		tcomplex funx=pow(tcomplex(wx*wx,-(z-fx)*a),-1);
+		tcomplex funy=pow(tcomplex(wy*wy,-(z-fy)*a),-1);
+		
+		return	sqrt(funx*funy)*exp(-x*x*funx-y*y*funy-k);
+	
+	}	else	{
+	
+	
 	
 	tcomplex k=2*OrbitConst::PI/Laser_lambda;
-	
 	tcomplex funx=sqrt(tcomplex(wx*wx-2.0*J*(z-fx)/k));
 	tcomplex funy=sqrt(tcomplex(wy*wy-2.0*J*(z-fy)/k));
 	tcomplex xf=x/funx;
 	tcomplex yf=y/funy;
 	
-	return	pow(funx,-n-1)*pow(funy,-m-1)*exp(-xf*xf-yf*yf-J*(k*z-t*k*OrbitConst::c))*MathPolynomial::ComplexHermite(n,xf)*MathPolynomial::ComplexHermite(m,yf);
+	return	pow(funx,-n-1)*pow(funy,-m-1)*exp(-xf*xf-yf*yf-J*k*(z-t*OrbitConst::c))*MathPolynomial::ComplexHermite(n,xf)*MathPolynomial::ComplexHermite(m,yf);
+	
+	}
+	
+
 	
 }
-
-
-
-
 
 
 

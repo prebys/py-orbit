@@ -26,8 +26,7 @@
 
 #include "BaseLaserFieldSource.hh"
 
-#include <complex>
-typedef std::complex<double>	tcomplex;
+
 
 namespace OrbitUtils{
 	
