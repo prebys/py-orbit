@@ -16,8 +16,8 @@
 #define BASELASERFIELDSOURCE_HH_
 
 #include "CppPyWrapper.hh"
-#include <complex>
-typedef std::complex<double>	tcomplex;
+#include "tcomplex.hh"
+
 #define J tcomplex(0.,1.)
 
 
