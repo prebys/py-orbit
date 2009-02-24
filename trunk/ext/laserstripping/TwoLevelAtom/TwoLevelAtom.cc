@@ -31,14 +31,14 @@
 #include <iomanip>
 #include <cmath>
 #include <fstream>
-#include "MathPolinomial.hh"
+
 
 
 #include "TwoLevelAtom.hh"
 #include "RungeKuttaTracker.hh"
 #include "OrbitConst.hh"
 #include "LorentzTransformationEM.hh"
-//#include "HydrogenStarkParam.hh"
+
 
 
 
@@ -68,12 +68,11 @@ using namespace LaserStripping;
 using namespace OrbitUtils;
 
 
-TwoLevelAtom::TwoLevelAtom(BaseLaserFieldSource*	BaseLaserField, double delta_E, double dipole_tr,double par_res)
+TwoLevelAtom::TwoLevelAtom(BaseLaserFieldSource*	BaseLaserField, double delta_E, double dipole_tr)
 {
 	setName("unnamed");
 	
 	LaserField=BaseLaserField;
-	Parameter_resonance=par_res;
 	d_Energy=delta_E;
 	dip_transition=dipole_tr;
 	
@@ -176,19 +175,29 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 void TwoLevelAtom::GetParticleFrameFields(int i,double t,  Bunch* bunch)	{
 	
 	double** xyz = bunch->coordArr();
+	double E_x,E_y,E_z,nx,ny,nz,Eabs;
 
 	
 	for (int j=0; j<3;j++)	{
 							
 		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
 				t,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
-			
-	LorentzTransformationEM::complex_transform(bunch->getMass(),
+
+	LorentzTransformationEM::complex_electric_transform(bunch->getMass(),
 											px0(i),py0(i),pz0(i),
 																		 Ex_las[j],Ey_las[j],Ez_las[j],
 																		 Bx_las[j],By_las[j],Bz_las[j]);	
 
-	Ez_las[j]=(Ex_las[j]*abs(Ex_las[j])+Ey_las[j]*abs(Ey_las[j])+Ez_las[j]*abs(Ez_las[j]))/sqrt(abs(Ex_las[j])*abs(Ex_las[j])+abs(Ey_las[j])*abs(Ey_las[j])+abs(Ez_las[j])*abs(Ez_las[j]));
+	if(j==0)		{
+		E_x=abs(Ex_las[j]);
+		E_y=abs(Ey_las[j]);
+		E_z=abs(Ez_las[j]);
+		Eabs=sqrt(pow(E_x,2)+pow(E_y,2)+pow(E_z,2));
+	}
+
+	
+	Ez_las[j]=(Ex_las[j]*E_x+Ey_las[j]*E_y+Ez_las[j]*E_z)/Eabs;
+
 	
 	}
 			
@@ -205,7 +214,7 @@ void	TwoLevelAtom::GetParticleFrameParameters(int i, double t,double t_step, Bun
 	
 		
 	double ta=2.418884326505e-17;			//atomic unit of time
-	double Ea=5.14220642e011;				//Atomic unit of electric field
+	double Ea=5.14220642e+011;				//Atomic unit of electric field
 	double m=bunch->getMass();
 
 //This line calculates relyativistic factor-Gamma
@@ -220,7 +229,6 @@ for(int j=0;j<3;j++)
 
 part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
 t_part=time(i);					//time  in frame of particle (in atomic units) 
-omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
 
 	
 }
@@ -243,7 +251,7 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 	
 	
 
-	tcomplex z1,z2,zz1,zz2;
+	tcomplex z1,z2;
 	double dt;
 		
 
@@ -255,10 +263,11 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 					
 	for(int j=0; j<3;j++)	mu_Elas[j]=dip_transition*conj(Ez_las[j])*J/2.;	
 	
-		if (fabs((fabs(d_Energy)-omega_part))<Parameter_resonance*abs(2.*mu_Elas[1])) 		{	///THIS CRITERII SHOULD BE CHANGED
+
 			
 			z1=exp(J*t_part*fabs(d_Energy));		
 			z2=exp(J*part_t_step*fabs(d_Energy)/2.);
+
 
 			
 			exp_mu_El[1]=z1*mu_Elas[0];			
@@ -272,16 +281,16 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 				
 				if (j==4)	dt=part_t_step;	else dt=part_t_step/2.;
 
-				k_RungeKutt_1[j]*=0.;
+				k_RungeKutt_1[j]=tcomplex(0.);
 				k_RungeKutt_1[j]+=conj(exp_mu_El[j])*(Ampl_2(i)+k_RungeKutt_1[j-1]*dt);	
 
-				k_RungeKutt_2[j]*=0.;
+				k_RungeKutt_2[j]=tcomplex(0.);
 				k_RungeKutt_2[j]-=exp_mu_El[j]*(Ampl_1(i)+k_RungeKutt_2[j-1]*dt);	
 			
 			}
 					
 			
-		}
+
 				
 		z1=(k_RungeKutt_1[1]+2.*k_RungeKutt_1[2]+2.*k_RungeKutt_1[3]+k_RungeKutt_1[4])/6.;	
 		z2=(k_RungeKutt_2[1]+2.*k_RungeKutt_2[2]+2.*k_RungeKutt_2[3]+k_RungeKutt_2[4])/6.;
