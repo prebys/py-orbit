@@ -42,20 +42,19 @@ extern "C" {
 	  
 
 
-	  double par_res=0;
 	  double delta_E=0;
 	  double dipole_tr=0;
 
 	  PyObject*	pyBaseLaserField=NULL;
 
 
-		 if(!PyArg_ParseTuple(	args,"Oddd:",&pyBaseLaserField,&delta_E,&dipole_tr,&par_res)){
-			 		          error("TwoLevelAtom(LaserField,delta_E,dipole_transition,states) - params. are needed");
+		 if(!PyArg_ParseTuple(	args,"Odd:",&pyBaseLaserField,&delta_E,&dipole_tr)){
+			 		          error("TwoLevelAtom(LaserField,delta_E,dipole_transition) - params. are needed");
 			 			 		        }  
 		 else	{
 		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
 
-		 self->cpp_obj =  new  TwoLevelAtom(lfs,delta_E,dipole_tr, par_res);
+		 self->cpp_obj =  new  TwoLevelAtom(lfs,delta_E,dipole_tr);
 		 }
 	
 

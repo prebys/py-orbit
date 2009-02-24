@@ -19,7 +19,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor. */
-			TwoLevelAtom(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, double delta_E, double dipole_tr, double par_res);
+			TwoLevelAtom(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, double delta_E, double dipole_tr);
 		
 			
 			/** Destructor. */
@@ -57,14 +57,11 @@ namespace LaserStripping{
 			  double dip_transition;
 
 			  
-
-			  double Parameter_resonance;
 			  
 		  
 
 			  			 
 			  //time and frequensy of laser in frame of particle
-			  double omega_part;
 			  double part_t_step;
 			  double t_part;
 			  double phasa_part;
