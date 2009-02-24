@@ -45,6 +45,8 @@ y=	(xt*(ky*mz-kz*my)
 
 z=	(kx*xt+ky*yt+kz*zt)/b;
 
+return;
+
 
 }
 

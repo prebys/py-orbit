@@ -1,5 +1,5 @@
-#ifndef WRAP_RK4_TRACKER_H
-#define WRAP_RK4_TRACKER_H
+#ifndef WRAP_LASERSTRIPPING_HH
+#define WRAP_LASERSTRIPPING_HH
 
 #include "Python.h"
 
@@ -13,4 +13,4 @@ extern "C" {
 }
 #endif  // __cplusplus
 
-#endif // WRAP_TRACKER_3D_FIELD_H
+#endif // WRAP_LASERSTRIPPING_HH
