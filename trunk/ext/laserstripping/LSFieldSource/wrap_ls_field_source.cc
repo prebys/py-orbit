@@ -12,7 +12,7 @@
 using namespace OrbitUtils;
 using namespace wrap_orbit_utils;
 
-namespace wrap_laserstripping_ls_field_source{
+namespace wrap_ls_field_source{
 
   void error(const char* msg){ ORBIT_MPI_Finalize(msg); }
 

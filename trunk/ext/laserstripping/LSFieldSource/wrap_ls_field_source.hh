@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-  namespace wrap_laserstripping_ls_field_source{
+  namespace wrap_ls_field_source{
     void initLSFieldSource(PyObject* module);
   }
 
