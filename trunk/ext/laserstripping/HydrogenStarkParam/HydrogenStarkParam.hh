@@ -1,7 +1,7 @@
 
-#include <complex>
+#include "tcomplex.hh"
 
-typedef std::complex<double>	tcomplex;
+
 
 
 
