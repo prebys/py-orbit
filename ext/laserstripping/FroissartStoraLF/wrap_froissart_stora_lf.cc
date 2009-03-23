@@ -2,19 +2,19 @@
 #include "pyORBIT_Object.hh"
 
 #include "wrap_utils.hh"
-#include "wrap_hydrogen_stark_param.hh"
+#include "wrap_froissart_stora_lf.hh"
 
 #include <iostream>
 #include <string>
 #include <cmath>
 
 
-#include "HydrogenStarkParam.hh"
+#include "FroissartStoraLF.hh"
 
-//using namespace OrbitUtils;
+using namespace OrbitUtils;
 using namespace wrap_orbit_utils;
 
-namespace wrap_hydrogen_stark_param{
+namespace wrap_froissart_stora_lf{
 
   void error(const char* msg){ ORBIT_MPI_Finalize(msg); }
 
@@ -28,7 +28,7 @@ extern "C" {
 
 	//constructor for python class wrapping CppBaseFieldSource instance
 	//It never will be called directly
-	static PyObject* HydrogenStarkParam_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+	static PyObject* FroissartStoraLF_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 	{
 		pyORBIT_Object* self;
 		self = (pyORBIT_Object *) type->tp_alloc(type, 0);
@@ -38,77 +38,65 @@ extern "C" {
 
   //initializator for python  CppBaseFieldSource class
   //this is implementation of the __init__ method
-  static int HydrogenStarkParam_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
-
-	  int states;
-	  char* addressEG;
-	  PyObject*	pyBaseLaserField=NULL;
-
-		 if(!PyArg_ParseTuple(	args,"si:",&addressEG,&states)){
-			 		          error("HydrogenStarkParam(address,states) - params. are needed");
-			 			 		        }  
-		 else	{
-
-		 self->cpp_obj =  new  HydrogenStarkParam(addressEG,states);
-		 }
-	
+  static int FroissartStoraLF_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
+	  
+	  double Omega;
+	  double Gamma;
+	  double Elas;
+	  
+		 if(!PyArg_ParseTuple(	args,"ddd:",&Omega,&Gamma,&Elas)){
+			 		          error("FroissartStoraLF(Omega,Gamma,ampl_Elas) - params. are needed");
+		 } 
+		 else	
+			 
+		self->cpp_obj = new FroissartStoraLF(Omega,Gamma,Elas);	
 
     return 0;
-    
-    
   }
   
   
   
   
-  static PyObject* HydrogenStarkParam_getStarkEnergy(PyObject *self, PyObject *args){
-	  HydrogenStarkParam* cpp_HydrogenStarkParam = (HydrogenStarkParam*)((pyORBIT_Object*) self)->cpp_obj;
-  				       
-  		
-       int nVars = PyTuple_Size(args);
-       double val;
-       double mass;
-       int n1;
-       int n2;
-       int m;
-       double E_x;
-       double E_y;
-       double E_z;
-       double B_x;
-       double B_y;
-       double B_z;
-       double px;
-       double py;
-       double pz;
-       
+  
+  
+  static PyObject* FroissartStoraLF_setLaserFieldPolarization(PyObject *self, PyObject *args){
+	  FroissartStoraLF* LaserField = (FroissartStoraLF*)((pyORBIT_Object*) self)->cpp_obj;
+ 	 
 
-           //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
-           if(!PyArg_ParseTuple(	args,"diiiddddddddd:",&mass,&n1,&n2,&m,&E_x,&E_y,&E_z,&B_x,&B_y,&B_z,&px,&py,&pz))
-             error(" getStarkEnergy(mass,n1,n2,m,E_x,E-y,E-z,B_x,B_y,B_z,px,py,pz) - parameters are needed");
-           else
-           val=cpp_HydrogenStarkParam->getStarkEnergy(mass,n1,n2,m,E_x,E_y,E_z,B_x,B_y,B_z,px,py,pz);
-           return Py_BuildValue("d",val);
-  }
-  
-  
-  	
-  
+   		double nEx;
+   		double nEy;
+   		double nEz;
 
+
+   		        if(!PyArg_ParseTuple(	args,"ddd:", &nEx, &nEy, &nEz))
+   		          {error("LaserExternalEfects - setLaserFieldPolarization(nEx, nEy, nEz) - params. afe needed");}
+  		        
+   		        else	
+   		        LaserField->setLaserFieldPolarization(nEx, nEy, nEz);
+   		      
+   	   
+   		    Py_INCREF(Py_None);
+   		    return Py_None;	  
+    }	
+  
+		
+  
+  
   
 
   //-----------------------------------------------------
   //destructor for python PyBaseFieldSource class (__del__ method).
   //-----------------------------------------------------
-  static void HydrogenStarkParam_del(pyORBIT_Object* self){
+  static void FroissartStoraLF_del(pyORBIT_Object* self){
 		//std::cerr<<"The CppBaseFieldSource __del__ has been called!"<<std::endl;
-		delete ((HydrogenStarkParam*)self->cpp_obj);
+		delete ((FroissartStoraLF*)self->cpp_obj);
 		self->ob_type->tp_free((PyObject*)self);
   }
 
 	// defenition of the methods of the python PyBaseFieldSource wrapper class
 	// they will be vailable from python level
-  static PyMethodDef HydrogenStarkParamClassMethods[] = {
-		    { "getStarkEnergy",  HydrogenStarkParam_getStarkEnergy,         		METH_VARARGS,"gets Stark Energy"},
+  static PyMethodDef FroissartStoraLFClassMethods[] = {
+		    { "setLaserFieldPolarization",  FroissartStoraLF_setLaserFieldPolarization,         METH_VARARGS,"Sets or returns the name of effects."},
 /*			{ "setLaserHalfAngle",         HermiteGaussianLFmode_setLaserHalfAngle,         METH_VARARGS,"Sets or returns the name of effects."},
 			{ "setLaserPower",         HermiteGaussianLFmode_setLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},
 			{ "setLaser_lambda",         HermiteGaussianLFmode_setLaser_lambda,         METH_VARARGS,"Sets or returns the name of effects."},
@@ -122,18 +110,18 @@ extern "C" {
 
 	// defenition of the memebers of the python PyBaseFieldSource wrapper class
 	// they will be vailable from python level
-	static PyMemberDef HydrogenStarkParamClassMembers [] = {
+	static PyMemberDef FroissartStoraLFClassMembers [] = {
 		{NULL}
 	};
 
 	//new python PyBaseFieldSource wrapper type definition
-	static PyTypeObject pyORBIT_HydrogenStarkParam_Type = {
+	static PyTypeObject pyORBIT_FroissartStoraLF_Type = {
 		PyObject_HEAD_INIT(NULL)
 		0, /*ob_size*/
-		"HydrogenStarkParam", /*tp_name*/
+		"FroissartStoraLF", /*tp_name*/
 		sizeof(pyORBIT_Object), /*tp_basicsize*/
 		0, /*tp_itemsize*/
-		(destructor) HydrogenStarkParam_del , /*tp_dealloc*/
+		(destructor) FroissartStoraLF_del , /*tp_dealloc*/
 		0, /*tp_print*/
 		0, /*tp_getattr*/
 		0, /*tp_setattr*/
@@ -149,34 +137,34 @@ extern "C" {
 		0, /*tp_setattro*/
 		0, /*tp_as_buffer*/
 		Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
-		"The HydrogenStarkParam python wrapper", /* tp_doc */
+		"The FroissartStoraLF python wrapper", /* tp_doc */
 		0, /* tp_traverse */
 		0, /* tp_clear */
 		0, /* tp_richcompare */
 		0, /* tp_weaklistoffset */
 		0, /* tp_iter */
 		0, /* tp_iternext */
-		HydrogenStarkParamClassMethods, /* tp_methods */
-		HydrogenStarkParamClassMembers, /* tp_members */
+		FroissartStoraLFClassMethods, /* tp_methods */
+		FroissartStoraLFClassMembers, /* tp_members */
 		0, /* tp_getset */
 		0, /* tp_base */
 		0, /* tp_dict */
 		0, /* tp_descr_get */
 		0, /* tp_descr_set */
 		0, /* tp_dictoffset */
-		(initproc) HydrogenStarkParam_init, /* tp_init */
+		(initproc) FroissartStoraLF_init, /* tp_init */
 		0, /* tp_alloc */
-		HydrogenStarkParam_new, /* tp_new */
+		FroissartStoraLF_new, /* tp_new */
 	};	
 
 	//--------------------------------------------------
 	//Initialization function of the pyPyBaseFieldSource class
 	//It will be called from Bunch wrapper initialization
 	//--------------------------------------------------
-  void initHydrogenStarkParam(PyObject* module){
-		if (PyType_Ready(&pyORBIT_HydrogenStarkParam_Type) < 0) return;
-		Py_INCREF(&pyORBIT_HydrogenStarkParam_Type);
-		PyModule_AddObject(module, "HydrogenStarkParam", (PyObject *)&pyORBIT_HydrogenStarkParam_Type);
+  void initFroissartStoraLF(PyObject* module){
+		if (PyType_Ready(&pyORBIT_FroissartStoraLF_Type) < 0) return;
+		Py_INCREF(&pyORBIT_FroissartStoraLF_Type);
+		PyModule_AddObject(module, "FroissartStoraLF", (PyObject *)&pyORBIT_FroissartStoraLF_Type);
 	}
 
 #ifdef __cplusplus

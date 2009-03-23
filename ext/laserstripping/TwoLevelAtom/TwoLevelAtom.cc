@@ -75,7 +75,10 @@ TwoLevelAtom::TwoLevelAtom(BaseLaserFieldSource*	BaseLaserField, double delta_E,
 	LaserField=BaseLaserField;
 	d_Energy=delta_E;
 	dip_transition=dipole_tr;
+	print_par=-1;
+	max_print_par=-2;
 	
+//	print_par=max_print_par=10;
 
 }
 
@@ -83,6 +86,17 @@ TwoLevelAtom::TwoLevelAtom(BaseLaserFieldSource*	BaseLaserField, double delta_E,
 
 
 TwoLevelAtom::~TwoLevelAtom() {}
+
+
+
+
+void TwoLevelAtom::SetupPrint(int i, char* addr)	{
+
+	max_print_par=i;
+	print_par=max_print_par;
+	addr_print=addr;
+
+}
 
 
 
@@ -130,30 +144,39 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 			
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
 			//in natural unts (Volt per meter)	in the frame of particle				
-			GetParticleFrameFields(i, t, bunch);
+			GetParticleFrameFields(i, t,t_step, bunch);
 	
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	t_part	omega_part	part_t_step 
 			//in atomic units in frame of particle		
 			GetParticleFrameParameters(i,t,t_step,bunch);	
 	
 			
-/*
-			ofstream file("/home/tg4/workspace/PyOrbit/ext/laserstripping/working_dir/data_ampl.txt",ios::app);
-			file<<t<<"\t";
-			file<<Re1(i)*Re1(i)+Im1(i)*Im1(i)<<"\t";
-			file<<Re2(i)*Re2(i)+Im2(i)*Im2(i)<<"\t";
-			file<<Re1(i)*Re1(i)+Im1(i)*Im1(i)+Re2(i)*Re2(i)+Im2(i)*Im2(i)<<"\n";
-			file.close();			
-*/		
-
+			
+			
+			//This function prints evolution of populations in file
+			if (print_par==max_print_par)	{
+			print_par=0;
+			double pop1=Re1(i)*Re1(i)+Im1(i)*Im1(i);
+			double pop2=Re2(i)*Re2(i)+Im2(i)*Im2(i);
+			ofstream file(addr_print,ios::app);
+			file<<t<<"\t"<<pop1<<"\t"<<pop2<<"\t"<<pop1+pop2<<"\n";
+			file.close();	
+			}
+			if (max_print_par!=-2)	print_par++;
+			
+			
+			
+			
+			
+			
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
 		
 	
 		
 		}	
-
 //	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\n";
+
 
 	
 }
@@ -172,7 +195,7 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 
 
 
-void TwoLevelAtom::GetParticleFrameFields(int i,double t,  Bunch* bunch)	{
+void TwoLevelAtom::GetParticleFrameFields(int i,double t,double t_step,  Bunch* bunch)	{
 	
 	double** xyz = bunch->coordArr();
 	double E_x,E_y,E_z,nx,ny,nz,Eabs;
@@ -181,7 +204,7 @@ void TwoLevelAtom::GetParticleFrameFields(int i,double t,  Bunch* bunch)	{
 	for (int j=0; j<3;j++)	{
 							
 		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
-				t,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
+				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
 
 	LorentzTransformationEM::complex_electric_transform(bunch->getMass(),
 											px0(i),py0(i),pz0(i),
@@ -257,9 +280,6 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 
 	
 	
-	
-		
-
 					
 	for(int j=0; j<3;j++)	mu_Elas[j]=dip_transition*conj(Ez_las[j])*J/2.;	
 	
@@ -267,7 +287,6 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 			
 			z1=exp(J*t_part*fabs(d_Energy));		
 			z2=exp(J*part_t_step*fabs(d_Energy)/2.);
-
 
 			
 			exp_mu_El[1]=z1*mu_Elas[0];			
@@ -281,16 +300,12 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 				
 				if (j==4)	dt=part_t_step;	else dt=part_t_step/2.;
 
-				k_RungeKutt_1[j]=tcomplex(0.);
-				k_RungeKutt_1[j]+=conj(exp_mu_El[j])*(Ampl_2(i)+k_RungeKutt_1[j-1]*dt);	
-
-				k_RungeKutt_2[j]=tcomplex(0.);
-				k_RungeKutt_2[j]-=exp_mu_El[j]*(Ampl_1(i)+k_RungeKutt_2[j-1]*dt);	
+				k_RungeKutt_1[j]=conj(exp_mu_El[j])*(Ampl_2(i)+k_RungeKutt_2[j-1]*dt);	
+				k_RungeKutt_2[j]=-exp_mu_El[j]*(Ampl_1(i)+k_RungeKutt_1[j-1]*dt);	
 			
 			}
 					
 			
-
 				
 		z1=(k_RungeKutt_1[1]+2.*k_RungeKutt_1[2]+2.*k_RungeKutt_1[3]+k_RungeKutt_1[4])/6.;	
 		z2=(k_RungeKutt_2[1]+2.*k_RungeKutt_2[2]+2.*k_RungeKutt_2[3]+k_RungeKutt_2[4])/6.;
@@ -300,17 +315,10 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 		
 		Re2(i)+=z2.real()*part_t_step;
 		Im2(i)+=z2.imag()*part_t_step;
-		
 
-	
-	
 		
-		
-		
-		
-		
-	
-	
+			
+			
 	
 	
 	time(i)+=part_t_step;
