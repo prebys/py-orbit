@@ -97,40 +97,6 @@ double b=sqrt(n_Hx*n_Hx+n_Hy*n_Hy+n_Hz*n_Hz);
 
 
 
-tcomplex HermiteGaussianLFmode::E_FroissartStora(double x, double y, double z, double t){
-	
-	double ta=2.418884326505e-17;			//atomic unit of time
-	double Ea=5.14220642e11;				//Atomic unit of electric field
-	t/=ta;
-	
-		double Rabi=1e+12*ta;					//Rabi frequensy (in atomic units)
-		double Elas=64*Rabi*sqrt(2.)/27;		//Amplitude of laser field (in atonic units)
-
-		double gamma_sweep=-OrbitConst::PI*Rabi*Rabi/2/log(1-0.87);
-//		double omega_part=0.44417915081800191102;				// frequensy of laser in particle frame (in atomic units) 
-//		double phasa=omega_part*t/ta;
-		
-		double phasa=4/9.*t+gamma_sweep*t*t/2;
-	
-	return Elas*Ea*exp(J*phasa); 
-
-	
-
-}
-
-
-double HermiteGaussianLFmode::FroissartStoraTestOmega(double x, double y, double z, double px, double py, double pz, double t){
-	
-	double ta=2.418884326505e-17;			//atomic unit of time
-	t/=ta;
-
-	double Rabi=1e+12*ta;
-	double gamma_sweep=-OrbitConst::PI*Rabi*Rabi/2/log(1-0.87);
-	return (4/9.+gamma_sweep*t)/ta;
-	
-
-}
-
 
 
 double HermiteGaussianLFmode::HermiteGaussianOmega(double m,double x, double y, double z, double px, double py, double pz, double t){
@@ -173,8 +139,6 @@ LaserFieldOrientation::OrientCoordinates(x,y,z,x0,y0,z0,kx,ky,kz,mx,my,mz);
 tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
 
 
-//tcomplex	E=E_FroissartStora(x,y,z,t);
-
 tcomplex	H=E/OrbitConst::c;
 
 
@@ -198,7 +162,6 @@ double HermiteGaussianLFmode::getFrequencyOmega(double m, double x, double y, do
 	
 
 	return HermiteGaussianOmega(m,x,y,z,px,py,pz,t);
-//	return FroissartStoraTestOmega(x,y,z,px,py,pz,t);
 
 }
 

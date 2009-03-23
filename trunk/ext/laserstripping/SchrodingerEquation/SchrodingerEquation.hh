@@ -24,6 +24,9 @@ namespace LaserStripping{
 			
 			/** Destructor. */
 			~SchrodingerEquation();
+			
+		/** Method that initialise and defines parameters of printing */
+		void SetupPrint(int i,char* addr_print);
 		
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
@@ -50,11 +53,10 @@ namespace LaserStripping{
 			  
 			  //this array is used on each step of solution of density matrix equation at definite field  
 			  tcomplex*** exp_mu_El;
-			  tcomplex*** k_RungeKutt;
+			  tcomplex** k_RungeKutt;
 			  tcomplex*** mu_Elas;
 			  double* Gamma_i;
 			  double* E_i;
-			  double** gamma_ij;
 			  bool** cond;
 
 			  
@@ -86,6 +88,10 @@ namespace LaserStripping{
 			  double Bx_stat;
 			  double By_stat;
 			  double Bz_stat;
+			  
+			  int print_par;
+			  int max_print_par;
+			  char* addr_print;
 			  			 
 
 			  	
@@ -96,7 +102,7 @@ namespace LaserStripping{
 				void GetParticleFrameParameters(int i, double t, double t_step, Bunch* bunch);
 				
 				/*this method gives laser and static fields transformed by rotation relatively z axes  */
-				void GetParticleFrameFields(int i, double t,  Bunch* bunch,  OrbitUtils::BaseFieldSource* fieldSource);
+				void GetParticleFrameFields(int i, double t,double t_step,  Bunch* bunch,  OrbitUtils::BaseFieldSource* fieldSource);
 				
 				/*This method provides rotational transformation of statis and laser field in frame of particle to z axes */
 				double	RotateElectricFields(double Ex_s, double Ey_s, double Ez_s,tcomplex& Ex_l,tcomplex& Ey_l,tcomplex& Ez_l);

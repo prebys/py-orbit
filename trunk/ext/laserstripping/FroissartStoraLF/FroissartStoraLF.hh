@@ -19,8 +19,8 @@
 //               debugging only.
 //
 ///////////////////////////////////////////////////////////////////////////
-#ifndef HERMITE_GAUSSIAN_LF_MODE_HH_
-#define HERMITE_GAUSSIAN_LF_MODE_HH_
+#ifndef FROISSART_STORA_LF_HH_
+#define FROISSART_STORA_LF_HH_
 
 #include "Python.h"
 
@@ -30,26 +30,23 @@
 
 namespace OrbitUtils{
 	
-	class  HermiteGaussianLFmode: public BaseLaserFieldSource{
+	class  FroissartStoraLF: public BaseLaserFieldSource{
 		public:
 		
-			HermiteGaussianLFmode(double Cnm,int n,int m,double wx,double wy,double f_x,double f_y,double la);
-			~HermiteGaussianLFmode();
+			FroissartStoraLF(double Om,double G,double El);
+			~FroissartStoraLF();
 		
 			void getLaserElectricMagneticField(double x, double y, double z, double t, 
 					tcomplex& E_x, tcomplex& E_y, tcomplex& E_z,
 					tcomplex& H_x, tcomplex& H_y, tcomplex& H_z);
 
 					
-			tcomplex getNonOrientedU(int n, int m, double x, double y, double z, double t);
+			tcomplex getNonOrientedU(double t);
 		
 			
 			double getFrequencyOmega(double m, double x, double y, double z, double px, double py, double pz, double t);
 			
-			void setLaserFieldOrientation(double x_0, double y_0, double z_0,
-										double k_x, double k_y, double k_z,
-										double m_x, double m_y, double m_z,
-										double n_Ex, double n_Ey, double n_Ez);
+			void setLaserFieldPolarization(double n_Ex, double n_Ey, double n_Ez);
 			
 			
 
@@ -57,26 +54,25 @@ namespace OrbitUtils{
 		private:
 			
 			
-
-			double HermiteGaussianOmega(double m, double x, double y, double z, double px, double py, double pz, double t);
-
+//			double FroissartStoraTestOmega(double x, double y, double z, double px, double py, double pz, double t);
+//			double HermiteGaussianOmega(double m, double x, double y, double z, double px, double py, double pz, double t);
+//			tcomplex E_FroissartStora(double x, double y, double z, double t);
 			
 			
 
 			
 			  //Laser parameters
-			  tcomplex Unm;
-			  double Laser_lambda;
-			  int	n_moda;
-			  int	m_moda;
-			  double wx;
-			  double wy;
-			  double fx;
-			  double fy;
+
+			  double Omega;
+			  double Gamma;
+			  double amp_ELas;
+
 			
-			  //parameters of orientation of laser field
-			  double x0,y0,z0,kx,ky,kz,mx,my,mz,nEx,nEy,nEz;
-			  double nHx, nHy, nHz;
+			  //parameters of polarization of laser field
+			  double nEx,nEy,nEz;
+
+			  
+
 			
 
 	};
@@ -84,4 +80,4 @@ namespace OrbitUtils{
 
 
 
-#endif /*HERMITE_GAUSSIAN_LF_MODE_HH_*/
+#endif /*FROISSART_STORA_LF_HH_*/

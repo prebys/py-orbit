@@ -7,6 +7,7 @@
 #include "wrap_las_field_container.hh"
 #include "wrap_hydrogen_stark_param.hh"
 #include "wrap_two_level_atom.hh"
+#include "wrap_froissart_stora_lf.hh"
 
 static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
@@ -24,6 +25,7 @@ extern "C" {
 		wrap_las_field_container::initLaserFieldContainer(module);
 		wrap_hydrogen_stark_param::initHydrogenStarkParam(module);
 		wrap_two_level_atom::initTwoLevelAtom(module);
+		wrap_froissart_stora_lf::initFroissartStoraLF(module);
 		
   }
 	

@@ -72,6 +72,9 @@ DensityMatrix::DensityMatrix(BaseLaserFieldSource*	BaseLaserField, HydrogenStark
 	LaserField=BaseLaserField;
 	Parameter_resonance=par_res;
 	levels=	StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
+	
+	print_par=-1;
+	max_print_par=-2;
 
 
 
@@ -102,6 +105,17 @@ DensityMatrix::~DensityMatrix()
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
 
 }
+
+
+
+void DensityMatrix::SetupPrint(int i, char* addr)	{
+
+	max_print_par=i;
+	print_par=max_print_par;
+	addr_print=addr;
+
+}
+
 
 
 
@@ -151,20 +165,27 @@ void DensityMatrix::applyEffects(Bunch* bunch, int index,
 			
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
 			//in natural unts (Volt per meter)	in the frame of particle				
-			GetParticleFrameFields(i, t, bunch,fieldSource);
+			GetParticleFrameFields(i, t,t_step, bunch,fieldSource);
 	
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	t_part	omega_part	part_t_step 
 			//in atomic units in frame of particle		
 			GetParticleFrameParameters(i,t,t_step,bunch);	
 	
 			
-
-			ofstream file("/home/tg4/workspace/PyOrbit/ext/laserstripping/working_dir/data_ampl.txt",ios::app);
+			if (print_par==max_print_par)	{
+			print_par=0;
+			ofstream file(addr_print,ios::app);
 			file<<t<<"\t";
 			for(int n=1;n<levels+1;n++)	file<<Re(i,n,n)<<"\t";
 			double sum=0;	for(int n=1;n<levels+1;n++)	sum+=Re(i,n,n);
 			file<<sum<<"\n";
 			file.close();			
+			}
+			if (max_print_par!=-2)	print_par++;
+			
+			
+			
+			
 		
 
 			//	This function provides step solution for density matrix using rk4	method
@@ -229,7 +250,7 @@ return E;
 
 
 
-void DensityMatrix::GetParticleFrameFields(int i,double t,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
+void DensityMatrix::GetParticleFrameFields(int i,double t,double t_step,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
 	
 	double** xyz = bunch->coordArr();
 	double Ez;
@@ -243,7 +264,7 @@ void DensityMatrix::GetParticleFrameFields(int i,double t,  Bunch* bunch,  BaseF
 	for (int j=0; j<3;j++)	{
 							
 		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
-				t,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
+				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
 			
 	LorentzTransformationEM::complex_transform(bunch->getMass(),
 											px0(i),py0(i),pz0(i),
