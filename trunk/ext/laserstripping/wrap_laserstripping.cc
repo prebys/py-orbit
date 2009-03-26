@@ -8,6 +8,8 @@
 #include "wrap_hydrogen_stark_param.hh"
 #include "wrap_two_level_atom.hh"
 #include "wrap_froissart_stora_lf.hh"
+#include "wrap_quad_em_field.hh"
+#include "wrap_const_em_field.hh"
 
 static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
@@ -26,6 +28,8 @@ extern "C" {
 		wrap_hydrogen_stark_param::initHydrogenStarkParam(module);
 		wrap_two_level_atom::initTwoLevelAtom(module);
 		wrap_froissart_stora_lf::initFroissartStoraLF(module);
+		wrap_quad_em_field::initQuadEMfield(module);
+		wrap_const_em_field::initConstEMfield(module);
 		
   }
 	
