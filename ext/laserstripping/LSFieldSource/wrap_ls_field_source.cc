@@ -38,25 +38,15 @@ extern "C" {
   //this is implementation of the __init__ method
   static int LSFieldSource_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
 	  
-//	  self->cpp_obj = new LSFieldSource();
-	 
-	  double E_x;
-	  double E_y;
-	  double E_z;
-	  double B_x;
-	  double B_y;
-	  double B_z;
-	  int nVars = PyTuple_Size(args);
-	     
+     
 
 //	 if (PyArg_ParseTuple(	args,"")) {self->cpp_obj = new LSFieldSource();}
 //	 if(PyArg_ParseTuple(args,"dddddd:",&E_x,&E_y,&E_z,&B_x,&B_y,&B_z))	{ self->cpp_obj = new LSFieldSource(E_x,E_y,E_z,B_x,B_y,B_z);}
 	  
-	  if(nVars==0)	 if (!PyArg_ParseTuple(	args,"")) {} else {self->cpp_obj = new LSFieldSource();}
-	  if(nVars==6)	 if (!PyArg_ParseTuple(args,"dddddd:",&E_x,&E_y,&E_z,&B_x,&B_y,&B_z)) 
-	  {error("Parameters  (E_x,E_y,E_z,B_x,B_y,B_z) -are needed");} else {self->cpp_obj = new LSFieldSource(E_x,E_y,E_z,B_x,B_y,B_z);}
+	  if (!PyArg_ParseTuple(	args,"")) {error("No parameters in LSFieldSource() are needed");} 
+	  else self->cpp_obj = new LSFieldSource();
+	  
 
-		  
 		
     return 0;
   }

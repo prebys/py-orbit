@@ -19,8 +19,8 @@
 //               debugging only.
 //
 ///////////////////////////////////////////////////////////////////////////
-#ifndef LSFIELDSOURCE_HH_
-#define LSFIELDSOURCE_HH_
+#ifndef CONSTEMFIELD_HH_
+#define CONSTEMFIELD_HH_
 
 #include "Python.h"
 
@@ -28,17 +28,36 @@
 
 namespace OrbitUtils{
 	
-	class  LSFieldSource: public BaseFieldSource
+	class  ConstEMfield: public BaseFieldSource
 	{
 		public:
 		
-			LSFieldSource();
-			~LSFieldSource();
+			ConstEMfield();
+			ConstEMfield(double E_x,double E_y,double E_z,double B_x,double B_y,double B_z);
+			~ConstEMfield();
 		
 			void getElectricMagneticField(double x, double y, double z, double t, double& E_x, double& E_y, double& E_z, double& H_x, double& H_y, double& H_z);
-
+			
+		 	void Ex(double val);
+		 	void Ey(double val);
+		 	void Ez(double val);
+			
+		 	void Bx(double val);
+		 	void By(double val);
+		 	void Bz(double val);
+						
+			
+			
 		private:
 			
+		
+		
+			double ExConst;
+			double EyConst;
+			double EzConst;
+			double BxConst;
+			double ByConst;
+			double BzConst;
 			
 			
 	};
@@ -47,7 +66,7 @@ namespace OrbitUtils{
 
 
 
-#endif /*LSFIELDSOURCE_HH_*/
+#endif /*CONSTEMFIELD_HH_*/
 
 
 
