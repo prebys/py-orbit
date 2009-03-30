@@ -8,7 +8,8 @@
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
 #include "HydrogenStarkParam.hh"
-
+#include "WaveFunctionAmplitudes.hh"
+#include "AtomPopulations.hh"
 
 using namespace TrackerRK4;
 
@@ -25,8 +26,7 @@ namespace LaserStripping{
 			/** Destructor. */
 			~SchrodingerEquation();
 			
-		/** Method that initialise and defines parameters of printing */
-		void SetupPrint(int i,char* addr_print);
+
 		
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
@@ -58,10 +58,14 @@ namespace LaserStripping{
 			  double* Gamma_i;
 			  double* E_i;
 			  bool** cond;
+			  
 
 			  
 			  int levels;
 			  double Parameter_resonance;
+			  
+			  WaveFunctionAmplitudes* AmplAttr;
+			  AtomPopulations* PopAttr;
 			  
 		  
 
@@ -89,14 +93,13 @@ namespace LaserStripping{
 			  double By_stat;
 			  double Bz_stat;
 			  
-			  int print_par;
-			  int max_print_par;
-			  char* addr_print;
-			  			 
 
 			  	
 				/**Solver for Amplitudes**/
 				void AmplSolver4step(int i,Bunch* bunch);
+				
+				/**Calculates populations**/
+				void CalcPopulations(int i,Bunch* bunch);
 							
 				/*this all parameters in frame of particle in atomic units necesarry for applying external effect  */
 				void GetParticleFrameParameters(int i, double t, double t_step, Bunch* bunch);
