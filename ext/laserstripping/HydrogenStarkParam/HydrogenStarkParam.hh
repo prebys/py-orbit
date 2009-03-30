@@ -1,18 +1,21 @@
-
-#include "tcomplex.hh"
-
-
-
-
-
 #ifndef HYDROGENSTARKPARAM_HH_
 #define HYDROGENSTARKPARAM_HH_
+
+
+#include "tcomplex.hh"
+#include "CppPyWrapper.hh"
+
+
+
+
+
+
 
 
 
 
 		
-		class  HydrogenStarkParam
+		class  HydrogenStarkParam: public OrbitUtils::CppPyWrapper
 		{
 
 			
