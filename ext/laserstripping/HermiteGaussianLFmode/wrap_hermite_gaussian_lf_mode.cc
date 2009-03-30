@@ -52,9 +52,11 @@ extern "C" {
 		 if(!PyArg_ParseTuple(	args,"diiddddd:",&Cnm,&n,&m,&wx,&wy,&f_x,&f_y,&lambda)){
 			 		          error("LaserExternalEfects(Cnm==sqrt(P),n,m,wx,wy,fx,fy,lambda) - params. are needed");
 		 } 
-		 else	
+		 else	{
 			 
-		self->cpp_obj = new HermiteGaussianLFmode(Cnm,n,m,wx,wy,f_x,f_y,lambda);	
+		self->cpp_obj = new HermiteGaussianLFmode(Cnm,n,m,wx,wy,f_x,f_y,lambda);
+		((HermiteGaussianLFmode*) self->cpp_obj)->setPyWrapper((PyObject*) self);
+		 }
 
     return 0;
   }
