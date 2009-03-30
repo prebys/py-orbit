@@ -54,6 +54,7 @@ extern "C" {
 		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
 		 HydrogenStarkParam* Stark = (HydrogenStarkParam*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
 		 self->cpp_obj =  new  DensityMatrix(lfs, Stark, par_res);
+		 ((DensityMatrix*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 			 		        	  
 	  
@@ -64,6 +65,7 @@ extern "C" {
 	     BaseLaserFieldSource* lfs = NULL;
 		 HydrogenStarkParam* Stark = (HydrogenStarkParam*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
 		 self->cpp_obj =  new  DensityMatrix(lfs, Stark, par_res);
+		 ((DensityMatrix*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 			 			
 
@@ -93,28 +95,7 @@ extern "C" {
   
   
   
-  
-  static PyObject* DensityMatrix_SetupPrint(PyObject *self, PyObject *args){
-	  DensityMatrix* cpp_DensityMatrix = (DensityMatrix*)((pyORBIT_Object*) self)->cpp_obj;
-   				       
 
-        char* address;
-        int max_print;
-
-        
-
-            //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
-            if(!PyArg_ParseTuple(	args,"is:",&max_print,&address))
-              error(" SetupPrint(max_print_par,adress and name of file) - parameters are needed");
-            else 	  
-            cpp_DensityMatrix->SetupPrint(max_print,address);
-            
-   		    Py_INCREF(Py_None);
-   		    return Py_None;
-
-   }
-   
-  
   
   
   
@@ -137,7 +118,6 @@ extern "C" {
 	// they will be vailable from python level
   static PyMethodDef DensityMatrixClassMethods[] = {
 		{ "name",        			 DensityMatrix_name,        		METH_VARARGS,"Sets or returns the name of effects."},
-		{ "SetupPrint",				 DensityMatrix_SetupPrint,    		METH_VARARGS,"Setups parameters of printing."},
 
     {NULL}
   };

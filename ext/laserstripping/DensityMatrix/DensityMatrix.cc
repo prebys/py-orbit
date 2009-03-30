@@ -44,16 +44,16 @@
 
 
 
-#define Re(i,n,m) bunch->arrAttr[i][(n-1)*levels+m]		//i-part index, n,m-attr index
-#define Im(i,n,m) bunch->arrAttr[i][(n-1)*levels+m+levels*levels]
-#define time(i)  bunch->arrAttr[i][2*levels*levels+1]
-#define x0(i)  bunch->arrAttr[i][2*levels*levels+2]
-#define y0(i)  bunch->arrAttr[i][2*levels*levels+3]
-#define z0(i)  bunch->arrAttr[i][2*levels*levels+4]
-#define px0(i)  bunch->arrAttr[i][2*levels*levels+5]
-#define py0(i)  bunch->arrAttr[i][2*levels*levels+6]
-#define pz0(i)  bunch->arrAttr[i][2*levels*levels+7]
-#define dm(i,n,m) tcomplex(bunch->arrAttr[i][(n-1)*levels+m],bunch->arrAttr[i][(n-1)*levels+m+levels*levels])
+#define Re(i,n,m) AmplAttr->attArr(i)[(n-1)*levels+m]		//i-part index, n,m-attr index
+#define Im(i,n,m) AmplAttr->attArr(i)[(n-1)*levels+m+levels*levels]
+#define time(i)  AmplAttr->attArr(i)[2*levels*levels+1]
+#define x0(i)  AmplAttr->attArr(i)[2*levels*levels+2]
+#define y0(i)  AmplAttr->attArr(i)[2*levels*levels+3]
+#define z0(i)  AmplAttr->attArr(i)[2*levels*levels+4]
+#define px0(i)  AmplAttr->attArr(i)[2*levels*levels+5]
+#define py0(i)  AmplAttr->attArr(i)[2*levels*levels+6]
+#define pz0(i)  AmplAttr->attArr(i)[2*levels*levels+7]
+#define dm(i,n,m) tcomplex(AmplAttr->attArr(i)[(n-1)*levels+m],AmplAttr->attArr(i)[(n-1)*levels+m+levels*levels])
 #define k_rk(j,n,m) k_RungeKutt[j][(n-1)*levels+m]
 
 
@@ -73,13 +73,8 @@ DensityMatrix::DensityMatrix(BaseLaserFieldSource*	BaseLaserField, HydrogenStark
 	Parameter_resonance=par_res;
 	levels=	StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
 	
-	print_par=-1;
-	max_print_par=-2;
 
 
-
-	
-	
 //allocating memory for koefficients of 4-th order Runge-Kutta method and other koeeficients of the master equation
 k_RungeKutt=new tcomplex**[levels+1];	for (int i=0;i<levels+1;i++)	k_RungeKutt[i]=new tcomplex*[levels+1]; for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	k_RungeKutt[i][j]=new tcomplex[5];
 exp_mu_El=new tcomplex**[levels+1];	for (int i=0;i<levels+1;i++)	exp_mu_El[i]=new tcomplex*[levels+1]; for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	exp_mu_El[i][j]=new tcomplex[5];
@@ -90,8 +85,16 @@ Gamma_i=new double[levels+1];
 E_i=new double[levels+1];
 
 
-}
+if(LaserField->getPyWrapper() != NULL){
+		Py_INCREF(LaserField->getPyWrapper());
+	}
 
+if(StarkEffect->getPyWrapper() != NULL){
+		Py_INCREF(StarkEffect->getPyWrapper());
+	}
+
+
+}
 
 DensityMatrix::~DensityMatrix()
 {
@@ -103,24 +106,42 @@ DensityMatrix::~DensityMatrix()
 	delete [] Gamma_i;
 	for (int i=0;i<levels+1;i++)	delete	[]	gamma_ij[i];	delete	[]	gamma_ij;
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
+	
+	
+	if(LaserField->getPyWrapper() == NULL){
+		delete LaserField;
+	} else {
+		Py_XDECREF(LaserField->getPyWrapper());
+	}
+	
+	
+	if(StarkEffect->getPyWrapper() == NULL){
+		delete LaserField;
+	} else {
+		Py_XDECREF(StarkEffect->getPyWrapper());
+	}
+
+	
 
 }
 
 
-
-void DensityMatrix::SetupPrint(int i, char* addr)	{
-
-	max_print_par=i;
-	print_par=max_print_par;
-	addr_print=addr;
-
+void DensityMatrix::CalcPopulations(int i, Bunch* bunch)	{
+		
+	PopAttr->attArr(i)[0] = 0;
+	for (int j=1; j<levels + 1;j++)	{
+	PopAttr->attArr(i)[j] =  Re(i,j,j);
+	PopAttr->attArr(i)[0] += PopAttr->attArr(i)[j];
+	}
+	
 }
-
-
 
 
 
 void DensityMatrix::setupEffects(Bunch* bunch){		
+	
+	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
+	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
 
 	for (int i=0; i<bunch->getSize();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
@@ -133,6 +154,8 @@ void DensityMatrix::setupEffects(Bunch* bunch){
 		
 		time(i)=0.;
 		//All other attributes of particle are initiated in Python script
+		
+		CalcPopulations(i, bunch);
 
 	}
 	
@@ -171,27 +194,11 @@ void DensityMatrix::applyEffects(Bunch* bunch, int index,
 			//in atomic units in frame of particle		
 			GetParticleFrameParameters(i,t,t_step,bunch);	
 	
-			
-			if (print_par==max_print_par)	{
-			print_par=0;
-			ofstream file(addr_print,ios::app);
-			file<<t<<"\t";
-			for(int n=1;n<levels+1;n++)	file<<Re(i,n,n)<<"\t";
-			double sum=0;	for(int n=1;n<levels+1;n++)	sum+=Re(i,n,n);
-			file<<sum<<"\n";
-			file.close();			
-			}
-			if (max_print_par!=-2)	print_par++;
-			
-			
-			
-			
-		
-
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
 		
 	
+			CalcPopulations(i, bunch);
 		
 		}	
 
