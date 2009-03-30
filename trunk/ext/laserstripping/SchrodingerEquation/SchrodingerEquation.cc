@@ -42,16 +42,16 @@
 
 
 
-#define Re(i,m) bunch->arrAttr[i][m]		//i-part index, n,m-attr index
-#define Im(i,m) bunch->arrAttr[i][m+levels]
-#define time(i)  bunch->arrAttr[i][2*levels+1]
-#define x0(i)  bunch->arrAttr[i][2*levels+2]
-#define y0(i)  bunch->arrAttr[i][2*levels+3]
-#define z0(i)  bunch->arrAttr[i][2*levels+4]
-#define px0(i)  bunch->arrAttr[i][2*levels+5]
-#define py0(i)  bunch->arrAttr[i][2*levels+6]
-#define pz0(i)  bunch->arrAttr[i][2*levels+7]
-#define a(i,m) tcomplex(bunch->arrAttr[i][m],bunch->arrAttr[i][m+levels])
+#define Re(i,m) AmplAttr->attArr(i)[m]		//i-part index, n,m-attr index
+#define Im(i,m) AmplAttr->attArr(i)[m+levels]
+#define time(i)  AmplAttr->attArr(i)[2*levels+1]
+#define x0(i)  AmplAttr->attArr(i)[2*levels+2]
+#define y0(i)  AmplAttr->attArr(i)[2*levels+3]
+#define z0(i)  AmplAttr->attArr(i)[2*levels+4]
+#define px0(i)  AmplAttr->attArr(i)[2*levels+5]
+#define py0(i)  AmplAttr->attArr(i)[2*levels+6]
+#define pz0(i)  AmplAttr->attArr(i)[2*levels+7]
+#define a(i,m) tcomplex(AmplAttr->attArr(i)[m],AmplAttr->attArr(i)[m+levels])
 
 
 
@@ -71,9 +71,6 @@ SchrodingerEquation::SchrodingerEquation(BaseLaserFieldSource*	BaseLaserField, H
 	Parameter_resonance=par_res;
 	levels=	StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
 	
-	print_par=-1;
-	max_print_par=-2;
-
 
 
 	
@@ -86,38 +83,77 @@ cond=new bool*[levels+1];	for (int i=0;i<levels+1;i++)	cond[i]=new bool[levels+1
 Gamma_i=new double[levels+1];
 E_i=new double[levels+1];
 
+if(LaserField->getPyWrapper() != NULL){
+		Py_INCREF(LaserField->getPyWrapper());
+	}
 
-
+if(StarkEffect->getPyWrapper() != NULL){
+		Py_INCREF(StarkEffect->getPyWrapper());
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 SchrodingerEquation::~SchrodingerEquation()
 {
 
-	for (int i=0;i<levels+1;i++) delete	[]	k_RungeKutt[i];		delete	[]	k_RungeKutt;
+	for (int i=0;i<levels+1;i++) delete	[]	k_RungeKutt[i];		delete []	k_RungeKutt;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] exp_mu_El[i][j]; for (int i=0;i<levels+1;i++)	delete [] exp_mu_El[i];	delete	[]	exp_mu_El;		
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] mu_Elas[i][j]; for (int i=0;i<levels+1;i++)	delete [] mu_Elas[i];	delete	[]	mu_Elas;
 	delete [] E_i;
 	delete [] Gamma_i;
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
+	
+	
+	if(LaserField->getPyWrapper() == NULL){
+		delete LaserField;
+	} else {
+		Py_XDECREF(LaserField->getPyWrapper());
+	}
+	
+	
+	if(StarkEffect->getPyWrapper() == NULL){
+		delete LaserField;
+	} else {
+		Py_XDECREF(StarkEffect->getPyWrapper());
+	}
+
+	
+	
 
 }
 
 
-
-
-void SchrodingerEquation::SetupPrint(int i, char* addr)	{
-
-	max_print_par=i;
-	print_par=max_print_par;
-	addr_print=addr;
-
+void SchrodingerEquation::CalcPopulations(int i, Bunch* bunch)	{
+		
+	PopAttr->attArr(i)[0] = 0;
+	for (int j=1; j<levels + 1;j++)	{
+	PopAttr->attArr(i)[j] =  Re(i,j)*Re(i,j)+Im(i,j)*Im(i,j);
+	PopAttr->attArr(i)[0] += PopAttr->attArr(i)[j];
+	}
+	
 }
+
 
 
 
 void SchrodingerEquation::setupEffects(Bunch* bunch){		
+	
+	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
+	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
+	
 
 	for (int i=0; i<bunch->getSize();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
@@ -130,6 +166,7 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 		
 		time(i)=0.;
 		//All other attributes of particle are initiated in Python script
+		CalcPopulations(i, bunch);
 
 	}
 	
@@ -159,7 +196,7 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 	
 		for (int i=0; i<bunch->getSize();i++)	{
 
-			
+
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
 			//in natural unts (Volt per meter)	in the frame of particle				
 			GetParticleFrameFields(i, t, t_step,bunch,fieldSource);
@@ -167,28 +204,12 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	t_part	omega_part	part_t_step 
 			//in atomic units in frame of particle		
 			GetParticleFrameParameters(i,t,t_step,bunch);	
-	
-			
-			
-			
-			//This function prints evolution of populations in file
-			if (print_par==max_print_par)	{
-			print_par=0;
-			ofstream file(addr_print,ios::app);
-			file<<t<<"\t";
-			for(int n=1;n<levels+1;n++)	file<<Re(i,n)*Re(i,n)+Im(i,n)*Im(i,n)<<"\t";
-			double sum=0;	for(int n=1;n<levels+1;n++)	sum+=Re(i,n)*Re(i,n)+Im(i,n)*Im(i,n);
-			file<<sum<<"\n";
-			file.close();	
-			}
-			if (max_print_par!=-2)	print_par++;
-
-			
+				
 
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
-		
-	
+			
+			CalcPopulations(i, bunch);
 		
 		}	
 
@@ -434,7 +455,7 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 	px0(i)=bunch->coordArr()[i][1];
 	py0(i)=bunch->coordArr()[i][3];
 	pz0(i)=bunch->coordArr()[i][5];
-
+	
 	
 
 }
