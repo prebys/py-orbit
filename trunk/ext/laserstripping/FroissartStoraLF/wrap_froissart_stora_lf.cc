@@ -47,9 +47,11 @@ extern "C" {
 		 if(!PyArg_ParseTuple(	args,"ddd:",&Omega,&Gamma,&Elas)){
 			 		          error("FroissartStoraLF(Omega,Gamma,ampl_Elas) - params. are needed");
 		 } 
-		 else	
+		 else	{
 			 
-		self->cpp_obj = new FroissartStoraLF(Omega,Gamma,Elas);	
+		self->cpp_obj = new FroissartStoraLF(Omega,Gamma,Elas);
+		 ((FroissartStoraLF*) self->cpp_obj)->setPyWrapper((PyObject*) self);
+		 }
 
     return 0;
   }
