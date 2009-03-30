@@ -7,7 +7,8 @@
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
-
+#include "WaveFunctionAmplitudes.hh"
+#include "AtomPopulations.hh"
 
 
 using namespace TrackerRK4;
@@ -21,14 +22,11 @@ namespace LaserStripping{
 			/** Constructor. */
 			TwoLevelAtom(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, double delta_E, double dipole_tr);
 			
-
-		
 			
 			/** Destructor. */
 			~TwoLevelAtom();
 			
-		/** Method that initialise and defines parameters of printing */
-		void SetupPrint(int i,char* addr_print);
+
 		
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
@@ -61,8 +59,8 @@ namespace LaserStripping{
 			  double d_Energy;
 			  double dip_transition;
 
-			  
-			  
+			  WaveFunctionAmplitudes* AmplAttr;
+			  AtomPopulations* PopAttr;
 		  
 
 			  			 
@@ -89,25 +87,23 @@ namespace LaserStripping{
 			  double By_stat;
 			  double Bz_stat;
 			  
-			  int print_par;
-			  int max_print_par;
-			  char* addr_print;
+
 			  			 
 
 			  	
 				/**Solver for Amplitudes**/
 				void AmplSolver4step(int i,Bunch* bunch);
 							
+				/**Calculates populations**/
+				void CalcPopulations(int i,Bunch* bunch);
+				
 				/*this all parameters in frame of particle in atomic units necesarry for applying external effect  */
 				void GetParticleFrameParameters(int i, double t, double t_step, Bunch* bunch);
 				
 				/*this method gives laser and static fields transformed by rotation relatively z axes  */
 				void GetParticleFrameFields(int i, double t,double t_step,  Bunch* bunch);
 				
-				
-
-
-				
+								
 
 				
 	};

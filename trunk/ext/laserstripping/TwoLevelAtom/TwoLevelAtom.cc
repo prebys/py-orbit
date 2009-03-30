@@ -34,6 +34,9 @@
 
 
 
+
+
+
 #include "TwoLevelAtom.hh"
 #include "RungeKuttaTracker.hh"
 #include "OrbitConst.hh"
@@ -44,20 +47,20 @@
 
 
 
-#define Re1(i) bunch->arrAttr[i][1]		//i-part index, n,m-attr index
-#define Im1(i) bunch->arrAttr[i][2]
-#define Re2(i) bunch->arrAttr[i][3]		//i-part index, n,m-attr index
-#define Im2(i) bunch->arrAttr[i][4]
+#define Re1(i) AmplAttr->attArr(i)[1]		//i-part index, n,m-attr index
+#define Im1(i) AmplAttr->attArr(i)[2]
+#define Re2(i) AmplAttr->attArr(i)[3]		//i-part index, n,m-attr index
+#define Im2(i) AmplAttr->attArr(i)[4]
 
-#define time(i)  bunch->arrAttr[i][5]
-#define x0(i) 	 bunch->arrAttr[i][6]
-#define y0(i)  	 bunch->arrAttr[i][7]
-#define z0(i)  	 bunch->arrAttr[i][8]
-#define px0(i)   bunch->arrAttr[i][9]
-#define py0(i)   bunch->arrAttr[i][10]
-#define pz0(i)   bunch->arrAttr[i][11]
-#define Ampl_1(i) tcomplex(bunch->arrAttr[i][1],bunch->arrAttr[i][2])
-#define Ampl_2(i) tcomplex(bunch->arrAttr[i][3],bunch->arrAttr[i][4])
+#define time(i)  AmplAttr->attArr(i)[5]
+#define x0(i) 	 AmplAttr->attArr(i)[6]
+#define y0(i)  	 AmplAttr->attArr(i)[7]
+#define z0(i)  	 AmplAttr->attArr(i)[8]
+#define px0(i)   AmplAttr->attArr(i)[9]
+#define py0(i)   AmplAttr->attArr(i)[10]
+#define pz0(i)   AmplAttr->attArr(i)[11]
+#define Ampl_1(i) tcomplex(AmplAttr->attArr(i)[1],AmplAttr->attArr(i)[2])
+#define Ampl_2(i) tcomplex(AmplAttr->attArr(i)[3],AmplAttr->attArr(i)[4])
 
 //#define k_rk(j,n,m) k_RungeKutt[j][(n-1)*levels+m]
 
@@ -70,32 +73,51 @@ using namespace OrbitUtils;
 
 TwoLevelAtom::TwoLevelAtom(BaseLaserFieldSource*	BaseLaserField, double delta_E, double dipole_tr)
 {
+
 	setName("unnamed");
 	
 	LaserField=BaseLaserField;
 	d_Energy=delta_E;
 	dip_transition=dipole_tr;
-	print_par=-1;
-	max_print_par=-2;
 	
-//	print_par=max_print_par=10;
+	if(LaserField->getPyWrapper() != NULL){
+			Py_INCREF(LaserField->getPyWrapper());
+		}
 
 }
 
 
 
 
-TwoLevelAtom::~TwoLevelAtom() {}
+TwoLevelAtom::~TwoLevelAtom() 
+{
+	
+			if(LaserField->getPyWrapper() == NULL){
+				delete LaserField;
+			} else {
+				Py_XDECREF(LaserField->getPyWrapper());
+			}
+
+}
 
 
 
 
-void TwoLevelAtom::SetupPrint(int i, char* addr)	{
 
-	max_print_par=i;
-	print_par=max_print_par;
-	addr_print=addr;
 
+
+
+
+
+
+
+
+void TwoLevelAtom::CalcPopulations(int i, Bunch* bunch)	{
+		
+	PopAttr->attArr(i)[1] =  Re1(i)*Re1(i)+Im1(i)*Im1(i);
+	PopAttr->attArr(i)[2] =  Re2(i)*Re2(i)+Im2(i)*Im2(i);
+	PopAttr->attArr(i)[0] = PopAttr->attArr(i)[1]+PopAttr->attArr(i)[2];
+	
 }
 
 
@@ -103,6 +125,9 @@ void TwoLevelAtom::SetupPrint(int i, char* addr)	{
 
 void TwoLevelAtom::setupEffects(Bunch* bunch){		
 
+	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
+	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
+	
 	for (int i=0; i<bunch->getSize();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
 		y0(i)=bunch->coordArr()[i][2];
@@ -115,6 +140,7 @@ void TwoLevelAtom::setupEffects(Bunch* bunch){
 		time(i)=0.;
 		//All other attributes of particle are initiated in Python script
 
+		CalcPopulations(i, bunch);
 	}
 	
 }
@@ -141,7 +167,6 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 	
 		for (int i=0; i<bunch->getSize();i++)	{
 
-			
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
 			//in natural unts (Volt per meter)	in the frame of particle				
 			GetParticleFrameFields(i, t,t_step, bunch);
@@ -149,31 +174,14 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	t_part	omega_part	part_t_step 
 			//in atomic units in frame of particle		
 			GetParticleFrameParameters(i,t,t_step,bunch);	
-	
-			
-			
-			
-			//This function prints evolution of populations in file
-			if (print_par==max_print_par)	{
-			print_par=0;
-			double pop1=Re1(i)*Re1(i)+Im1(i)*Im1(i);
-			double pop2=Re2(i)*Re2(i)+Im2(i)*Im2(i);
-			ofstream file(addr_print,ios::app);
-			file<<t<<"\t"<<pop1<<"\t"<<pop2<<"\t"<<pop1+pop2<<"\n";
-			file.close();	
-			}
-			if (max_print_par!=-2)	print_par++;
-			
-			
-			
-			
-			
+				
 			
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
-		
-	
-		
+			
+			CalcPopulations(i, bunch);
+			
+
 		}	
 //	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\n";
 
@@ -253,6 +261,9 @@ for(int j=0;j<3;j++)
 part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
 t_part=time(i);					//time  in frame of particle (in atomic units) 
 
+
+
+
 	
 }
 
@@ -330,7 +341,9 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 	px0(i)=bunch->coordArr()[i][1];
 	py0(i)=bunch->coordArr()[i][3];
 	pz0(i)=bunch->coordArr()[i][5];
-
+	
+	
+	
 	
 
 }
