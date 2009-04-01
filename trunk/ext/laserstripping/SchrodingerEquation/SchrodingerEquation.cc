@@ -87,6 +87,7 @@ if(LaserField->getPyWrapper() != NULL){
 		Py_INCREF(LaserField->getPyWrapper());
 	}
 
+
 if(StarkEffect->getPyWrapper() != NULL){
 		Py_INCREF(StarkEffect->getPyWrapper());
 	}
@@ -109,29 +110,29 @@ if(StarkEffect->getPyWrapper() != NULL){
 SchrodingerEquation::~SchrodingerEquation()
 {
 
-	for (int i=0;i<levels+1;i++) delete	[]	k_RungeKutt[i];		delete []	k_RungeKutt;
+	for (int i=0;i<levels+1;i++) delete	[]	k_RungeKutt[i];		delete [] k_RungeKutt;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] exp_mu_El[i][j]; for (int i=0;i<levels+1;i++)	delete [] exp_mu_El[i];	delete	[]	exp_mu_El;		
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] mu_Elas[i][j]; for (int i=0;i<levels+1;i++)	delete [] mu_Elas[i];	delete	[]	mu_Elas;
 	delete [] E_i;
 	delete [] Gamma_i;
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
 	
+
 	
 	if(LaserField->getPyWrapper() == NULL){
 		delete LaserField;
-	} else {
+	} else { 
 		Py_XDECREF(LaserField->getPyWrapper());
 	}
-	
+		
 	
 	if(StarkEffect->getPyWrapper() == NULL){
-		delete LaserField;
+		delete StarkEffect; 
 	} else {
 		Py_XDECREF(StarkEffect->getPyWrapper());
 	}
 
-	
-	
+
 
 }
 
@@ -198,14 +199,14 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 
 
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
-			//in natural unts (Volt per meter)	in the frame of particle				
+			//in natural unts (Volt per meter)	in the frame of particle
+			
 			GetParticleFrameFields(i, t, t_step,bunch,fieldSource);
 	
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	t_part	omega_part	part_t_step 
 			//in atomic units in frame of particle		
 			GetParticleFrameParameters(i,t,t_step,bunch);	
 				
-
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
 			
@@ -286,7 +287,7 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 																		 Ex_las[j],Ey_las[j],Ez_las[j],
 																		 Bx_las[j],By_las[j],Bz_las[j]);	
 	
-	
+
 	Ez=RotateElectricFields(Ex_stat,Ey_stat,Ez_stat,Ex_las[j],Ey_las[j],Ez_las[j]);
 	
 	}

@@ -51,7 +51,7 @@ HermiteGaussianLFmode::HermiteGaussianLFmode(double Cnm,int n,int m,double w_x,d
 }
 
 HermiteGaussianLFmode::~HermiteGaussianLFmode()
-{
+{	
 }
 
 
