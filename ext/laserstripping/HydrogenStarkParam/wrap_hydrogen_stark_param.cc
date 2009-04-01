@@ -50,6 +50,7 @@ extern "C" {
 		 else	{
 
 		 self->cpp_obj =  new  HydrogenStarkParam(addressEG,states);
+		 ((HydrogenStarkParam*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	
 

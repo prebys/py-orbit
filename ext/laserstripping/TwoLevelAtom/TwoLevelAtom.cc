@@ -127,6 +127,7 @@ void TwoLevelAtom::setupEffects(Bunch* bunch){
 
 	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
 	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
+
 	
 	for (int i=0; i<bunch->getSize();i++)		{
 		x0(i)=bunch->coordArr()[i][0];

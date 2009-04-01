@@ -218,6 +218,7 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
 
 
 HydrogenStarkParam::~HydrogenStarkParam()	{
+
 	
 	for (int i=0;i<levels+1;i++)	delete	[]	energy[i];	delete	[]	energy;
 	for (int i=0;i<levels+1;i++)	delete	[]	gamma_autoionization[i];	delete	[]	gamma_autoionization;
@@ -226,7 +227,7 @@ HydrogenStarkParam::~HydrogenStarkParam()	{
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_z[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_z[i];	delete	[]	dipole_transition_z;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] gamma_spontaneous_relax[i][j]; for (int i=0;i<levels+1;i++)	delete [] gamma_spontaneous_relax[i];	delete	[]	gamma_spontaneous_relax;
 	
-	
+
 }
 
 
