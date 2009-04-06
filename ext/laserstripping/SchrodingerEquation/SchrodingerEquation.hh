@@ -93,6 +93,12 @@ namespace LaserStripping{
 			  double By_stat;
 			  double Bz_stat;
 			  
+			  double* nx;
+			  double* ny;
+			  double* nz;
+			  
+			  bool zero_cross;
+			  
 
 			  	
 				/**Solver for Amplitudes**/
@@ -108,7 +114,7 @@ namespace LaserStripping{
 				void GetParticleFrameFields(int i, double t,double t_step,  Bunch* bunch,  OrbitUtils::BaseFieldSource* fieldSource);
 				
 				/*This method provides rotational transformation of statis and laser field in frame of particle to z axes */
-				double	RotateElectricFields(double Ex_s, double Ey_s, double Ez_s,tcomplex& Ex_l,tcomplex& Ey_l,tcomplex& Ez_l);
+				void	RotateElectricFields(double nx, double ny, double nz, tcomplex& Ex_l,tcomplex& Ey_l,tcomplex& Ez_l);
 				
 
 				
