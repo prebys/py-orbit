@@ -71,7 +71,7 @@ SchrodingerEquation::SchrodingerEquation(BaseLaserFieldSource*	BaseLaserField, H
 	Parameter_resonance=par_res;
 	levels=	StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
 	
-
+	zero_cross==true;
 
 	
 	
@@ -117,6 +117,10 @@ SchrodingerEquation::~SchrodingerEquation()
 	delete [] Gamma_i;
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
 	
+	delete [] nx;
+	delete [] ny;
+	delete [] nz;
+	
 
 	
 	if(LaserField->getPyWrapper() == NULL){
@@ -156,6 +160,10 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
 	
 
+	nx=new double[bunch->getSize()];
+	ny=new double[bunch->getSize()];
+	nz=new double[bunch->getSize()];
+
 	for (int i=0; i<bunch->getSize();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
 		y0(i)=bunch->coordArr()[i][2];
@@ -165,7 +173,7 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 		py0(i)=bunch->coordArr()[i][3];
 		pz0(i)=bunch->coordArr()[i][5];
 		
-		time(i)=0.;
+		time(i)=0;
 		//All other attributes of particle are initiated in Python script
 		CalcPopulations(i, bunch);
 
@@ -200,7 +208,7 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
 			//in natural unts (Volt per meter)	in the frame of particle
-			
+
 			GetParticleFrameFields(i, t, t_step,bunch,fieldSource);
 	
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	t_part	omega_part	part_t_step 
@@ -226,35 +234,38 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 
 
 
-
-double	SchrodingerEquation::RotateElectricFields(double Exs, double Eys, double Ezs,tcomplex& Exl,tcomplex& Eyl,tcomplex& Ezl){
+void	SchrodingerEquation::RotateElectricFields(double nx,double ny,double nz, tcomplex& Exl,tcomplex& Eyl,tcomplex& Ezl){
 	
-	double Exy2=Exs*Exs+Eys*Eys;
-	double E2=Exs*Exs+Eys*Eys+Ezs*Ezs;
-	double E=sqrt(E2);
+	double nxy2=nx*nx+ny*ny;
+	double n2=nxy2+nz*nz;
+	double n=sqrt(n2);
 
-	
-	if(Exy2>1e-40*E2)	{
+
+
 		
 		tcomplex Exll=Exl;
 		tcomplex Eyll=Eyl;
 		tcomplex Ezll=Ezl;
 		
-		Exl=(-Exs*Exy2*Ezll + Eyll*Exs*Eys*(-E + Ezs) + Exll*(E*Eys*Eys + Exs*Exs*Ezs))/(E*Exy2);
-		Eyl=(-Eys*Exy2*Ezll + Exll*Exs*Eys*(-E + Ezs) + Eyll*(E*Exs*Exs + Eys*Eys*Ezs))/(E*Exy2);
-		Ezl=(Exll*Exs + Eyll*Eys + Ezll*Ezs)/E;
 		
-	}
-	
-	else	{
+		if(nxy2>1e-40*n2)	{
+			
+		Exl=(-nx*nxy2*Ezll + Eyll*nx*ny*(-n + nz) + Exll*(n*ny*ny + nx*nx*nz))/(n*nxy2);
+		Eyl=(-ny*nxy2*Ezll + Exll*nx*ny*(-n + nz) + Eyll*(n*nx*nx + ny*ny*nz))/(n*nxy2);
+		Ezl=(Exll*nx + Eyll*ny + Ezll*nz)/n;
 		
-		Exl=Exl;
-		Eyl=Eyl;
-		Ezl=Ezl;
+		}
+		
 
-	}
+		else	{
+			
+			Exl=Exl;
+			Eyl=Eyl;
+			Ezl=Ezl;
+
+		}
 	
-return E;
+return ;
 
 }
 
@@ -272,11 +283,25 @@ return E;
 void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
 	
 	double** xyz = bunch->coordArr();
-	double Ez;
-	
-		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
-		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);
 
+
+		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
+		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
+
+		if (zero_cross&&time(i)==0)	{
+		nx[i] = Ex_stat;	
+		ny[i] = Ey_stat;	
+		nz[i] = Ez_stat;
+		}	
+		
+		
+		if (!zero_cross)	{
+		nx[i] = Ex_stat;	
+		ny[i] = Ey_stat;	
+		nz[i] = Ez_stat;
+		}
+		
+		
 	for (int j=0; j<3;j++)	{
 							
 		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
@@ -286,20 +311,19 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 											px0(i),py0(i),pz0(i),
 																		 Ex_las[j],Ey_las[j],Ez_las[j],
 																		 Bx_las[j],By_las[j],Bz_las[j]);	
+
+
+	RotateElectricFields(nx[i],ny[i],nz[i],Ex_las[j],Ey_las[j],Ez_las[j]);
 	
 
-	Ez=RotateElectricFields(Ex_stat,Ey_stat,Ez_stat,Ex_las[j],Ey_las[j],Ez_las[j]);
-	
 	}
 	
+	Ez_stat=sqrt(Ex_stat*Ex_stat+Ey_stat*Ey_stat+Ez_stat*Ez_stat);
 	Ex_stat=0;	
 	Ey_stat=0;		
-	Ez_stat=Ez;
+
 	
 			
-
-
-
 }
 
 
