@@ -61,7 +61,7 @@ extern "C" {
  	  QuadEMfield* cpp_QuadEMfield = (QuadEMfield*)((pyORBIT_Object*) self)->cpp_obj;			       
         double y0;
             //NO NEW OBJECT CREATED By0 PyArg_ParseTuple! NO NEED OF Py_DECREF()
-            if(!PyArg_ParseTuple(	args,"d:",y0))
+            if(!PyArg_ParseTuple(	args,"d:",&y0))
               error(" SetupPrint(y0 - parameter is needed");
             else 	  
             cpp_QuadEMfield->y0(y0);
