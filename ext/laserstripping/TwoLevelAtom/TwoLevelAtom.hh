@@ -9,6 +9,7 @@
 #include "BaseLaserFieldSource.hh"
 #include "WaveFunctionAmplitudes.hh"
 #include "AtomPopulations.hh"
+#include "pq_coordinates.hh"
 
 
 using namespace TrackerRK4;
@@ -30,6 +31,9 @@ namespace LaserStripping{
 		
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
+		
+		/*it memorizes initial coordinates and impulses before rk step*/
+		void memorizeInitParams(Bunch* bunch);
 		
 		/** It finalizes effects. */
 		void finalizeEffects(Bunch* bunch);
@@ -61,6 +65,7 @@ namespace LaserStripping{
 
 			  WaveFunctionAmplitudes* AmplAttr;
 			  AtomPopulations* PopAttr;
+			  pq_coordinates* Coords;
 		  
 
 			  			 

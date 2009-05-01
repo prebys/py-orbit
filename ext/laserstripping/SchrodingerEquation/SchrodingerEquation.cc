@@ -44,13 +44,14 @@
 
 #define Re(i,m) AmplAttr->attArr(i)[m]		//i-part index, n,m-attr index
 #define Im(i,m) AmplAttr->attArr(i)[m+levels]
-#define time(i)  AmplAttr->attArr(i)[2*levels+1]
-#define x0(i)  AmplAttr->attArr(i)[2*levels+2]
-#define y0(i)  AmplAttr->attArr(i)[2*levels+3]
-#define z0(i)  AmplAttr->attArr(i)[2*levels+4]
-#define px0(i)  AmplAttr->attArr(i)[2*levels+5]
-#define py0(i)  AmplAttr->attArr(i)[2*levels+6]
-#define pz0(i)  AmplAttr->attArr(i)[2*levels+7]
+
+#define x0(i) 	 Coords->attArr(i)[0]
+#define y0(i)  	 Coords->attArr(i)[2]
+#define z0(i)  	 Coords->attArr(i)[4]
+#define px0(i)   Coords->attArr(i)[1]
+#define py0(i)   Coords->attArr(i)[3]
+#define pz0(i)   Coords->attArr(i)[5]
+
 #define a(i,m) tcomplex(AmplAttr->attArr(i)[m],AmplAttr->attArr(i)[m+levels])
 
 
@@ -156,6 +157,13 @@ void SchrodingerEquation::CalcPopulations(int i, Bunch* bunch)	{
 
 void SchrodingerEquation::setupEffects(Bunch* bunch){		
 	
+	if (bunch->hasParticleAttributes("pq_coords")==0)	{
+	std::map<std::string,double> part_attr_dict;
+	part_attr_dict["size"] = 6;
+	bunch->addParticleAttributes("pq_coords",part_attr_dict);
+	}
+	
+	Coords = (pq_coordinates*) bunch->getParticleAttributes("pq_coords");
 	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
 	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
 	
@@ -163,7 +171,15 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 	nx=new double[bunch->getSize()];
 	ny=new double[bunch->getSize()];
 	nz=new double[bunch->getSize()];
+	
+	t_part=0;
 
+}
+		
+
+
+void SchrodingerEquation::memorizeInitParams(Bunch* bunch){
+	
 	for (int i=0; i<bunch->getSize();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
 		y0(i)=bunch->coordArr()[i][2];
@@ -172,18 +188,17 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 		px0(i)=bunch->coordArr()[i][1];
 		py0(i)=bunch->coordArr()[i][3];
 		pz0(i)=bunch->coordArr()[i][5];
-		
-		time(i)=0;
-		//All other attributes of particle are initiated in Python script
-		CalcPopulations(i, bunch);
 
 	}
 	
+	
 }
-		
 
 	
 void SchrodingerEquation::finalizeEffects(Bunch* bunch){
+	
+	if(bunch->hasParticleAttributes("pq_coords")==1)
+		bunch->removeParticleAttributes("pq_coords");
 	
 }
 
@@ -203,7 +218,7 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 
 
 	
-		for (int i=0; i<bunch->getSize();i++)	{
+			for (int i=0; i<bunch->getSize();i++)	{
 
 
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
@@ -288,7 +303,7 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
 		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
 
-		if (zero_cross&&time(i)==0)	{
+		if (zero_cross&&t_part==0)	{
 		nx[i] = Ex_stat;	
 		ny[i] = Ey_stat;	
 		nz[i] = Ez_stat;
@@ -358,7 +373,6 @@ Ez_stat/=Ea;
 
 
 part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
-t_part=time(i);					//time  in frame of particle (in atomic units) 
 omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
 
 
@@ -468,18 +482,8 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 	
 	
 
-	
-	
 
-	time(i)+=part_t_step;
-	
-	x0(i)=bunch->coordArr()[i][0];
-	y0(i)=bunch->coordArr()[i][2];
-	z0(i)=bunch->coordArr()[i][4];
-	
-	px0(i)=bunch->coordArr()[i][1];
-	py0(i)=bunch->coordArr()[i][3];
-	pz0(i)=bunch->coordArr()[i][5];
+	t_part+=part_t_step;
 	
 	
 
