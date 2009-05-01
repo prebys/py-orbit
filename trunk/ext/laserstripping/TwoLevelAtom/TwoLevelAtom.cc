@@ -52,13 +52,12 @@
 #define Re2(i) AmplAttr->attArr(i)[3]		//i-part index, n,m-attr index
 #define Im2(i) AmplAttr->attArr(i)[4]
 
-#define time(i)  AmplAttr->attArr(i)[5]
-#define x0(i) 	 AmplAttr->attArr(i)[6]
-#define y0(i)  	 AmplAttr->attArr(i)[7]
-#define z0(i)  	 AmplAttr->attArr(i)[8]
-#define px0(i)   AmplAttr->attArr(i)[9]
-#define py0(i)   AmplAttr->attArr(i)[10]
-#define pz0(i)   AmplAttr->attArr(i)[11]
+#define x0(i) 	 Coords->attArr(i)[0]
+#define y0(i)  	 Coords->attArr(i)[2]
+#define z0(i)  	 Coords->attArr(i)[4]
+#define px0(i)   Coords->attArr(i)[1]
+#define py0(i)   Coords->attArr(i)[3]
+#define pz0(i)   Coords->attArr(i)[5]
 #define Ampl_1(i) tcomplex(AmplAttr->attArr(i)[1],AmplAttr->attArr(i)[2])
 #define Ampl_2(i) tcomplex(AmplAttr->attArr(i)[3],AmplAttr->attArr(i)[4])
 
@@ -123,11 +122,24 @@ void TwoLevelAtom::CalcPopulations(int i, Bunch* bunch)	{
 
 
 
-void TwoLevelAtom::setupEffects(Bunch* bunch){		
-
+void TwoLevelAtom::setupEffects(Bunch* bunch){
+	
+	if (bunch->hasParticleAttributes("pq_coords")==0)	{
+	std::map<std::string,double> part_attr_dict;
+	part_attr_dict["size"] = 6;
+	bunch->addParticleAttributes("pq_coords",part_attr_dict);
+	}
+	
+	Coords = (pq_coordinates*) bunch->getParticleAttributes("pq_coords");
 	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
 	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
 
+	t_part=0;
+}
+
+
+
+void TwoLevelAtom::memorizeInitParams(Bunch* bunch){
 	
 	for (int i=0; i<bunch->getSize();i++)		{
 		x0(i)=bunch->coordArr()[i][0];
@@ -137,18 +149,20 @@ void TwoLevelAtom::setupEffects(Bunch* bunch){
 		px0(i)=bunch->coordArr()[i][1];
 		py0(i)=bunch->coordArr()[i][3];
 		pz0(i)=bunch->coordArr()[i][5];
-		
-		time(i)=0.;
-		//All other attributes of particle are initiated in Python script
 
-		CalcPopulations(i, bunch);
 	}
+	
 	
 }
 		
 
 	
-void TwoLevelAtom::finalizeEffects(Bunch* bunch) {}
+void TwoLevelAtom::finalizeEffects(Bunch* bunch) {
+	
+	if(bunch->hasParticleAttributes("pq_coords")==1)
+		bunch->removeParticleAttributes("pq_coords");
+
+}
 
 
 
@@ -260,12 +274,9 @@ for(int j=0;j<3;j++)
 
 
 part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
-t_part=time(i);					//time  in frame of particle (in atomic units) 
+ 
 
 
-
-
-	
 }
 
 
@@ -330,22 +341,10 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 
 		
 			
-			
-	
-	
-	time(i)+=part_t_step;
-	
-	x0(i)=bunch->coordArr()[i][0];
-	y0(i)=bunch->coordArr()[i][2];
-	z0(i)=bunch->coordArr()[i][4];
-	
-	px0(i)=bunch->coordArr()[i][1];
-	py0(i)=bunch->coordArr()[i][3];
-	pz0(i)=bunch->coordArr()[i][5];
-	
-	
-	
-	
+				
+	t_part+=part_t_step;
+
+
 
 }
 
