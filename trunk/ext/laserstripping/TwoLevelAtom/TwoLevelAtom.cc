@@ -58,6 +58,7 @@
 #define px0(i)   Coords->attArr(i)[1]
 #define py0(i)   Coords->attArr(i)[3]
 #define pz0(i)   Coords->attArr(i)[5]
+
 #define Ampl_1(i) tcomplex(AmplAttr->attArr(i)[1],AmplAttr->attArr(i)[2])
 #define Ampl_2(i) tcomplex(AmplAttr->attArr(i)[3],AmplAttr->attArr(i)[4])
 
@@ -75,10 +76,12 @@ TwoLevelAtom::TwoLevelAtom(BaseLaserFieldSource*	BaseLaserField, double delta_E,
 
 	setName("unnamed");
 	
+	
 	LaserField=BaseLaserField;
 	d_Energy=delta_E;
 	dip_transition=dipole_tr;
 	
+
 	if(LaserField->getPyWrapper() != NULL){
 			Py_INCREF(LaserField->getPyWrapper());
 		}
@@ -124,17 +127,43 @@ void TwoLevelAtom::CalcPopulations(int i, Bunch* bunch)	{
 
 void TwoLevelAtom::setupEffects(Bunch* bunch){
 	
+	if(bunch->hasParticleAttributes("Amplitudes")==0)	{
+		std::map<std::string,double> part_attr_dict;
+		part_attr_dict["size"] = 5;
+		bunch->addParticleAttributes("Amplitudes",part_attr_dict);
+		
+		for (int i=0; i<bunch->getSize();i++)
+		bunch->getParticleAttributes("Amplitudes")->attValue(i,1) = 1;
+	}
+
+	
+		if(bunch->hasParticleAttributes("Populations")==0)	{
+			std::map<std::string,double> part_attr_dict;
+			part_attr_dict["size"] = 3;
+			bunch->addParticleAttributes("Populations",part_attr_dict);
+		}
+	
+	
+	
+	
+	
+	
+	
 	if (bunch->hasParticleAttributes("pq_coords")==0)	{
 	std::map<std::string,double> part_attr_dict;
 	part_attr_dict["size"] = 6;
 	bunch->addParticleAttributes("pq_coords",part_attr_dict);
 	}
-	
-	Coords = (pq_coordinates*) bunch->getParticleAttributes("pq_coords");
-	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
-	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
 
-	t_part=0;
+
+	Coords = bunch->getParticleAttributes("pq_coords");
+	AmplAttr = bunch->getParticleAttributes("Amplitudes");
+	PopAttr = bunch->getParticleAttributes("Populations");
+	
+	for (int i=0; i<bunch->getSize();i++)
+	CalcPopulations(i, bunch);
+	
+
 }
 
 
@@ -155,12 +184,12 @@ void TwoLevelAtom::memorizeInitParams(Bunch* bunch){
 	
 }
 		
-
 	
 void TwoLevelAtom::finalizeEffects(Bunch* bunch) {
 	
 	if(bunch->hasParticleAttributes("pq_coords")==1)
 		bunch->removeParticleAttributes("pq_coords");
+	
 
 }
 
@@ -196,9 +225,9 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 			
 			CalcPopulations(i, bunch);
 			
-
+			
 		}	
-//	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\n";
+
 
 
 	
@@ -265,6 +294,10 @@ void	TwoLevelAtom::GetParticleFrameParameters(int i, double t,double t_step, Bun
 
 //This line calculates relyativistic factor-Gamma
 double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
+double coeff=1./(gamma*ta);
+
+part_t_step=t_step*coeff;	//time step in frame of particle (in atomic units)
+t_part=t*coeff;	 
 
 
 
@@ -273,8 +306,6 @@ for(int j=0;j<3;j++)
 	Ez_las[j]/=Ea; 
 
 
-part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
- 
 
 
 }
@@ -341,9 +372,6 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 
 		
 			
-				
-	t_part+=part_t_step;
-
 
 
 }

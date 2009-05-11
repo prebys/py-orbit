@@ -8,9 +8,8 @@
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
 #include "HydrogenStarkParam.hh"
-#include "WaveFunctionAmplitudes.hh"
-#include "AtomPopulations.hh"
-#include "pq_coordinates.hh"
+#include "ParticleAttributes.hh"
+
 
 using namespace TrackerRK4;
 
@@ -68,9 +67,9 @@ namespace LaserStripping{
 			  int levels;
 			  double Parameter_resonance;
 			  
-			  WaveFunctionAmplitudes* AmplAttr;
-			  AtomPopulations* PopAttr;
-			  pq_coordinates* Coords;
+			  ParticleAttributes* AmplAttr;
+			  ParticleAttributes* PopAttr;
+			  ParticleAttributes* Coords;
 			  
 		  
 
@@ -79,7 +78,7 @@ namespace LaserStripping{
 			  double omega_part;
 			  double part_t_step;
 			  double t_part;
-			  double phasa_part;
+
 			  					  
 			  //Fields in the particle frame  
 			  tcomplex Ex_las[3];

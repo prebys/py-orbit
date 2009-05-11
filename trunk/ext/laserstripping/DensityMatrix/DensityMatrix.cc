@@ -141,17 +141,40 @@ void DensityMatrix::CalcPopulations(int i, Bunch* bunch)	{
 
 void DensityMatrix::setupEffects(Bunch* bunch){		
 	
+	if(bunch->hasParticleAttributes("Amplitudes")==0)	{
+		std::map<std::string,double> part_attr_dict;
+		part_attr_dict["size"] = 2*levels*levels+1;
+		bunch->addParticleAttributes("Amplitudes",part_attr_dict);
+		
+		for (int i=0; i<bunch->getSize();i++)
+		bunch->getParticleAttributes("Amplitudes")->attValue(i,1) = 1;
+	}
+
+	
+		if(bunch->hasParticleAttributes("Populations")==0)	{
+			std::map<std::string,double> part_attr_dict;
+			part_attr_dict["size"] = levels+1;
+			bunch->addParticleAttributes("Populations",part_attr_dict);
+		}
+	
+	
+
+	
+	
+	
+	
+	
 	if (bunch->hasParticleAttributes("pq_coords")==0)	{
 	std::map<std::string,double> part_attr_dict;
 	part_attr_dict["size"] = 6;
 	bunch->addParticleAttributes("pq_coords",part_attr_dict);
 	}
 	
-	Coords = (pq_coordinates*) bunch->getParticleAttributes("pq_coords");
-	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
-	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
+	Coords = bunch->getParticleAttributes("pq_coords");
+	AmplAttr = bunch->getParticleAttributes("Amplitudes");
+	PopAttr = bunch->getParticleAttributes("Populations");
 
-	t_part=0;
+
 	
 }
 		
@@ -278,8 +301,6 @@ void DensityMatrix::GetParticleFrameFields(int i,double t,double t_step,  Bunch*
 		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);
 
 		
-		
-	if (LaserField!=NULL)	{	
 	for (int j=0; j<3;j++)	{
 							
 		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
@@ -294,8 +315,8 @@ void DensityMatrix::GetParticleFrameFields(int i,double t,double t_step,  Bunch*
 	Ez=RotateElectricFields(Ex_stat,Ey_stat,Ez_stat,Ex_las[j],Ey_las[j],Ez_las[j]);
 	
 	}
-	}
-	else 	Ez=sqrt(Ex_stat*Ex_stat+Ey_stat*Ey_stat+Ez_stat*Ez_stat);
+
+
 	
 	Ex_stat=0;	
 	Ey_stat=0;		
@@ -321,10 +342,14 @@ void	DensityMatrix::GetParticleFrameParameters(int i, double t,double t_step, Bu
 
 //This line calculates relyativistic factor-Gamma
 double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
+double coeff=1./(gamma*ta);
+
+part_t_step=t_step*coeff;	//time step in frame of particle (in atomic units)
+t_part=t*coeff;	 
 
 
 
-if (LaserField!=NULL)
+
 for(int j=0;j<3;j++)	
 {		
 	Ex_las[j]/=Ea; 
@@ -336,9 +361,7 @@ Ey_stat/=Ea;
 Ez_stat/=Ea;
 
 
-part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
 
-if (LaserField!=NULL)
 omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
 
 
@@ -399,7 +422,7 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 
 
 
-		if (LaserField!=NULL)
+
 		for(int n=2; n<levels+1;n++)
 		for(int m=1; m<n;m++)		
 			if (cond[n][m])		{
@@ -423,14 +446,14 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 			
 			if (j==4)	dt=part_t_step;	else dt=part_t_step/2.;
 			
-			if (LaserField!=NULL)	{
+
 			k_RungeKutt[n][m][j]*=0.;
 			for(int k=1;k<n;k++)			if (cond[n][k])		 k_RungeKutt[n][m][j]+=exp_mu_El[n][k][j]*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt);	
 			for(int k=n+1;k<levels+1;k++)	if (cond[k][n]) 	 k_RungeKutt[n][m][j]+=conj(exp_mu_El[k][n][j])*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt); 
 			for(int k=1;k<m;k++)			if (cond[m][k]) 	 k_RungeKutt[n][m][j]-=conj(exp_mu_El[m][k][j])*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
 			for(int k=m+1;k<levels+1;k++)	if (cond[k][m]) 	 k_RungeKutt[n][m][j]-=exp_mu_El[k][m][j]*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
 			k_RungeKutt[n][m][j]*=J/2.;
-			}
+
 
 
 
@@ -478,7 +501,6 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 		
 	}
 
-	t_part+=part_t_step;
 
 }
 

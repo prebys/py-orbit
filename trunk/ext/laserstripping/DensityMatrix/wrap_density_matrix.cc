@@ -46,9 +46,9 @@ extern "C" {
 	  PyObject*	pyBaseLaserField=NULL;
 	  PyObject*	pyStarkEffect=NULL;
 
-	  int nVars = PyTuple_Size(args);
+
 	  
-	  if(nVars==3) if(!PyArg_ParseTuple(	args,"OOd:",&pyBaseLaserField,&pyStarkEffect,&par_res))
+	  if(!PyArg_ParseTuple(	args,"OOd:",&pyBaseLaserField,&pyStarkEffect,&par_res))
 			 		          {error("DensityMatrix(LaserField,StarkEffect,resonanse_parameter) - params. are needed");}	
 		 else	{
 		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
@@ -57,17 +57,7 @@ extern "C" {
 		 ((DensityMatrix*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 			 		        	  
-	  
-	  
-	  if(nVars==2) if(!PyArg_ParseTuple(	args,"Od:",&pyStarkEffect,&par_res))
-			 		          {error("DensityMatrix(StarkEffect,states) - params. are needed");}
-		 else	{
-	     BaseLaserFieldSource* lfs = NULL;
-		 HydrogenStarkParam* Stark = (HydrogenStarkParam*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
-		 self->cpp_obj =  new  DensityMatrix(lfs, Stark, par_res);
-		 ((DensityMatrix*) self->cpp_obj)->setPyWrapper((PyObject*) self);
-		 }
-			 			
+	  		
 
     return 0;
   }

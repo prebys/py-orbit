@@ -12,6 +12,7 @@
 #include "wrap_quad_em_field.hh"
 #include "wrap_const_em_field.hh"
 #include "wrap_print_ext_effects.hh"
+#include "wrap_record_evolution.hh"
 
 static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
@@ -34,6 +35,7 @@ extern "C" {
 		wrap_quad_em_field::initQuadEMfield(module);
 		wrap_const_em_field::initConstEMfield(module);
 		wrap_print_ext_effects::initPrintExtEffects(module);
+		wrap_record_evolution::initRecordEvolution(module);
 		
   }
 	

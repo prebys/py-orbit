@@ -155,7 +155,28 @@ void SchrodingerEquation::CalcPopulations(int i, Bunch* bunch)	{
 
 
 
-void SchrodingerEquation::setupEffects(Bunch* bunch){		
+void SchrodingerEquation::setupEffects(Bunch* bunch){	
+	
+	
+	if(bunch->hasParticleAttributes("Amplitudes")==0)	{
+		std::map<std::string,double> part_attr_dict;
+		part_attr_dict["size"] = 2*levels+1;
+		bunch->addParticleAttributes("Amplitudes",part_attr_dict);
+		
+		for (int i=0; i<bunch->getSize();i++)
+		bunch->getParticleAttributes("Amplitudes")->attValue(i,1) = 1;
+	}
+
+	
+		if(bunch->hasParticleAttributes("Populations")==0)	{
+			std::map<std::string,double> part_attr_dict;
+			part_attr_dict["size"] = levels+1;
+			bunch->addParticleAttributes("Populations",part_attr_dict);
+		}
+	
+	
+	
+	
 	
 	if (bunch->hasParticleAttributes("pq_coords")==0)	{
 	std::map<std::string,double> part_attr_dict;
@@ -163,16 +184,16 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 	bunch->addParticleAttributes("pq_coords",part_attr_dict);
 	}
 	
-	Coords = (pq_coordinates*) bunch->getParticleAttributes("pq_coords");
-	AmplAttr = (WaveFunctionAmplitudes*) bunch->getParticleAttributes("Amplitudes");
-	PopAttr = (AtomPopulations*) bunch->getParticleAttributes("Populations");
+	Coords = bunch->getParticleAttributes("pq_coords");
+	AmplAttr = bunch->getParticleAttributes("Amplitudes");
+	PopAttr = bunch->getParticleAttributes("Populations");
 	
 
 	nx=new double[bunch->getSize()];
 	ny=new double[bunch->getSize()];
 	nz=new double[bunch->getSize()];
 	
-	t_part=0;
+
 
 }
 		
@@ -237,9 +258,6 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 		
 		}	
 
-//	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\n";
-
-	
 }
 
 
@@ -357,7 +375,10 @@ void	SchrodingerEquation::GetParticleFrameParameters(int i, double t,double t_st
 
 //This line calculates relyativistic factor-Gamma
 double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
+double coeff=1./(gamma*ta);
 
+part_t_step=t_step*coeff;	//time step in frame of particle (in atomic units)
+t_part=t*coeff;	
 
 
 
@@ -372,9 +393,8 @@ Ey_stat/=Ea;
 Ez_stat/=Ea;
 
 
-part_t_step=t_step/gamma/ta;	//time step in frame of particle (in atomic units)
-omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
 
+omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
 
 StarkEffect->SetE(Ez_stat);	
 
@@ -483,7 +503,7 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 	
 
 
-	t_part+=part_t_step;
+
 	
 	
 
