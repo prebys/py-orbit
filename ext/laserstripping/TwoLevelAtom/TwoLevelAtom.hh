@@ -8,8 +8,8 @@
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
 #include "WaveFunctionAmplitudes.hh"
-#include "AtomPopulations.hh"
-#include "pq_coordinates.hh"
+#include "ParticleAttributes.hh"
+
 
 
 using namespace TrackerRK4;
@@ -63,16 +63,16 @@ namespace LaserStripping{
 			  double d_Energy;
 			  double dip_transition;
 
-			  WaveFunctionAmplitudes* AmplAttr;
-			  AtomPopulations* PopAttr;
-			  pq_coordinates* Coords;
+			  ParticleAttributes* AmplAttr;
+			  ParticleAttributes* PopAttr;
+			  ParticleAttributes* Coords;
 		  
 
 			  			 
 			  //time and frequensy of laser in frame of particle
 			  double part_t_step;
 			  double t_part;
-			  double phasa_part;
+
 			  					  
 			  //Fields in the particle frame  
 			  
