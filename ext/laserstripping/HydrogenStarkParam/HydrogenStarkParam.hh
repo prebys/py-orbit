@@ -49,7 +49,7 @@
 		int getStates();
 		
 		
-		
+		double* field_thresh;		
 		
 		
 		private:  
@@ -61,6 +61,7 @@
 		 double*** gamma_spontaneous_relax;
 		 double** energy;
 		 double** gamma_autoionization;
+
 		  
 		 double delta_F;
 		 int n_data;

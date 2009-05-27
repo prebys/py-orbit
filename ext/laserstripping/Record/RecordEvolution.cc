@@ -111,10 +111,9 @@ void RecordEvolution::setupEffects(Bunch* bunch){
 
 	for (int i=0; i<bunch->getSize();i++)                        
 	Evol->attArr(i)[0] = RecEff->attArr(i)[index_effect];
+
 	
 
-	cout<<RecEff->attArr(0)[1]<<"\n";
-	cout<<"flag2"<<"\n";
 	
 }
 
@@ -140,7 +139,7 @@ void RecordEvolution::memorizeInitParams(Bunch* bunch){
 
 	
 void RecordEvolution::finalizeEffects(Bunch* bunch) {
-	cout<<"last1 "<<Evol->attArr(0)[0]<<"\n";
+
 	if(bunch->hasParticleAttributes("pq_coords")==1)
 		bunch->removeParticleAttributes("pq_coords");
 
@@ -189,8 +188,7 @@ void RecordEvolution::applyEffects(Bunch* bunch, int index,
 if(int((t-t_in+t_step)/t_step+0.5)%(Num/num_plot) == 0)		
 for (int i=0; i<bunch->getSize();i++)	{
 	Evol->attArr(i)[int((t-t_in+t_step)/t_step+0.5)/(Num/num_plot)] = RecEff->attArr(i)[index_effect];
-//	cout<<int((t-t_in+t_step)/t_step+0.5)/(Num/num_plot)<<"  "<<RecEff->attArr(i)[index_effect]<<"\n";
-//	cout<<"last2 "<<Evol->attArr(0)[0]<<"\n";
+
 }
 
 

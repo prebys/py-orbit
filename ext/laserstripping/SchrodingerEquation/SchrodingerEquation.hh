@@ -102,6 +102,7 @@ namespace LaserStripping{
 			  double* nz;
 			  
 			  bool zero_cross;
+			  bool install_field_dir;
 			  
 
 			  	

@@ -60,6 +60,8 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
   ORBIT_MPI_Bcast(&n_data, 1, MPI_INT,0,MPI_COMM_WORLD);
 	
 	//allocating memory for dynamic massive of data that will be read fron files
+  	field_thresh = new double[levels+1];
+  
 	energy=new double*[levels+1];	
 	for (int i=0;i<levels+1;i++)	energy[i]=new double[n_data+10];
 	
@@ -95,16 +97,24 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
 					k=convert3to1level(n,n1,m);		
 					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));		
 					file_in.open(nameEG);for (fi=0; fi<n_data; fi++)	{file_in>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file_in.close();
+					
+					file.open(nameEG);	while(!file.eof())	file>>field_thresh[k]>>F>>F; file.close();
+					
 				}
 			}
 		}
 	}
 	
+	
+	ORBIT_MPI_Bcast(field_thresh,levels+1 ,MPI_DOUBLE,0,MPI_COMM_WORLD);
+	
+
+	
 	for(int n=1;n<states+1;n++){
-		for(int m=-(n-1);m<(n-1)+1;m++){
-			
+		for(int m=-(n-1);m<(n-1)+1;m++){	
 			for(int n1=0;n1<n-abs(m)-1+1;n1++)	{
 				k=convert3to1level(n,n1,m);	
+				
 				
 				for(fi=0; fi<n_data; fi++){
 					dump_arr[fi] = energy[k][fi];
@@ -143,12 +153,13 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
 								k=convert3to1level(n,n1,m);
 								ks=convert3to1level(ns,n1s,ms);
 								
+								
 								sprintf(nameEG,"%s%i%i%i---%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,m,n1s,ns-n1s-abs(ms)-1,ms);
 								file_in.open(nameEG);
 								for (fi=0; fi<n_data; fi++)	{file_in>>F>>dipole_transition_x[k][ks][fi]>>dipole_transition_y[k][ks][fi]>>dipole_transition_z[k][ks][fi];
 									
 									// this condition assumes that probability of spontaneous (see next line) and indused tansition  between levels with the same principal quantum number n is sero
-									if(ns==n)	{dipole_transition_x[k][ks][fi]=0;dipole_transition_y[k][ks][fi]=0;dipole_transition_z[k][ks][fi]=0;}
+									if((ns==n)||(field_thresh[k]<=F)||(field_thresh[ks]<=F))	{dipole_transition_x[k][ks][fi]=0;dipole_transition_y[k][ks][fi]=0;dipole_transition_z[k][ks][fi]=0;}
 									
 									//this loop fills spontaneous relaxation (transition) of atom in relative atomic units
 									gamma_spontaneous_relax[k][ks][fi]=fabs((4*alpha*alpha*alpha/3)*pow(energy[k][fi]-energy[ks][fi],3)*(pow(dipole_transition_x[k][ks][fi],2)+pow(dipole_transition_y[k][ks][fi],2)+pow(dipole_transition_z[k][ks][fi],2)));
@@ -226,7 +237,7 @@ HydrogenStarkParam::~HydrogenStarkParam()	{
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_y[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_y[i];	delete	[]	dipole_transition_y;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_z[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_z[i];	delete	[]	dipole_transition_z;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] gamma_spontaneous_relax[i][j]; for (int i=0;i<levels+1;i++)	delete [] gamma_spontaneous_relax[i];	delete	[]	gamma_spontaneous_relax;
-	
+	delete [] field_thresh;
 
 }
 

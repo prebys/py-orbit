@@ -20,7 +20,6 @@
 
 #include "orbit_mpi.hh"
 #include "OrbitConst.hh"
-#include "LaserFieldOrientation.hh"
 #include <iostream>
 
 #define J tcomplex(0.,1.)
@@ -40,11 +39,11 @@ HermiteGaussianLFmode::HermiteGaussianLFmode(double Cnm,int n,int m,double w_x,d
 	m_moda=m;
 	
 
-	//default orientation of laser field
+	//default orientation of laser field polarizations
 	nEx=1;nEy=0;nEz=0;
 	nHx=0;nHy=1;nHz=0;
-	kx=0;ky=0;kz=1;
-	mx=1;my=0;mz=0;
+
+
 	
 	
 	
@@ -62,17 +61,15 @@ HermiteGaussianLFmode::~HermiteGaussianLFmode()
 
 
 
-void HermiteGaussianLFmode::setLaserFieldOrientation(double x_0, double y_0, double z_0,
-													double k_x, double k_y, double k_z,
-													double m_x, double m_y, double m_z,
+void HermiteGaussianLFmode::setLaserFieldOrientation(double x0, double y0, double z0,
+													double kx, double ky, double kz,
+													double mx, double my, double mz,
 													double n_Ex, double n_Ey, double n_Ez)	
 {
 	double a=sqrt(n_Ex*n_Ex+n_Ey*n_Ey+n_Ez*n_Ez);
-
 	
-	x0=x_0;	y0=y_0;	z0=z_0;	//Point in space 
-	kx=k_x;	ky=k_y;	kz=k_z;	//Wave vector
-	mx=m_x;	my=m_y;	mz=m_z; //Vector of moda orientation
+	orient->setCoefficients(x0, y0, z0,kx, ky, kz, mx, my, mz);
+	
 	
 	nEx=n_Ex/a;	
 	nEy=n_Ey/a;	
@@ -135,7 +132,7 @@ void HermiteGaussianLFmode::getLaserElectricMagneticField(double x, double y, do
 	
 
 
-LaserFieldOrientation::OrientCoordinates(x,y,z,x0,y0,z0,kx,ky,kz,mx,my,mz);
+			orient->OrientCoordinates(x,y,z);
 tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
 
 
@@ -157,8 +154,8 @@ tcomplex	H=E/OrbitConst::c;
 double HermiteGaussianLFmode::getFrequencyOmega(double m, double x, double y, double z, double px, double py, double pz, double t){
 
 	
-	LaserFieldOrientation::OrientCoordinates(x,y,z,x0,y0,z0,kx,ky,kz,mx,my,mz);
-	LaserFieldOrientation::OrientCoordinates(px,py,pz,0.,0.,0.,kx,ky,kz,mx,my,mz);
+	orient->OrientCoordinates(x,y,z);
+	orient->OrientVector2(px,py,pz);
 	
 
 	return HermiteGaussianOmega(m,x,y,z,px,py,pz,t);

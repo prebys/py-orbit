@@ -39,6 +39,8 @@ extern "C" {
   static int QuadEMfield_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
 	  
 	  self->cpp_obj = new QuadEMfield();
+	  
+	  ((QuadEMfield*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 	 
     return 0;
   }

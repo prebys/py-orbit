@@ -54,6 +54,13 @@
 #define py0(i)   Coords->attArr(i)[3]
 #define pz0(i)   Coords->attArr(i)[5]
 
+#define x(i) 	 bunch->coordArr()[i][0]
+#define y(i)  	 bunch->coordArr()[i][2]
+#define z(i)  	 bunch->coordArr()[i][4]
+#define px(i)    bunch->coordArr()[i][1]
+#define py(i)    bunch->coordArr()[i][3]
+#define pz(i)    bunch->coordArr()[i][5]
+
 #define dm(i,n,m) tcomplex(AmplAttr->attArr(i)[(n-1)*levels+m],AmplAttr->attArr(i)[(n-1)*levels+m+levels*levels])
 #define k_rk(j,n,m) k_RungeKutt[j][(n-1)*levels+m]
 
@@ -129,10 +136,10 @@ DensityMatrix::~DensityMatrix()
 
 void DensityMatrix::CalcPopulations(int i, Bunch* bunch)	{
 		
-	PopAttr->attArr(i)[0] = 0;
+	PopAttr->attArr(i)[0] = 1;
 	for (int j=1; j<levels + 1;j++)	{
 	PopAttr->attArr(i)[j] =  Re(i,j,j);
-	PopAttr->attArr(i)[0] += PopAttr->attArr(i)[j];
+	PopAttr->attArr(i)[0] -= PopAttr->attArr(i)[j];
 	}
 	
 }
@@ -174,7 +181,8 @@ void DensityMatrix::setupEffects(Bunch* bunch){
 	AmplAttr = bunch->getParticleAttributes("Amplitudes");
 	PopAttr = bunch->getParticleAttributes("Populations");
 
-
+	for (int i=0; i<bunch->getSize();i++)
+	CalcPopulations(i, bunch);
 	
 }
 		
@@ -294,7 +302,6 @@ return E;
 
 void DensityMatrix::GetParticleFrameFields(int i,double t,double t_step,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
 	
-	double** xyz = bunch->coordArr();
 	double Ez;
 	
 		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
@@ -303,7 +310,7 @@ void DensityMatrix::GetParticleFrameFields(int i,double t,double t_step,  Bunch*
 		
 	for (int j=0; j<3;j++)	{
 							
-		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
+		LaserField->getLaserElectricMagneticField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
 				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
 			
 	LorentzTransformationEM::complex_transform(bunch->getMass(),

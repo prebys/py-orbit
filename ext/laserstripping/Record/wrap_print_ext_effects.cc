@@ -44,14 +44,14 @@ extern "C" {
       char* address;
       int max_print;
 
-	  PyObject*	pyBaseLaserField=NULL;
+
 
 
 		 if(!PyArg_ParseTuple(	args,"is:",&max_print,&address)){
 			 		          error("PrintExtEffects(LaserField,delta_E,dipole_transition) - params. are needed");
 			 			 		        }  
 		 else	{
-		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
+
 
 		 self->cpp_obj =  new  PrintExtEffects(max_print,address);
 		 ((PrintExtEffects*) self->cpp_obj)->setPyWrapper((PyObject*) self);

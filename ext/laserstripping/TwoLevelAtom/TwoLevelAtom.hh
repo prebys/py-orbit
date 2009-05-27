@@ -7,7 +7,6 @@
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
-#include "WaveFunctionAmplitudes.hh"
 #include "ParticleAttributes.hh"
 
 
@@ -62,6 +61,7 @@ namespace LaserStripping{
 			  tcomplex k_RungeKutt_2[5];
 			  double d_Energy;
 			  double dip_transition;
+			  
 
 			  ParticleAttributes* AmplAttr;
 			  ParticleAttributes* PopAttr;

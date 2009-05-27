@@ -52,6 +52,13 @@
 #define py0(i)   Coords->attArr(i)[3]
 #define pz0(i)   Coords->attArr(i)[5]
 
+#define x(i) 	 bunch->coordArr()[i][0]
+#define y(i)  	 bunch->coordArr()[i][2]
+#define z(i)  	 bunch->coordArr()[i][4]
+#define px(i)    bunch->coordArr()[i][1]
+#define py(i)    bunch->coordArr()[i][3]
+#define pz(i)    bunch->coordArr()[i][5]
+
 #define a(i,m) tcomplex(AmplAttr->attArr(i)[m],AmplAttr->attArr(i)[m+levels])
 
 
@@ -67,12 +74,14 @@ SchrodingerEquation::SchrodingerEquation(BaseLaserFieldSource*	BaseLaserField, H
 	setName("unnamed");
 	
 
+
 	StarkEffect=Stark;
 	LaserField=BaseLaserField;
 	Parameter_resonance=par_res;
 	levels=	StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
 	
-	zero_cross==true;
+	zero_cross=true;
+
 
 	
 	
@@ -144,10 +153,10 @@ SchrodingerEquation::~SchrodingerEquation()
 
 void SchrodingerEquation::CalcPopulations(int i, Bunch* bunch)	{
 		
-	PopAttr->attArr(i)[0] = 0;
+	PopAttr->attArr(i)[0] = 1;
 	for (int j=1; j<levels + 1;j++)	{
 	PopAttr->attArr(i)[j] =  Re(i,j)*Re(i,j)+Im(i,j)*Im(i,j);
-	PopAttr->attArr(i)[0] += PopAttr->attArr(i)[j];
+	PopAttr->attArr(i)[0] -= PopAttr->attArr(i)[j];
 	}
 	
 }
@@ -157,7 +166,9 @@ void SchrodingerEquation::CalcPopulations(int i, Bunch* bunch)	{
 
 void SchrodingerEquation::setupEffects(Bunch* bunch){	
 	
+	install_field_dir=true;
 	
+
 	if(bunch->hasParticleAttributes("Amplitudes")==0)	{
 		std::map<std::string,double> part_attr_dict;
 		part_attr_dict["size"] = 2*levels+1;
@@ -192,6 +203,9 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 	nx=new double[bunch->getSize()];
 	ny=new double[bunch->getSize()];
 	nz=new double[bunch->getSize()];
+	
+	for (int i=0; i<bunch->getSize();i++)
+	CalcPopulations(i, bunch);
 	
 
 
@@ -286,7 +300,7 @@ void	SchrodingerEquation::RotateElectricFields(double nx,double ny,double nz, tc
 		Exl=(-nx*nxy2*Ezll + Eyll*nx*ny*(-n + nz) + Exll*(n*ny*ny + nx*nx*nz))/(n*nxy2);
 		Eyl=(-ny*nxy2*Ezll + Exll*nx*ny*(-n + nz) + Eyll*(n*nx*nx + ny*ny*nz))/(n*nxy2);
 		Ezl=(Exll*nx + Eyll*ny + Ezll*nz)/n;
-		
+
 		}
 		
 
@@ -315,16 +329,16 @@ return ;
 
 void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
 	
-	double** xyz = bunch->coordArr();
 
 
 		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
 		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
 
-		if (zero_cross&&t_part==0)	{
+		if (zero_cross&&install_field_dir)	{
 		nx[i] = Ex_stat;	
 		ny[i] = Ey_stat;	
 		nz[i] = Ez_stat;
+		install_field_dir=false;
 		}	
 		
 		
@@ -337,8 +351,10 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 		
 	for (int j=0; j<3;j++)	{
 							
-		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
+		LaserField->getLaserElectricMagneticField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
 				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
+		
+
 			
 	LorentzTransformationEM::complex_transform(bunch->getMass(),
 											px0(i),py0(i),pz0(i),
@@ -348,8 +364,8 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 
 	RotateElectricFields(nx[i],ny[i],nz[i],Ex_las[j],Ey_las[j],Ez_las[j]);
 	
-
 	}
+
 	
 	Ez_stat=sqrt(Ex_stat*Ex_stat+Ey_stat*Ey_stat+Ez_stat*Ez_stat);
 	Ex_stat=0;	
@@ -417,7 +433,7 @@ StarkEffect->SetE(Ez_stat);
 
 void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 	
-	
+
 	
 
 	tcomplex z,z1,z2,mu_x,mu_y,mu_z;
@@ -462,6 +478,8 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 			exp_mu_El[n][m][3]=exp_mu_El[n][m][2];
 			exp_mu_El[n][m][4]=z1*z2*z2*mu_Elas[n][m][2];	
 			
+
+
 		}
 
 
@@ -496,7 +514,7 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 		z=(k_RungeKutt[m][1]+2.*k_RungeKutt[m][2]+2.*k_RungeKutt[m][3]+k_RungeKutt[m][4])/6.;	
 		Re(i,m)+=z.real()*part_t_step;
 		Im(i,m)+=z.imag()*part_t_step;
-		
+
 		
 	}
 	
