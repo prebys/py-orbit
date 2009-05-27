@@ -59,6 +59,13 @@
 #define py0(i)   Coords->attArr(i)[3]
 #define pz0(i)   Coords->attArr(i)[5]
 
+#define x(i) 	 bunch->coordArr()[i][0]
+#define y(i)  	 bunch->coordArr()[i][2]
+#define z(i)  	 bunch->coordArr()[i][4]
+#define px(i)    bunch->coordArr()[i][1]
+#define py(i)    bunch->coordArr()[i][3]
+#define pz(i)    bunch->coordArr()[i][5]
+
 #define Ampl_1(i) tcomplex(AmplAttr->attArr(i)[1],AmplAttr->attArr(i)[2])
 #define Ampl_2(i) tcomplex(AmplAttr->attArr(i)[3],AmplAttr->attArr(i)[4])
 
@@ -118,7 +125,7 @@ void TwoLevelAtom::CalcPopulations(int i, Bunch* bunch)	{
 		
 	PopAttr->attArr(i)[1] =  Re1(i)*Re1(i)+Im1(i)*Im1(i);
 	PopAttr->attArr(i)[2] =  Re2(i)*Re2(i)+Im2(i)*Im2(i);
-	PopAttr->attArr(i)[0] = PopAttr->attArr(i)[1]+PopAttr->attArr(i)[2];
+	PopAttr->attArr(i)[0] = 1- PopAttr->attArr(i)[1]-PopAttr->attArr(i)[2];
 	
 }
 
@@ -148,7 +155,6 @@ void TwoLevelAtom::setupEffects(Bunch* bunch){
 	
 	
 	
-	
 	if (bunch->hasParticleAttributes("pq_coords")==0)	{
 	std::map<std::string,double> part_attr_dict;
 	part_attr_dict["size"] = 6;
@@ -162,7 +168,6 @@ void TwoLevelAtom::setupEffects(Bunch* bunch){
 	
 	for (int i=0; i<bunch->getSize();i++)
 	CalcPopulations(i, bunch);
-	
 
 }
 
@@ -225,7 +230,8 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 			
 			CalcPopulations(i, bunch);
 			
-			
+
+
 		}	
 
 
@@ -248,14 +254,13 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 
 
 void TwoLevelAtom::GetParticleFrameFields(int i,double t,double t_step,  Bunch* bunch)	{
-	
-	double** xyz = bunch->coordArr();
+		
 	double E_x,E_y,E_z,nx,ny,nz,Eabs;
 
 	
 	for (int j=0; j<3;j++)	{
 							
-		LaserField->getLaserElectricMagneticField(x0(i)+j*(xyz[i][0]-x0(i))/2,y0(i)+j*(xyz[i][2]-y0(i))/2,z0(i)+j*(xyz[i][4]-z0(i))/2,
+		LaserField->getLaserElectricMagneticField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
 				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
 
 	LorentzTransformationEM::complex_electric_transform(bunch->getMass(),
@@ -272,6 +277,7 @@ void TwoLevelAtom::GetParticleFrameFields(int i,double t,double t_step,  Bunch* 
 
 	
 	Ez_las[j]=(Ex_las[j]*E_x+Ey_las[j]*E_y+Ez_las[j]*E_z)/Eabs;
+
 
 	
 	}
@@ -295,7 +301,6 @@ void	TwoLevelAtom::GetParticleFrameParameters(int i, double t,double t_step, Bun
 //This line calculates relyativistic factor-Gamma
 double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
 double coeff=1./(gamma*ta);
-
 part_t_step=t_step*coeff;	//time step in frame of particle (in atomic units)
 t_part=t*coeff;	 
 

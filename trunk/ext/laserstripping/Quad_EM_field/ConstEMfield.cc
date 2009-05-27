@@ -52,6 +52,7 @@ ConstEMfield::ConstEMfield(double E_x,double E_y,double E_z,double B_x,double B_
 
 ConstEMfield::~ConstEMfield()
 {
+
 }
 
 void ConstEMfield::getElectricMagneticField(double x, double y, double z, double t, 

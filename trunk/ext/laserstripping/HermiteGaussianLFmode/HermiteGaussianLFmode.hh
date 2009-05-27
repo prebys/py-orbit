@@ -25,6 +25,7 @@
 #include "Python.h"
 
 #include "BaseLaserFieldSource.hh"
+#include "FieldOrientation.hh"
 
 
 
@@ -75,8 +76,8 @@ namespace OrbitUtils{
 			  double fy;
 			
 			  //parameters of orientation of laser field
-			  double x0,y0,z0,kx,ky,kz,mx,my,mz,nEx,nEy,nEz;
-			  double nHx, nHy, nHz;
+			  double nHx, nHy, nHz, nEx, nEy, nEz;	  
+			  FieldOrientation*   orient; 
 			
 
 	};

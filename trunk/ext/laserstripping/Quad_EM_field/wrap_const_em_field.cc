@@ -57,7 +57,7 @@ extern "C" {
 	  if(nVars==6)	 if (!PyArg_ParseTuple(args,"dddddd:",&E_x,&E_y,&E_z,&B_x,&B_y,&B_z)) 
 	  {error("Parameters  (E_x,E_y,E_z,B_x,B_y,B_z) -are needed");} else {self->cpp_obj = new ConstEMfield(E_x,E_y,E_z,B_x,B_y,B_z);}
 
-		  
+	     ((ConstEMfield*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		
     return 0;
   }

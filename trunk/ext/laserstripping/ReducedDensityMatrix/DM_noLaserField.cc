@@ -57,7 +57,6 @@
 
 
 
-
 using namespace LaserStripping;
 using namespace OrbitUtils;
 
@@ -79,6 +78,9 @@ gamma_ij=new double*[levels+1];	for (int i=0;i<levels+1;i++)	gamma_ij[i]=new dou
 Gamma_i=new double[levels+1];
 E_i=new double[levels+1];
 
+for (int i=0; i<levels+1;i++)
+	k_RungeKutt[i][0]=0;
+
 
 if(StarkEffect->getPyWrapper() != NULL){
 		Py_INCREF(StarkEffect->getPyWrapper());
@@ -89,6 +91,8 @@ if(StarkEffect->getPyWrapper() != NULL){
 
 DM_noLaserField::~DM_noLaserField()
 {
+	
+
 
 	for (int i=0;i<levels+1;i++) delete [] k_RungeKutt[i]; 	delete	[]	k_RungeKutt;
 	delete [] E_i;
@@ -96,7 +100,7 @@ DM_noLaserField::~DM_noLaserField()
 	for (int i=0;i<levels+1;i++)	delete	[]	gamma_ij[i];	delete	[]	gamma_ij;
 
 	
-	
+
 
 	
 	if(StarkEffect->getPyWrapper() == NULL){
@@ -111,12 +115,11 @@ DM_noLaserField::~DM_noLaserField()
 
 void DM_noLaserField::CalcPopulations(int i, Bunch* bunch)	{
 		
-	PopAttr->attArr(i)[0] = 0;
-	for (int j=1; j<levels + 1;j++)	
-	PopAttr->attArr(i)[0] += PopAttr->attArr(i)[j];
+	PopAttr->attArr(i)[0] = 1;
+	for (int j=1; j<levels + 1;j++)		
+	PopAttr->attArr(i)[0] -= PopAttr->attArr(i)[j];
 
 
-	
 }
 
 
@@ -124,7 +127,9 @@ void DM_noLaserField::CalcPopulations(int i, Bunch* bunch)	{
 
 void DM_noLaserField::setupEffects(Bunch* bunch){	
 	
+
 	
+
 	if(bunch->hasParticleAttributes("Amplitudes")==1)	{
 		bunch->removeParticleAttributes("Amplitudes");
 	}
@@ -133,7 +138,7 @@ void DM_noLaserField::setupEffects(Bunch* bunch){
 			std::map<std::string,double> part_attr_dict;
 			part_attr_dict["size"] = levels+1;
 			bunch->addParticleAttributes("Populations",part_attr_dict);
-			
+
 			for (int i=0; i<bunch->getSize();i++)
 			bunch->getParticleAttributes("Populations")->attValue(i,1) = 1;
 		}
@@ -150,7 +155,7 @@ void DM_noLaserField::setupEffects(Bunch* bunch){
 	Coords = bunch->getParticleAttributes("pq_coords");
 	PopAttr = bunch->getParticleAttributes("Populations");
 	
-	
+
 	for (int i=0; i<bunch->getSize();i++)
 	CalcPopulations(i, bunch);
 
@@ -237,7 +242,7 @@ void DM_noLaserField::applyEffects(Bunch* bunch, int index,
 
 void DM_noLaserField::GetParticleFrameFields(int i,double t,double t_step,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
 	
-	double** xyz = bunch->coordArr();
+
 	double Ez;
 	
 		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
@@ -285,6 +290,8 @@ Ez_stat/=Ea;
 
 
 StarkEffect->SetE(Ez_stat);	
+
+
 	
 }
 
@@ -306,7 +313,6 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 	
 	
 
-	tcomplex mu_x,mu_y,mu_z;
 	double dt,sum;
 		
 
@@ -320,13 +326,11 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 
 					
 			for(int n=2; n<levels+1;n++)
-			for(int m=1; m<n;m++)	{
-				
-				StarkEffect->GetDipoleTransition(n,m,mu_x,mu_y,mu_z);
-												
+			for(int m=1; m<n;m++)											
 				StarkEffect->GetRelax(n,m,gamma_ij[n][m]);
 
-			}
+
+		
 			
 
 
@@ -340,24 +344,49 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 			
 			k_RungeKutt[m][j]=0;
 			
-			for(int k=m+1;k<levels+1;k++)	k_RungeKutt[m][j]+=gamma_ij[k][m]*(pop(i,k)+k_RungeKutt[k][j-1]*dt); 
+			for(int k=m+1;k<levels+1;k++)	 k_RungeKutt[m][j]+=gamma_ij[k][m]*(pop(i,k)+k_RungeKutt[k][j-1]*dt);
 			sum=0; 
 			for(int k=1;k<m;k++)			sum+=gamma_ij[m][k];
 			
+			
 			sum+=Gamma_i[m];
 			k_RungeKutt[m][j]-=(pop(i,m)+k_RungeKutt[m][j-1]*dt)*sum;
-
-
+			
 					
 		}
 
 
 		
+
 		
 		
-		
-	for(int m=1;m<levels+1;m++)	
+	for(int m=1;m<levels+1;m++)		{
 		pop(i,m) += part_t_step*(k_RungeKutt[m][1]+2.*k_RungeKutt[m][2]+2.*k_RungeKutt[m][3]+k_RungeKutt[m][4])/6.;	
+		
+	if (StarkEffect->field_thresh[m]<=Ez_stat)	{pop(i,m) = 0;}
+
+	}
+		
+
+
+
+			
+			
+			
+
+
+
+
+					
+			
+						
+			
+					
+					
+
+					
+
+
 
 
 		

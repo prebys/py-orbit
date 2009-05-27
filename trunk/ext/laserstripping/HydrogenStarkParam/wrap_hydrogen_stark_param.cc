@@ -42,7 +42,6 @@ extern "C" {
 
 	  int states;
 	  char* addressEG;
-	  PyObject*	pyBaseLaserField=NULL;
 
 		 if(!PyArg_ParseTuple(	args,"si:",&addressEG,&states)){
 			 		          error("HydrogenStarkParam(address,states) - params. are needed");
