@@ -420,7 +420,7 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 				cond[n][m]=fabs(fabs(E_i[n]-E_i[m])-omega_part)<Parameter_resonance*abs(mu_Elas[n][m][1]);	///THIS CRITERII SHOULD BE CHANGED
 				
 				
-				StarkEffect->GetRelax(n,m,gamma_ij[n][m]);
+				gamma_ij[n][m] = StarkEffect->GetRelax(n,m);
 //				cout<<"delta_res= "<<Ez_las[1]<<"\n";
 			}
 			
