@@ -7,7 +7,7 @@
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
-#include "HydrogenStarkParam.hh"
+#include "Stark.hh"
 #include "ParticleAttributes.hh"
 
 
@@ -21,7 +21,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor */
-			DM_noLaserField(HydrogenStarkParam* Stark);
+			DM_noLaserField(Stark* StarkEffect);
 
 			
 			/** Destructor. */
@@ -52,15 +52,13 @@ namespace LaserStripping{
 		  
 			  
 
-			  HydrogenStarkParam* StarkEffect;
+			  Stark* StarkEffect;
 			  
 			  //this array is used on each step of solution of density matrix equation at definite field  
 
 			  double** k_RungeKutt;
-
-			  double* Gamma_i;
-			  double* E_i;
 			  double** gamma_ij;
+			  bool** cond;
 
 
 			  

@@ -15,6 +15,7 @@
 #include "wrap_record_evolution.hh"
 #include "wrap_walls.hh"
 #include "wrap_fringe_field.hh"
+#include "wrap_stark.hh"
 
 static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
@@ -40,6 +41,7 @@ extern "C" {
 		wrap_record_evolution::initRecordEvolution(module);
 		wrap_walls::initWalls(module);
 		wrap_fringe_field::initFringeField(module);
+		wrap_stark::initStark(module);
 		
   }
 	

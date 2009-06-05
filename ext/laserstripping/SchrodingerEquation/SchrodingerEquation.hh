@@ -7,7 +7,7 @@
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
-#include "HydrogenStarkParam.hh"
+#include "Stark.hh"
 #include "ParticleAttributes.hh"
 
 
@@ -20,7 +20,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor */
-			SchrodingerEquation(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, HydrogenStarkParam* Stark,double par_res);
+			SchrodingerEquation(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, Stark* Stark,double par_res);
 
 			
 			/** Destructor. */
@@ -52,14 +52,12 @@ namespace LaserStripping{
 		  
 			  
 			  OrbitUtils::BaseLaserFieldSource*	LaserField;
-			  HydrogenStarkParam* StarkEffect;
+			  Stark* StarkEffect;
 			  
 			  //this array is used on each step of solution of density matrix equation at definite field  
 			  tcomplex*** exp_mu_El;
 			  tcomplex** k_RungeKutt;
 			  tcomplex*** mu_Elas;
-			  double* Gamma_i;
-			  double* E_i;
 			  bool** cond;
 			  
 

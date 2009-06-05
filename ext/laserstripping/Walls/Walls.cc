@@ -51,6 +51,10 @@
 #define y(i)  	 bunch->coordArr()[i][2]
 #define z(i)  	 bunch->coordArr()[i][4]
 
+#define px(i) 	 bunch->coordArr()[i][1]
+#define py(i)  	 bunch->coordArr()[i][3]
+#define pz(i)  	 bunch->coordArr()[i][5]
+
 
 
 
@@ -162,20 +166,61 @@ bool Walls::crossPlane(int i,Bunch* bunch,double xs, double ys,double zs,double 
 
 bool Walls::crossSurface(int i,Bunch* bunch)	{
 
-	
+double ax = -0.310729;
+double bx = 11.9591;
+double ay = -0.218678;
+double by = 13.4845;
+
+double gammax = (1+ax*ax)/bx;
+double gammay = (1+ay*ay)/by;
+
+double ex = 240.0e-6;
+double ey = 240.0e-6;
+
+double x_bump = 0.02;
+double y_bump = 0.00;
+
+double x0 = -0.09679+x_bump;
+double y0 = 0+y_bump;
+double z0 = 4.430187;
+
+double xp = px(i)/pz(i);
+double yp = py(i)/pz(i);
+
+
+double x = x(i)-x0;
+double y = y(i)-y0;
+
+double R = 0.093115;
+
+
+double bg = 1.807618407842236;
+
+
+
+
 if(
-/**************************		
+	
 		((z0(i)<=2.936809)&&(2.936809<=z(i))&&(0.118921>=x(i))&&(x(i)>=0.026719))		//position of thick foil
 		
 		||
 		
-		((z0(i)<=4.442887)&&(4.442887<=z(i))&&((x(i)+0.09679)*(x(i)+0.09679)+(y(i)-0)*(y(i)-0)<=0.0103476))	//position of ring flange
-***************************/	
+//		((z0(i)<=4.442887)&&(4.442887<=z(i))&&((x(i)+0.09679)*(x(i)+0.09679)+(y(i)-0)*(y(i)-0)<=0.0103476))	//position of ring flange
 		
-		((z0(i)<=0.25)&&(0.25<=z(i)))
+		((z0(i)<=z0)&&(z0<=z(i))&&(x*x+y*y<=R*R)&&(x*x*gammax+2*ax*x*xp+bx*xp*xp<=ex/bg)&&(y*y*gammay+2*ay*y*yp+by*yp*yp<=ey/bg))	//emittance of the ring beam 
+		
+
+
+//		((z0(i)<=2.936809)&&(2.936809<=z(i))&&(0.118921>=x(i))&&(x(i)>=0.026719))
+	
+		
+//		((z0(i)<=0.25)&&(0.25<=z(i)))
 		
 
 )
+	
+
+		
 	
 	return true;
 else
