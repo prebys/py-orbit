@@ -9,7 +9,7 @@
 
 #include "SchrodingerEquation.hh"
 #include "BaseLaserFieldSource.hh"
-#include "HydrogenStarkParam.hh"
+
 
 using namespace OrbitUtils;
 using namespace LaserStripping;
@@ -52,8 +52,8 @@ extern "C" {
 			 			 		        }  
 		 else	{
 		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
-		 HydrogenStarkParam* Stark = (HydrogenStarkParam*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
-		 self->cpp_obj =  new  SchrodingerEquation(lfs, Stark, par_res);
+		 Stark* StarkEffect = (Stark*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
+		 self->cpp_obj =  new  SchrodingerEquation(lfs, StarkEffect, par_res);
 		 ((SchrodingerEquation*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	

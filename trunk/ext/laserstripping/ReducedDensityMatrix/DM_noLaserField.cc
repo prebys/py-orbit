@@ -61,22 +61,52 @@ using namespace LaserStripping;
 using namespace OrbitUtils;
 
 
-DM_noLaserField::DM_noLaserField(HydrogenStarkParam* Stark)
+
+
+
+inline int convert3to1level(int n,int n1, int m){
+	return 1+m*n+n1+(n*n*n-n)/3-m*abs(m-1)/2;
+}
+
+
+
+DM_noLaserField::DM_noLaserField(Stark* Starkef)
 {
 	setName("unnamed");
 	
 
-	StarkEffect=Stark;
+	StarkEffect=Starkef;
 
-	levels=	StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
+	int st = StarkEffect->getStates();
+	levels=	st*(1+st)*(1+2*st)/6;
 	
 
 
 //allocating memory for koefficients of 4-th order Runge-Kutta method and other koeeficients of the master equation
 k_RungeKutt=new double*[levels+1]; for (int i=0;i<levels+1;i++) k_RungeKutt[i]=new double[5];
 gamma_ij=new double*[levels+1];	for (int i=0;i<levels+1;i++)	gamma_ij[i]=new double[levels+1];
-Gamma_i=new double[levels+1];
-E_i=new double[levels+1];
+cond=new bool*[levels+1];	for (int i=0;i<levels+1;i++)	cond[i]=new bool[levels+1];
+
+
+
+for(int n=1;n<st+1;n++){
+	for(int m=-(n-1);m<(n-1)+1;m++){
+		for(int n1=0;n1<n-abs(m)-1+1;n1++){
+			
+			for(int ns=1;ns<st+1;ns++){
+				for(int ms=-(ns-1);ms<(ns-1)+1;ms++){
+					for(int n1s=0;n1s<ns-abs(ms)-1+1;n1s++){
+						
+						cond[convert3to1level(n,n1,m)][convert3to1level(ns,n1s,ms)]=(n!=ns);
+						
+					}
+				}
+			}
+		}
+	}
+}
+						
+
 
 for (int i=0; i<levels+1;i++)
 	k_RungeKutt[i][0]=0;
@@ -95,9 +125,8 @@ DM_noLaserField::~DM_noLaserField()
 
 
 	for (int i=0;i<levels+1;i++) delete [] k_RungeKutt[i]; 	delete	[]	k_RungeKutt;
-	delete [] E_i;
-	delete [] Gamma_i;
 	for (int i=0;i<levels+1;i++)	delete	[]	gamma_ij[i];	delete	[]	gamma_ij;
+	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
 
 	
 
@@ -289,8 +318,6 @@ Ez_stat/=Ea;
 
 
 
-StarkEffect->SetE(Ez_stat);	
-
 
 	
 }
@@ -317,18 +344,16 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 		
 
 	
+	StarkEffect->SetE(Ez_stat);	
 	
 	
-	
-			for(int n=1; n<levels+1;n++)	
-				StarkEffect->GetEnergyAutoionization(n,E_i[n], Gamma_i[n]);
-			
 
 					
 			for(int n=2; n<levels+1;n++)
-			for(int m=1; m<n;m++)											
-				StarkEffect->GetRelax(n,m,gamma_ij[n][m]);
-
+			for(int m=1; m<n;m++)
+				if (cond[n][m] && StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)	{
+				gamma_ij[n][m] = StarkEffect->getRelax(n,m);
+				}
 
 		
 			
@@ -338,18 +363,19 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 		
 
 		for(int j=1; j<5; j++)
-		for(int m=1; m<levels+1;m++)	{	
+		for(int m=1; m<levels+1;m++)	
+		if (StarkEffect->field_thresh[m]>Ez_stat)	{	
 			
 			if (j==4)	dt=part_t_step;	else dt=part_t_step/2.;
 			
 			k_RungeKutt[m][j]=0;
 			
-			for(int k=m+1;k<levels+1;k++)	 k_RungeKutt[m][j]+=gamma_ij[k][m]*(pop(i,k)+k_RungeKutt[k][j-1]*dt);
+			for(int k=m+1;k<levels+1;k++)	 if (cond[k][m]) 	k_RungeKutt[m][j]+=gamma_ij[k][m]*(pop(i,k)+k_RungeKutt[k][j-1]*dt);
 			sum=0; 
-			for(int k=1;k<m;k++)			sum+=gamma_ij[m][k];
+			for(int k=1;k<m;k++)			 if (cond[m][k]) 	sum+=gamma_ij[m][k];
 			
 			
-			sum+=Gamma_i[m];
+			sum+=StarkEffect->Gamman[m];
 			k_RungeKutt[m][j]-=(pop(i,m)+k_RungeKutt[m][j-1]*dt)*sum;
 			
 					
@@ -360,12 +386,15 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 
 		
 		
-	for(int m=1;m<levels+1;m++)		{
-		pop(i,m) += part_t_step*(k_RungeKutt[m][1]+2.*k_RungeKutt[m][2]+2.*k_RungeKutt[m][3]+k_RungeKutt[m][4])/6.;	
+	for(int m=1;m<levels+1;m++)	{
 		
-	if (StarkEffect->field_thresh[m]<=Ez_stat)	{pop(i,m) = 0;}
-
+		if (StarkEffect->field_thresh[m]>Ez_stat)	
+		pop(i,m) += part_t_step*(k_RungeKutt[m][1]+2.*k_RungeKutt[m][2]+2.*k_RungeKutt[m][3]+k_RungeKutt[m][4])/6.;	
+		else
+		pop(i,m) = 0;
+		
 	}
+
 		
 
 

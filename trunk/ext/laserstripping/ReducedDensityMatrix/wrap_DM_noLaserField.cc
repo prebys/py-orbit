@@ -51,8 +51,8 @@ extern "C" {
 	  
 	  else	{
 	 	
-	 		 HydrogenStarkParam* Stark = (HydrogenStarkParam*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
-	 		 self->cpp_obj =  new  DM_noLaserField(Stark);
+	 		 Stark* Starkef = (Stark*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
+	 		 self->cpp_obj =  new  DM_noLaserField(Starkef);
 	 		 ((DM_noLaserField*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 	 		 }
 	 		
