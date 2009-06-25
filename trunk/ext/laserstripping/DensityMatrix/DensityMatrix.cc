@@ -38,6 +38,7 @@
 #include "RungeKuttaTracker.hh"
 #include "OrbitConst.hh"
 #include "LorentzTransformationEM.hh"
+#include "FieldRotation.hh"
 
 
 
@@ -71,14 +72,21 @@ using namespace LaserStripping;
 using namespace OrbitUtils;
 
 
-DensityMatrix::DensityMatrix(BaseLaserFieldSource*	BaseLaserField, HydrogenStarkParam* Stark,double par_res)
+inline int convert3to1level(int n,int n1, int m){
+	return 1+m*n+n1+(n*n*n-n)/3-m*abs(m-1)/2;
+}
+
+
+
+DensityMatrix::DensityMatrix(BaseLaserFieldSource*	BaseLaserField, Stark* Stark_ef,double par_res)
 {
 	setName("unnamed");
-	
 
-	StarkEffect=Stark;
+
+	StarkEffect=Stark_ef;
 	LaserField=BaseLaserField;
 	Parameter_resonance=par_res;
+	int st = StarkEffect->getStates();
 	levels = StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
 	
 
@@ -88,9 +96,33 @@ k_RungeKutt=new tcomplex**[levels+1];	for (int i=0;i<levels+1;i++)	k_RungeKutt[i
 exp_mu_El=new tcomplex**[levels+1];	for (int i=0;i<levels+1;i++)	exp_mu_El[i]=new tcomplex*[levels+1]; for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	exp_mu_El[i][j]=new tcomplex[5];
 mu_Elas=new tcomplex**[levels+1];	for (int i=0;i<levels+1;i++)	mu_Elas[i]=new tcomplex*[levels+1];		for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	mu_Elas[i][j]=new tcomplex[3];
 gamma_ij=new double*[levels+1];	for (int i=0;i<levels+1;i++)	gamma_ij[i]=new double[levels+1];
-cond=new bool*[levels+1];	for (int i=0;i<levels+1;i++)	cond[i]=new bool[levels+1];
+cond=new bool*[levels+1];	for (int i=0;i<levels+1;i++)		cond[i]=new bool[levels+1];
+cond_lev=new bool*[levels+1];	for (int i=0;i<levels+1;i++)	cond_lev[i]=new bool[levels+1];
 Gamma_i=new double[levels+1];
 E_i=new double[levels+1];
+
+
+
+
+
+for(int n=1;n<st+1;n++){
+	for(int m=-(n-1);m<(n-1)+1;m++){
+		for(int n1=0;n1<n-abs(m)-1+1;n1++){
+			
+			for(int ns=1;ns<st+1;ns++){
+				for(int ms=-(ns-1);ms<(ns-1)+1;ms++){
+					for(int n1s=0;n1s<ns-abs(ms)-1+1;n1s++){
+						
+						cond_lev[convert3to1level(n,n1,m)][convert3to1level(ns,n1s,ms)]=(n!=ns);
+						
+					}
+				}
+			}
+		}
+	}
+}
+	
+
 
 
 if(LaserField->getPyWrapper() != NULL){
@@ -114,6 +146,7 @@ DensityMatrix::~DensityMatrix()
 	delete [] Gamma_i;
 	for (int i=0;i<levels+1;i++)	delete	[]	gamma_ij[i];	delete	[]	gamma_ij;
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
+	for (int i=0;i<levels+1;i++)	delete	[]	cond_lev[i];	delete	[]	cond_lev;
 	
 	
 	if(LaserField->getPyWrapper() == NULL){
@@ -258,43 +291,6 @@ void DensityMatrix::applyEffects(Bunch* bunch, int index,
 
 
 
-double	DensityMatrix::RotateElectricFields(double Exs, double Eys, double Ezs,tcomplex& Exl,tcomplex& Eyl,tcomplex& Ezl){
-	
-	double Exy2=Exs*Exs+Eys*Eys;
-	double E2=Exs*Exs+Eys*Eys+Ezs*Ezs;
-	double E=sqrt(E2);
-
-	
-	if(Exy2>1e-40*E2)	{
-		
-		tcomplex Exll=Exl;
-		tcomplex Eyll=Eyl;
-		tcomplex Ezll=Ezl;
-		
-		Exl=(-Exs*Exy2*Ezll + Eyll*Exs*Eys*(-E + Ezs) + Exll*(E*Eys*Eys + Exs*Exs*Ezs))/(E*Exy2);
-		Eyl=(-Eys*Exy2*Ezll + Exll*Exs*Eys*(-E + Ezs) + Eyll*(E*Exs*Exs + Eys*Eys*Ezs))/(E*Exy2);
-		Ezl=(Exll*Exs + Eyll*Eys + Ezll*Ezs)/E;
-		
-	}
-	
-	else	{
-		
-		Exl=Exl;
-		Eyl=Eyl;
-		Ezl=Ezl;
-
-	}
-	
-return E;
-
-}
-
-
-
-
-
-
-
 
 
 
@@ -319,7 +315,7 @@ void DensityMatrix::GetParticleFrameFields(int i,double t,double t_step,  Bunch*
 																		 Bx_las[j],By_las[j],Bz_las[j]);	
 	
 	
-	Ez=RotateElectricFields(Ex_stat,Ey_stat,Ez_stat,Ex_las[j],Ey_las[j],Ez_las[j]);
+	Ez=FieldRotation::RotateElectricFields(Ex_stat,Ey_stat,Ez_stat,Ex_las[j],Ey_las[j],Ez_las[j]);
 	
 	}
 
@@ -372,7 +368,6 @@ Ez_stat/=Ea;
 omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
 
 
-StarkEffect->SetE(Ez_stat);	
 	
 }
 
@@ -394,47 +389,45 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 	
 	
 
-	tcomplex z,z1,z2,mu_x,mu_y,mu_z;
+	tcomplex JdE, z,z1,z2,mu_x,mu_y,mu_z;
 	double dt,sum;
+	
+	
+	
+	StarkEffect->SetE(Ez_stat);	
+	
+	
+	
+
 		
-
 	
-	
-	
-	
-			for(int n=1; n<levels+1;n++)	
-				StarkEffect->GetEnergyAutoionization(n,E_i[n], Gamma_i[n]);
+	for(int n=2; n<levels+1;n++)
+	for(int m=1; m<n;m++)	
+	if (StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)	{
+		
+		gamma_ij[n][m]=StarkEffect->getRelaxTransition(n,m,mu_x,mu_y,mu_z);
+		
+		mu_Elas[n][m][1]=(mu_x*conj(Ex_las[1])+mu_y*conj(Ey_las[1])+mu_z*conj(Ez_las[1]))*(J/2.);
+		cond[n][m]=fabs(fabs(StarkEffect->En[n]-StarkEffect->En[m])-omega_part)<Parameter_resonance*abs(2.*mu_Elas[n][m][1]);
+		
+		if (cond[n][m])	{
 			
+			mu_Elas[n][m][0]=(mu_x*conj(Ex_las[0])+mu_y*conj(Ey_las[0])+mu_z*conj(Ez_las[0]))*(J/2.);	
+			mu_Elas[n][m][2]=(mu_x*conj(Ex_las[2])+mu_y*conj(Ey_las[2])+mu_z*conj(Ez_las[2]))*(J/2.);
+		}
+										
+	}
 
-					
-			for(int n=2; n<levels+1;n++)
-			for(int m=1; m<n;m++)	{
-				
-				StarkEffect->GetDipoleTransition(n,m,mu_x,mu_y,mu_z);
-				
-				if (LaserField!=NULL)	
-				for(int j=0; j<3;j++)
-				mu_Elas[n][m][j]=mu_x*conj(Ex_las[j])+mu_y*conj(Ey_las[j])+mu_z*conj(Ez_las[j]);	
-				
-				if (LaserField!=NULL)
-				cond[n][m]=fabs(fabs(E_i[n]-E_i[m])-omega_part)<Parameter_resonance*abs(mu_Elas[n][m][1]);	///THIS CRITERII SHOULD BE CHANGED
-				
-				
-				gamma_ij[n][m] = StarkEffect->GetRelax(n,m);
-//				cout<<"delta_res= "<<Ez_las[1]<<"\n";
-			}
-			
-
-			//cout<<"delta_res= "<<omega_part-(E_i[7]-E_i[1])<<"\n";
 
 
 
 
 		for(int n=2; n<levels+1;n++)
 		for(int m=1; m<n;m++)		
-			if (cond[n][m])		{
-				z1=exp(J*t_part*fabs(E_i[n]-E_i[m]));		
-				z2=exp(J*part_t_step*fabs(E_i[n]-E_i[m])/2.);
+			if (cond[n][m] && StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)		{
+				JdE=tcomplex(0,fabs(StarkEffect->En[n]-StarkEffect->En[m]));
+				z1=exp(JdE*t_part);		
+				z2=exp(JdE*part_t_step/2.);
 			
 			exp_mu_El[n][m][1]=z1*mu_Elas[n][m][0];			
 			exp_mu_El[n][m][2]=z1*z2*mu_Elas[n][m][1];
@@ -449,37 +442,38 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 
 		for(int j=1; j<5; j++)
 		for(int n=1; n<levels+1;n++)
-		for(int m=1; m<n+1;m++)	{	
+		for(int m=1; m<n+1;m++)	
+			if (StarkEffect->field_thresh[m]>Ez_stat && StarkEffect->field_thresh[n]>Ez_stat){	
 			
 			if (j==4)	dt=part_t_step;	else dt=part_t_step/2.;
 			
 
-			k_RungeKutt[n][m][j]*=0.;
-			for(int k=1;k<n;k++)			if (cond[n][k])		 k_RungeKutt[n][m][j]+=exp_mu_El[n][k][j]*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt);	
-			for(int k=n+1;k<levels+1;k++)	if (cond[k][n]) 	 k_RungeKutt[n][m][j]+=conj(exp_mu_El[k][n][j])*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt); 
-			for(int k=1;k<m;k++)			if (cond[m][k]) 	 k_RungeKutt[n][m][j]-=conj(exp_mu_El[m][k][j])*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
-			for(int k=m+1;k<levels+1;k++)	if (cond[k][m]) 	 k_RungeKutt[n][m][j]-=exp_mu_El[k][m][j]*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
-			k_RungeKutt[n][m][j]*=J/2.;
+			k_RungeKutt[n][m][j]=tcomplex(0);
+			for(int k=1;k<n;k++)			if (cond[n][k] && StarkEffect->field_thresh[k]>Ez_stat)		 k_RungeKutt[n][m][j]+=exp_mu_El[n][k][j]*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt);	
+			for(int k=n+1;k<levels+1;k++)	if (cond[k][n] && StarkEffect->field_thresh[k]>Ez_stat) 	 k_RungeKutt[n][m][j]-=conj(exp_mu_El[k][n][j])*(dm(i,k,m)+k_RungeKutt[k][m][j-1]*dt); 
+			for(int k=1;k<m;k++)			if (cond[m][k] && StarkEffect->field_thresh[k]>Ez_stat) 	 k_RungeKutt[n][m][j]+=conj(exp_mu_El[m][k][j])*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
+			for(int k=m+1;k<levels+1;k++)	if (cond[k][m] && StarkEffect->field_thresh[k]>Ez_stat) 	 k_RungeKutt[n][m][j]-=exp_mu_El[k][m][j]*(dm(i,n,k)+k_RungeKutt[n][k][j-1]*dt); 
+
 
 
 
 
 			if(n==m){
-			for(int k=m+1;k<levels+1;k++)	k_RungeKutt[n][m][j]+=gamma_ij[k][m]*(dm(i,k,k)+k_RungeKutt[k][k][j-1]*dt);
-			sum=0; 
-			for(int k=1;k<m;k++)			sum+=gamma_ij[m][k];
+			for(int k=m+1;k<levels+1;k++)	if (cond_lev[k][m] && StarkEffect->field_thresh[k]>Ez_stat) 	k_RungeKutt[n][m][j]+=gamma_ij[k][m]*(dm(i,k,k)+k_RungeKutt[k][k][j-1]*dt);
+	 sum=0; for(int k=1;k<m;k++)			if (cond_lev[m][k] && StarkEffect->field_thresh[k]>Ez_stat)		sum+=gamma_ij[m][k];
+	 
 			k_RungeKutt[n][m][j]-=(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)*sum;
 			}
 			
 			if(n!=m){
 			sum=0;
-			for(int k=1;k<m;k++)			sum+=gamma_ij[m][k];
-			for(int k=1;k<n;k++)			sum+=gamma_ij[n][k];
+			for(int k=1;k<m;k++)			if (cond_lev[m][k] && StarkEffect->field_thresh[k]>Ez_stat)	sum+=gamma_ij[m][k];
+			for(int k=1;k<n;k++)			if (cond_lev[n][k] && StarkEffect->field_thresh[k]>Ez_stat)	sum+=gamma_ij[n][k];
 			k_RungeKutt[n][m][j]-=(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)*sum/2.;
 			}
 	
 			
-			k_RungeKutt[n][m][j]-=(Gamma_i[n]+Gamma_i[m])*(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)/2.;
+			k_RungeKutt[n][m][j]-=(StarkEffect->Gamman[n]+StarkEffect->Gamman[m])*(dm(i,n,m)+k_RungeKutt[n][m][j-1]*dt)/2.;
 
 		
 			k_RungeKutt[m][n][j]=conj(k_RungeKutt[n][m][j]);
@@ -496,7 +490,7 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 		
 	for(int n=1;n<levels+1;n++)
 	for(int m=1;m<n+1;m++)	{
-		
+	if (StarkEffect->field_thresh[m]>Ez_stat && StarkEffect->field_thresh[n]>Ez_stat)	{
 		
 		z=(k_RungeKutt[n][m][1]+2.*k_RungeKutt[n][m][2]+2.*k_RungeKutt[n][m][3]+k_RungeKutt[n][m][4])/6.;	
 		Re(i,n,m)+=z.real()*part_t_step;
@@ -504,29 +498,15 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 		
 		Re(i,m,n)=Re(i,n,m);
 		Im(i,m,n)=-Im(i,n,m);
-
-		
 	}
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	else	{
+		Re(i,m,n) = 0;
+		Im(i,m,n) = 0;
+		Re(i,n,m) = 0;
+		Im(i,n,m) = 0;
+	}
+	
+	}
+	}
+	
 

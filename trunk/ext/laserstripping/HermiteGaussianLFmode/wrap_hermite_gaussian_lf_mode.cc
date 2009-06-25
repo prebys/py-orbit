@@ -48,11 +48,11 @@ extern "C" {
 	  double f_x=0;
 	  double f_y=0;
 	  double lambda=0;
-	  
+
 		 if(!PyArg_ParseTuple(	args,"diiddddd:",&Cnm,&n,&m,&wx,&wy,&f_x,&f_y,&lambda)){
 			 		          error("LaserExternalEfects(Cnm==sqrt(P),n,m,wx,wy,fx,fy,lambda) - params. are needed");
 		 } else	{
-			 
+
 		self->cpp_obj = new HermiteGaussianLFmode(Cnm,n,m,wx,wy,f_x,f_y,lambda);
 		((HermiteGaussianLFmode*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
@@ -66,8 +66,8 @@ extern "C" {
   
   
   static PyObject* HermiteGaussianLFmode_setLaserFieldOrientation(PyObject *self, PyObject *args){
+	  
  	 HermiteGaussianLFmode* LaserField = (HermiteGaussianLFmode*)((pyORBIT_Object*) self)->cpp_obj;
- 	 
    		double x0;
    		double y0;
    		double z0;
@@ -90,7 +90,7 @@ extern "C" {
    		        if(fabs(kx*nEx+ky*nEy+kz*nEz)/sqrt(kx*kx+ky*ky+kz*kz)/sqrt(nEx*nEx+nEy*nEy+nEz*nEz)>1.e-15)
    		          {error("Please be shure that kx*Ex+ky*Ey+kz*Ez==0");flag=false;}
 	
-		        
+
    		        if(flag)	
    		        	LaserField->setLaserFieldOrientation(x0,y0, z0, kx, ky, kz, mx, my, mz, nEx, nEy, nEz);
    		      
@@ -98,6 +98,30 @@ extern "C" {
    		    Py_INCREF(Py_None);
    		    return Py_None;	  
     }	
+  
+  
+  
+  static PyObject* HermiteGaussianLFmode_setLocalParameters(PyObject *self, PyObject *args){
+	  
+	  HermiteGaussianLFmode* LaserField = (HermiteGaussianLFmode*)((pyORBIT_Object*) self)->cpp_obj;
+
+   		double rx;
+   		double ry;
+   		double ax;
+   		double ay;
+
+
+   		        if(!PyArg_ParseTuple(	args,"dddd:",&rx, &ry, &ax, &ay))
+   		          error("LaserExternalEfects - setLaserHalfAngle(comments is not written yet) - param. is needed");
+   		        else
+   		        	LaserField->setLocalParameters(rx,ry,ax,ay);
+  		        
+   		      
+   	   
+   		    Py_INCREF(Py_None);
+   		    return Py_None;	  
+    }	
+  
   
 		
   
@@ -205,8 +229,8 @@ extern "C" {
 	// they will be vailable from python level
   static PyMethodDef HermiteGaussianLFmodeClassMethods[] = {
 		    { "setLaserFieldOrientation",  HermiteGaussianLFmode_setLaserFieldOrientation,         METH_VARARGS,"Sets or returns the name of effects."},
-/*			{ "setLaserHalfAngle",         HermiteGaussianLFmode_setLaserHalfAngle,         METH_VARARGS,"Sets or returns the name of effects."},
-			{ "setLaserPower",         HermiteGaussianLFmode_setLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},
+			{ "setLocalParameters",         HermiteGaussianLFmode_setLocalParameters,         METH_VARARGS,"Sets or returns the name of effects."},
+/*			{ "setLaserPower",         HermiteGaussianLFmode_setLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},
 			{ "setLaser_lambda",         HermiteGaussianLFmode_setLaser_lambda,         METH_VARARGS,"Sets or returns the name of effects."},
 			{ "getLaserHalfAngle",         HermiteGaussianLFmode_getLaserHalfAngle,         METH_VARARGS,"Sets or returns the name of effects."},
 			{ "getLaserPower",         HermiteGaussianLFmode_getLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},

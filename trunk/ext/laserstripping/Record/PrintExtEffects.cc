@@ -45,7 +45,7 @@ using namespace OrbitUtils;
 
 
 
-PrintExtEffects::PrintExtEffects(int i,char* addr)
+PrintExtEffects::PrintExtEffects(char* name,int i,char* addr)
 {
 
 	setRankSetup(1);
@@ -57,9 +57,9 @@ PrintExtEffects::PrintExtEffects(int i,char* addr)
 	ORBIT_MPI_Comm_size(MPI_COMM_WORLD, &size_MPI);
 	ORBIT_MPI_Comm_rank(MPI_COMM_WORLD, &rank_MPI);
 	
-	max_print_par=i;
-	print_par=max_print_par;
+	num_print=i;
 	addr_print=addr;
+	eff_name = name;
 
 }
 
@@ -78,6 +78,8 @@ PrintExtEffects::~PrintExtEffects()
 
 
 void PrintExtEffects::setupEffects(Bunch* bunch){		
+	
+	setup_par = true;
 
 }
 		
@@ -102,30 +104,42 @@ void PrintExtEffects::applyEffects(Bunch* bunch, int index,
 
 
 
+	if (setup_par == true)	{
+
+	Num = tracker->getStepsNumber();
 	
-		for (int i=0; i<bunch->getSize();i++)	{
+	if(Num<num_print)		{cout<<"The number of record points must be equal or less then the number of steps \n"; abort();}
+	if(Num%num_print!=0)	{cout<<"The number of steps must be divisible by the number of record points \n"; abort();}
+	
+	
+	
+	setup_par = false;
+	t_in = t;
 
-			
-			
-			if (print_par==max_print_par)	{
-			if (i==bunch->getSize()-1)	print_par=0;
-			sprintf(addr_name,"%s%i.dat",addr_print,i*size_MPI+rank_MPI);		
-			ofstream file(addr_name,ios::app);
-			
-			file<<t<<"\t";
-			for (int j=1; j<bunch->getParticleAttributes("Populations")->getAttSize();j++)	
-				file<<bunch->getParticleAttributes("Populations")->attArr(i)[j]<<"\t";
-			
-			file<<bunch->getParticleAttributes("Populations")->attArr(i)[0]<<"\n";
-			file.close();
-				
-			}
-			if (i==bunch->getSize()-1)	print_par++;
-
-				
-			
+	}
+	
+	
+	
+	
 		
-		}	
+		if(int((t-t_in+t_step)/t_step+0.5)%(Num/num_print) == 0)		
+			
+		for (int i=0; i<bunch->getSize();i++)	{
+			sprintf(addr_name,"%s%i.dat",addr_print,i*size_MPI+rank_MPI);
+			ofstream file(addr_name,ios::app);
+			file<<t;
+			
+			for (int j=0; j<bunch->getParticleAttributes(eff_name)->getAttSize();j++)	
+				file<<"\t"<<bunch->getParticleAttributes(eff_name)->attArr(i)[j];
+			file<<"\n";
+
+			file.close();
+			
+			
+
+		}
+
+
 
 }
 

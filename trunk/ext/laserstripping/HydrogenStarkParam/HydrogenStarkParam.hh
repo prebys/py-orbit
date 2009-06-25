@@ -33,7 +33,7 @@
 		void GetDipoleTransition(int k,int ks,tcomplex& mu_x,tcomplex& mu_y,tcomplex& mu_z);	
 			
 			/*this method gives frequendy transitions as a function of field */
-		void GetRelax(int k,int ks,double& relax);
+		double GetRelax(int k,int ks);
 		
 //			/*this method gives frequendy transitions as a function of field */
 		double getStarkEnergy(

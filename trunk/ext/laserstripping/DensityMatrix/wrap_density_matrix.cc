@@ -52,8 +52,8 @@ extern "C" {
 			 		          {error("DensityMatrix(LaserField,StarkEffect,resonanse_parameter) - params. are needed");}	
 		 else	{
 		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
-		 HydrogenStarkParam* Stark = (HydrogenStarkParam*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
-		 self->cpp_obj =  new  DensityMatrix(lfs, Stark, par_res);
+		 Stark* Stark_ef = (Stark*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
+		 self->cpp_obj =  new  DensityMatrix(lfs, Stark_ef, par_res);
 		 ((DensityMatrix*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 			 		        	  

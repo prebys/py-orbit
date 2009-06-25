@@ -22,14 +22,17 @@
 #include "OrbitConst.hh"
 #include <iostream>
 
+
 #define J tcomplex(0.,1.)
 
 using namespace OrbitUtils;
 
-HermiteGaussianLFmode::HermiteGaussianLFmode(double Cnm,int n,int m,double w_x,double w_y,double f_x,double f_y,double la)
+HermiteGaussianLFmode::HermiteGaussianLFmode(tcomplex C,int n,int m,double w_x,double w_y,double f_x,double f_y,double la)
 {
+	Cnm=C;
 	Unm=Cnm*sqrt(2*OrbitConst::c*OrbitConst::permeability)*sqrt(pow(w_x,2*n+1)*pow(w_y,2*m+1)*MathPolynomial::Factorial(n)*MathPolynomial::Factorial(m)*pow(2,n+m+1)/(MathPolynomial::Factorial(2*n)*MathPolynomial::Factorial(2*m)*OrbitConst::PI));
 
+	orient = new FieldOrientation();  
 	Laser_lambda=la;
 	fx=f_x;
 	fy=f_y;
@@ -37,7 +40,7 @@ HermiteGaussianLFmode::HermiteGaussianLFmode(double Cnm,int n,int m,double w_x,d
 	wy=w_y;
 	n_moda=n;
 	m_moda=m;
-	
+	k=2*OrbitConst::PI/Laser_lambda;
 
 	//default orientation of laser field polarizations
 	nEx=1;nEy=0;nEz=0;
@@ -67,9 +70,8 @@ void HermiteGaussianLFmode::setLaserFieldOrientation(double x0, double y0, doubl
 													double n_Ex, double n_Ey, double n_Ez)	
 {
 	double a=sqrt(n_Ex*n_Ex+n_Ey*n_Ey+n_Ez*n_Ez);
-	
 	orient->setCoefficients(x0, y0, z0,kx, ky, kz, mx, my, mz);
-	
+
 	
 	nEx=n_Ex/a;	
 	nEy=n_Ey/a;	
@@ -91,12 +93,26 @@ double b=sqrt(n_Hx*n_Hx+n_Hy*n_Hy+n_Hz*n_Hz);
 
 
 
+void HermiteGaussianLFmode::setLocalParameters(double rx, double ry, double ax, double ay)	{
+	
+	fx=-ax*rx*rx*rx/(4/(k*k)+ax*ax*rx*rx);
+	fy=-ay*ry*ry*ry/(4/(k*k)+ay*ay*ry*ry);
+	wx=2*rx/(k*sqrt(4/(k*k)+ax*ax*rx*rx));
+	wy=2*ry/(k*sqrt(4/(k*k)+ay*ay*ry*ry));
+	
+	int n=n_moda;
+	int m=m_moda;
+	
+	Unm=Cnm*sqrt(2*OrbitConst::c*OrbitConst::permeability)*sqrt(pow(wx,2*n+1)*pow(wy,2*m+1)*MathPolynomial::Factorial(n)*MathPolynomial::Factorial(m)*pow(2,n+m+1)/(MathPolynomial::Factorial(2*n)*MathPolynomial::Factorial(2*m)*OrbitConst::PI));
 
+
+}
 
 
 
 
 double HermiteGaussianLFmode::HermiteGaussianOmega(double m,double x, double y, double z, double px, double py, double pz, double t){
+	
 	
 	
 	double a=OrbitConst::c/sqrt(m*m+px*px+py*py+pz*pz);
@@ -105,13 +121,15 @@ double HermiteGaussianLFmode::HermiteGaussianOmega(double m,double x, double y, 
 	double vy=py*a;
 	double vz=pz*a;
 	
-	double k=2*OrbitConst::PI/Laser_lambda;
+
 
 double ax=k*k*pow(wx,4)+4*pow(fx-z,2);
 double ay=k*k*pow(wy,4)+4*pow(fy-z,2);
 
+double bx = 4*x*(fx-z);
+double by = 4*y*(fy-z);
 
-	return 	k*(OrbitConst::c-vz-4*k*k*vz*(pow(wx*wx*x/ax,2)+pow(wy*wy*y/ay,2)) + (vz*(wx*wx+ 2*x*x) + 4*vx*x*(fx - z))/ax + (vz*(wy*wy + 2*y*y) + 4*vy*y*(fy - z))/ay);
+	return 	k*(OrbitConst::c+vz*(pow(bx/ax,2)+pow(by/ay,2)-1) + (vz*(wx*wx-2*x*x) + bx*vx)/ax + (vz*(wy*wy-2*y*y) + by*vy)/ay);
 
 }
 
@@ -133,7 +151,10 @@ void HermiteGaussianLFmode::getLaserElectricMagneticField(double x, double y, do
 
 
 			orient->OrientCoordinates(x,y,z);
+			
 tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
+
+
 
 
 tcomplex	H=E/OrbitConst::c;
@@ -174,21 +195,18 @@ double HermiteGaussianLFmode::getFrequencyOmega(double m, double x, double y, do
 
 tcomplex HermiteGaussianLFmode::getNonOrientedU(int n, int m, double x, double y, double z, double t){
 
-	
+
 	if (n==0&&m==0)	{
 		
-		double a=Laser_lambda/OrbitConst::PI;
-		tcomplex k=tcomplex(0.,2*(z-t*OrbitConst::c)/a);
-		tcomplex funx=pow(tcomplex(wx*wx,-(z-fx)*a),-1);
-		tcomplex funy=pow(tcomplex(wy*wy,-(z-fy)*a),-1);
-		
-		return	sqrt(funx*funy)*exp(-x*x*funx-y*y*funy-k);
+		tcomplex a=tcomplex(0.,k*(z-t*OrbitConst::c));
+		tcomplex funx=pow(tcomplex(wx*wx,-(z-fx)*2/k),-1);
+		tcomplex funy=pow(tcomplex(wy*wy,-(z-fy)*2/k),-1);
+		return	sqrt(funx*funy)*exp(-x*x*funx-y*y*funy-a);	
 	
 	}	else	{
 	
 	
 	
-	tcomplex k=2*OrbitConst::PI/Laser_lambda;
 	tcomplex funx=sqrt(tcomplex(wx*wx-2.0*J*(z-fx)/k));
 	tcomplex funy=sqrt(tcomplex(wy*wy-2.0*J*(z-fy)/k));
 	tcomplex xf=x/funx;

@@ -24,6 +24,7 @@
 #include <fstream>
 #include <iostream>
 
+
 using namespace OrbitUtils;
 
 inline int convert3to1level(int n,int n1, int m){
@@ -52,7 +53,7 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
 	//this function measures parameter of input files (length, delta_F) using groung level file 000.txt
 	sprintf(nameEG,"%s000.txt",addressEG);	
 	if(rank_MPI == 0) {
-		file.open(nameEG);file>>F>>F>>F>>delta_F; file.close();
+		file.open(nameEG);	file>>F>>F>>F>>delta_F; file.close();
 		file.open(nameEG);fi=0;	while(!file.eof())	{file>>F>>F>>F;fi++;} file.close();n_data=fi-1;
 	}
 	
@@ -255,12 +256,12 @@ void HydrogenStarkParam::GetDipoleTransition(int k,int ks,tcomplex& mu_x,tcomple
 
 
 
-void HydrogenStarkParam::GetRelax(int k,int ks,double& relax){
+double HydrogenStarkParam::GetRelax(int k,int ks){
 	
 	int i=(int)(Ez_stat/delta_F);
 	double c=(Ez_stat-i*delta_F)/delta_F;
 	
-	relax=fabs(gamma_spontaneous_relax[k][ks][i]+c*(gamma_spontaneous_relax[k][ks][i+1]-gamma_spontaneous_relax[k][ks][i]));
+	return fabs(gamma_spontaneous_relax[k][ks][i]+c*(gamma_spontaneous_relax[k][ks][i+1]-gamma_spontaneous_relax[k][ks][i]));
 	
 }
 

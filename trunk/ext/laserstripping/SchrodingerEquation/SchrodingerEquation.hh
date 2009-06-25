@@ -99,7 +99,7 @@ namespace LaserStripping{
 			  double* ny;
 			  double* nz;
 			  
-			  bool zero_cross;
+
 			  bool install_field_dir;
 			  
 
@@ -116,8 +116,6 @@ namespace LaserStripping{
 				/*this method gives laser and static fields transformed by rotation relatively z axes  */
 				void GetParticleFrameFields(int i, double t,double t_step,  Bunch* bunch,  OrbitUtils::BaseFieldSource* fieldSource);
 				
-				/*This method provides rotational transformation of statis and laser field in frame of particle to z axes */
-				void	RotateElectricFields(double nx, double ny, double nz, tcomplex& Ex_l,tcomplex& Ey_l,tcomplex& Ez_l);
 				
 
 				

@@ -42,18 +42,19 @@ extern "C" {
 
 
       char* address;
+      char* eff_name;
       int max_print;
 
 
 
 
-		 if(!PyArg_ParseTuple(	args,"is:",&max_print,&address)){
-			 		          error("PrintExtEffects(LaserField,delta_E,dipole_transition) - params. are needed");
+		 if(!PyArg_ParseTuple(	args,"sis:",&eff_name,&max_print,&address)){
+			 		          error("PrintExtEffects(eff_name,max_print,address) - params. are needed");
 			 			 		        }  
 		 else	{
 
 
-		 self->cpp_obj =  new  PrintExtEffects(max_print,address);
+		 self->cpp_obj =  new  PrintExtEffects(eff_name,max_print,address);
 		 ((PrintExtEffects*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	

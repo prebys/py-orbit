@@ -37,7 +37,7 @@ inline int convert3to1level(int n,int n1, int m){
 
 
 Stark::Stark(char* addressEG,int states)
-{
+{		
 
 	int rank_MPI,size_MPI;
 	ORBIT_MPI_Comm_size(MPI_COMM_WORLD, &size_MPI);
@@ -46,55 +46,69 @@ Stark::Stark(char* addressEG,int states)
 	std::ifstream file;
 	double F;
 	double alpha=7.297352570e-3;
-	int k,ks,fi,nn1,nn2,mm,nn1s,nn2s,mms;
+	int k,ks,fi,nn1,nn2,mm,nn1s,nn2s,mms,ff;
 	char nameEG[1024];
 	string dump,dump2;
-	int ff;
+
 	
 	st=states;
 	const_relax = 4*alpha*alpha*alpha/3;
 	levels=st*(1+st)*(1+2*st)/6;
 
 	
-	//this function measures parameter of input files (length, delta_F) using groung level file 000.txt
+	
+  	field_thresh = new double[levels+1];
+  	n_data = new int[levels+1];
+  	En = new double[levels+1];
+  	Gamman = new double[levels+1];	
+	
 
+	
 	if(rank_MPI == 0) {
+		
 		sprintf(nameEG,"%s000.txt",addressEG);	
 		file.open(nameEG);	file>>F>>F>>F>>delta_F; file.close();
-		file.open(nameEG);fi=0;	while(!file.eof())	{file>>F>>F>>F;fi++;} file.close();n_data=fi-1;
-	}
-	
-  ORBIT_MPI_Bcast(&delta_F, 1, MPI_DOUBLE,0,MPI_COMM_WORLD);	
-  ORBIT_MPI_Bcast(&n_data, 1, MPI_INT,0,MPI_COMM_WORLD);
-	
-  
-  
-	//allocating memory for dynamic massive of data that will be read fron files
-  	field_thresh = new double[levels+1];
-  	En = new double[levels+1];
-  	Gamman = new double[levels+1];
-  
-	energy=new double*[levels+1];	
-	for (int i=0;i<levels+1;i++)	energy[i]=new double[n_data+10];
-	
-	gamma_autoionization=new double*[levels+1];	
-	for (int i=0;i<levels+1;i++)	gamma_autoionization[i]=new double[n_data+10];
-	
-	
-	
-	
-	
-	
-	if(rank_MPI == 0) {
+		
 		sprintf(nameEG,"%stransitions.txt",addressEG);
 		file.open(nameEG);	file>>ff>>ff>>ff>>dump>>ff>>ff>>ff; fi=0;	while(dump2!=dump)	{file>>dump2;fi++;} file.close(); order_trans = (fi-4)/3;
+		
+		
+		for(int n=1;n<states+1;n++){
+			for(int m=-(n-1);m<(n-1)+1;m++){
+				for(int n1=0;n1<n-abs(m)-1+1;n1++)	{
+
+					k=convert3to1level(n,n1,m);		
+					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));		
+					n_data[k]=-1;	file.open(nameEG);	while(!file.eof())	{file>>field_thresh[k]>>F>>F; n_data[k]++;} file.close();	
+					
+				}
+			}
+		}
+		
 	}
 	
-	ORBIT_MPI_Bcast(&order_trans, 1, MPI_INT,0,MPI_COMM_WORLD);
-	  
+
 	
-	//allocating memory for dynamic massive of data that will be read fron files	
+	ORBIT_MPI_Bcast(&order_trans, 1, MPI_INT,0,MPI_COMM_WORLD);	
+	ORBIT_MPI_Bcast(&delta_F, 1, MPI_DOUBLE,0,MPI_COMM_WORLD);
+	ORBIT_MPI_Bcast(n_data,levels+1 ,MPI_INT,0,MPI_COMM_WORLD);
+	ORBIT_MPI_Bcast(field_thresh,levels+1 ,MPI_DOUBLE,0,MPI_COMM_WORLD);
+
+
+
+
+	//allocating memory for dynamic massive of data that will be read fronm files	
 	E_pow_n = new double[order_trans];
+	
+	
+	
+	energy=new double*[levels+1];	
+	for (int i=0;i<levels+1;i++)	energy[i]=new double[n_data[i]];
+	
+	gamma_autoionization=new double*[levels+1];	
+	for (int i=0;i<levels+1;i++)	gamma_autoionization[i]=new double[n_data[i]];
+	
+	
 	
 	dipole_transition_x=new double**[levels+1];	
 	for (int i=0;i<levels+1;i++)	dipole_transition_x[i]=new double*[levels+1]; 
@@ -108,19 +122,46 @@ Stark::Stark(char* addressEG,int states)
 	for (int i=0;i<levels+1;i++)	dipole_transition_z[i]=new double*[levels+1]; 
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	dipole_transition_z[i][j]=new double[order_trans];	
 	
-	int buff_index = 0;
-	
-  double* dump_arr = BufferStore::getBufferStore()->getFreeDoubleArr(buff_index,n_data+10);
-  
+
   
 
+  
 	
-	//this double loop reads dipole transitions anf fills spontaneous relaxation coefficients
+
+				
+		for(int n=1;n<states+1;n++){
+			for(int m=-(n-1);m<(n-1)+1;m++){
+				for(int n1=0;n1<n-abs(m)-1+1;n1++){
+
+					k=convert3to1level(n,n1,m);		
+				
+					if(rank_MPI == 0) {
+					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));						
+					file.open(nameEG);for (fi=0; fi<n_data[k]; fi++)	{file>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file.close();
+					}
+						
+					
+					for(int fi=0;fi<n_data[k];fi++)	{
+					ORBIT_MPI_Bcast(&energy[k][fi],1, MPI_DOUBLE,0,MPI_COMM_WORLD);
+					ORBIT_MPI_Bcast(&gamma_autoionization[k][fi],1, MPI_DOUBLE,0,MPI_COMM_WORLD);
+					}
+					
+				}
+			}
+		}
+		
+	 
+
+
+
+	//this double loop reads and broadcast dipole transitions 
 	if(rank_MPI == 0) {
 	
-		std::ifstream file_in;
+
 		sprintf(nameEG,"%stransitions.txt",addressEG);
-		file_in.open(nameEG); 
+		file.open(nameEG);
+	
+	}
 
 		for(int n=1;n<states+1;n++){
 			for(int m=-(n-1);m<(n-1)+1;m++){
@@ -128,28 +169,45 @@ Stark::Stark(char* addressEG,int states)
 					
 					for(int ns=1;ns<states+1;ns++){
 						for(int ms=-(ns-1);ms<(ns-1)+1;ms++){
-							for(int n1s=0;n1s<ns-abs(ms)-1+1;n1s++)		{
+							for(int n1s=0;n1s<ns-abs(ms)-1+1;n1s++){
 								
 				
 								k=convert3to1level(n,n1,m);
 								ks=convert3to1level(ns,n1s,ms);
 								
+								
+								
+								if(rank_MPI == 0)	{
 								while(true)	{
-								file_in>>nn1>>nn2>>mm>>dump>>nn1s>>nn2s>>mms;
+								file>>nn1>>nn2>>mm>>dump>>nn1s>>nn2s>>mms;
 						
 								if(nn1==n1&&nn2==n-n1-fabs(m)-1&&mm==m&&nn1s==n1s&&nn2s==ns-n1s-fabs(ms)-1&&mms==ms)	{
+
 									
-										for (fi=0; fi<order_trans; fi++) file_in>>dipole_transition_x[k][ks][fi];
-										for (fi=0; fi<order_trans; fi++) file_in>>dipole_transition_y[k][ks][fi];
-										for (fi=0; fi<order_trans; fi++) file_in>>dipole_transition_z[k][ks][fi];
+										for (fi=0; fi<order_trans; fi++) file>>dipole_transition_x[k][ks][fi];
+										for (fi=0; fi<order_trans; fi++) file>>dipole_transition_y[k][ks][fi];
+										for (fi=0; fi<order_trans; fi++) file>>dipole_transition_z[k][ks][fi];
 																				
 									break;
 									
 								}
-								else for (fi=0; fi<order_trans; fi++) file_in>>F>>F>>F;
+								else for (fi=0; fi<order_trans; fi++) file>>F>>F>>F;
+								}
 								}
 									
+								
+								for(int fi=0;fi<order_trans;fi++)	{
+								ORBIT_MPI_Bcast(&dipole_transition_x[k][ks][fi], 1, MPI_DOUBLE,0,MPI_COMM_WORLD);
+								ORBIT_MPI_Bcast(&dipole_transition_y[k][ks][fi], 1, MPI_DOUBLE,0,MPI_COMM_WORLD);
+								ORBIT_MPI_Bcast(&dipole_transition_z[k][ks][fi], 1, MPI_DOUBLE,0,MPI_COMM_WORLD);		
+								
+//								if(rank_MPI == 0&&k==1&&ks==2)cout<<dipole_transition_x[1][2][fi]<<"\n";
+//								if(rank_MPI == 1&&k==1&&ks==2)cout<<dipole_transition_x[1][2][fi]<<"\n";
+								}
+								
 
+
+								
 								}
 
 	
@@ -158,99 +216,12 @@ Stark::Stark(char* addressEG,int states)
 					}
 				}
 			}
-		file_in.close();
-		}
-	
-
-	
-	
-	
-	
-	for(int n=1;n<states+1;n++){
-		for(int m=-(n-1);m<(n-1)+1;m++){
-			for(int n1=0;n1<n-abs(m)-1+1;n1++){
-				
-				for(int ns=1;ns<states+1;ns++){
-					for(int ms=-(ns-1);ms<(ns-1)+1;ms++){
-						for(int n1s=0;n1s<ns-abs(ms)-1+1;n1s++)	{
-							
-							k=convert3to1level(n,n1,m);
-							ks=convert3to1level(ns,n1s,ms);
-													
-						
-							for (fi=0; fi<order_trans; fi++) ORBIT_MPI_Bcast(&dipole_transition_x[k][ks][fi], 1, MPI_DOUBLE,0,MPI_COMM_WORLD);
-							for (fi=0; fi<order_trans; fi++) ORBIT_MPI_Bcast(&dipole_transition_y[k][ks][fi], 1, MPI_DOUBLE,0,MPI_COMM_WORLD);
-							for (fi=0; fi<order_trans; fi++) ORBIT_MPI_Bcast(&dipole_transition_z[k][ks][fi], 1, MPI_DOUBLE,0,MPI_COMM_WORLD);
-
-								
-								
-							}		
-						}
-					}
-				}
-			}
-		}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	//this loop reads energies and autoionization coefficients
-	if(rank_MPI == 0) {
-		for(int n=1;n<states+1;n++){
-			for(int m=-(n-1);m<(n-1)+1;m++){
-				for(int n1=0;n1<n-abs(m)-1+1;n1++)	{
-					std::ifstream file_in;
-					k=convert3to1level(n,n1,m);		
-					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));		
-					file_in.open(nameEG);for (fi=0; fi<n_data; fi++)	{file_in>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file_in.close();
-					
-					file.open(nameEG);	while(!file.eof())	file>>field_thresh[k]>>F>>F; file.close();
-					
-				}
-			}
-		}
-	}
-	
-	
-	ORBIT_MPI_Bcast(field_thresh,levels+1 ,MPI_DOUBLE,0,MPI_COMM_WORLD);
-	
-
-	
-	for(int n=1;n<states+1;n++){
-		for(int m=-(n-1);m<(n-1)+1;m++){	
-			for(int n1=0;n1<n-abs(m)-1+1;n1++)	{
-				k=convert3to1level(n,n1,m);	
-				
-				
-				for(fi=0; fi<n_data; fi++){
-					dump_arr[fi] = energy[k][fi];
-				}
-				ORBIT_MPI_Bcast(dump_arr,n_data , MPI_DOUBLE,0,MPI_COMM_WORLD);
-				for(fi=0; fi<n_data; fi++){
-					energy[k][fi] = dump_arr[fi];
-				}		
-				
-				for(fi=0; fi<n_data; fi++){
-					dump_arr[fi] = gamma_autoionization[k][fi];
-				}
-				ORBIT_MPI_Bcast(dump_arr,n_data , MPI_DOUBLE,0,MPI_COMM_WORLD);
-				for(fi=0; fi<n_data; fi++){
-					gamma_autoionization[k][fi] = dump_arr[fi];
-				}		
-				
-			}
-		}
-	}	
+		if(rank_MPI == 0)	{file.close();}
 	
 
 
-	
-	BufferStore::getBufferStore()->setUnusedDoubleArr(buff_index);				
+		
+		
 }
 
 
@@ -262,9 +233,12 @@ Stark::~Stark()	{
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_x[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_x[i];	delete	[]	dipole_transition_x;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_y[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_y[i];	delete	[]	dipole_transition_y;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_z[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_z[i];	delete	[]	dipole_transition_z;
-//	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] gamma_spontaneous_relax[i][j]; for (int i=0;i<levels+1;i++)	delete [] gamma_spontaneous_relax[i];	delete	[]	gamma_spontaneous_relax;
 	delete [] field_thresh;
 	delete [] E_pow_n;
+	delete [] n_data;
+	delete [] En;
+	delete [] Gamman;
+
 
 }
 
@@ -274,11 +248,16 @@ Stark::~Stark()	{
 
 void Stark::getTransition(int k,int ks,tcomplex& mu_x,tcomplex& mu_y,tcomplex& mu_z){
 	
+	int rank_MPI,size_MPI;
+	ORBIT_MPI_Comm_size(MPI_COMM_WORLD, &size_MPI);
+	ORBIT_MPI_Comm_rank(MPI_COMM_WORLD, &rank_MPI);
 	
 	double mu_xd=0, mu_yd=0, mu_zd=0;
 	
 	E_pow_n[0] = 1;
-	for (int fi=1; fi<order_trans; fi++)  E_pow_n[fi] *= Ez_stat;
+	for (int fi=1; fi<order_trans; fi++)  E_pow_n[fi] = E_pow_n[fi-1]*Ez_stat;	
+	
+	
 	
 	
 	for (int fi=0; fi<order_trans; fi++) mu_xd += dipole_transition_x[k][ks][fi]*E_pow_n[fi];
@@ -288,6 +267,8 @@ void Stark::getTransition(int k,int ks,tcomplex& mu_x,tcomplex& mu_y,tcomplex& m
 	mu_x = tcomplex(mu_xd,0);
 	mu_y = tcomplex(0,mu_yd);
 	mu_z = tcomplex(mu_zd,0);
+	
+	
 	
 }
 
@@ -300,7 +281,7 @@ double Stark::getRelax(int k,int ks){
 	double absdE = fabs(En[k]-En[ks]);
 	
 	E_pow_n[0] = 1;
-	for (int fi=1; fi<order_trans; fi++)  E_pow_n[fi] *= Ez_stat;
+	for (int fi=1; fi<order_trans; fi++)  E_pow_n[fi] = E_pow_n[fi-1]*Ez_stat;
 	
 	for (int fi=0; fi<order_trans; fi++) mu_xd += dipole_transition_x[k][ks][fi]*E_pow_n[fi];
 	for (int fi=0; fi<order_trans; fi++) mu_yd += dipole_transition_y[k][ks][fi]*E_pow_n[fi];
@@ -317,7 +298,7 @@ double Stark::getRelaxTransition(int k,int ks,tcomplex& mu_x,tcomplex& mu_y,tcom
 	double absdE = fabs(En[k]-En[ks]);
 	
 	E_pow_n[0] = 1;
-	for (int fi=1; fi<order_trans; fi++)  E_pow_n[fi] *= Ez_stat;
+	for (int fi=1; fi<order_trans; fi++)  E_pow_n[fi] = E_pow_n[fi-1]*Ez_stat;
 	
 	
 	for (int fi=0; fi<order_trans; fi++) mu_xd += dipole_transition_x[k][ks][fi]*E_pow_n[fi];
@@ -348,7 +329,7 @@ void	Stark::SetE(double E){
 	else	{
 	En[k] = energy[k][iEz]+cEz*(energy[k][iEz+1]-energy[k][iEz]);
 	
-	if(gamma_autoionization[k][iEz]<1e-30)
+	if(gamma_autoionization[k][iEz]<1e-21)
 	Gamman[k] = 0;
 	else	
 	Gamman[k] = gamma_autoionization[k][iEz]*pow(gamma_autoionization[k][iEz+1]/gamma_autoionization[k][iEz],cEz);
