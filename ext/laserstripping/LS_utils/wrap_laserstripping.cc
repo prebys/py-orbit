@@ -16,6 +16,7 @@
 #include "wrap_walls.hh"
 #include "wrap_fringe_field.hh"
 #include "wrap_stark.hh"
+#include "wrap_cone_lf_mode.hh"
 
 static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
@@ -42,6 +43,7 @@ extern "C" {
 		wrap_walls::initWalls(module);
 		wrap_fringe_field::initFringeField(module);
 		wrap_stark::initStark(module);
+		wrap_cone_lf_mode::initConeLFmode(module);
 		
   }
 	

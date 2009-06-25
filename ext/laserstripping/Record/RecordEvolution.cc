@@ -165,9 +165,10 @@ void RecordEvolution::applyEffects(Bunch* bunch, int index,
 
 	Num = tracker->getStepsNumber();
 	
-	if(Num<num_plot)	num_plot=Num;
+	if(Num<num_plot)	{cout<<"The number of evolution points must be equal or less then the number of steps \n"; abort();}
+	if(Num%num_plot!=0)	{cout<<"The number of steps must be divisible by the number of evolution point \n"; abort();}
 	
-
+	
 	for (int i=0; i<bunch->getSize();i++)	{
 	x0_ev(i) = x0(i);
 	y0_ev(i) = y0(i);

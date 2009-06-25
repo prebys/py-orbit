@@ -38,6 +38,7 @@
 #include "RungeKuttaTracker.hh"
 #include "OrbitConst.hh"
 #include "LorentzTransformationEM.hh"
+#include "FieldRotation.hh"
 
 
 
@@ -80,13 +81,12 @@ SchrodingerEquation::SchrodingerEquation(BaseLaserFieldSource*	BaseLaserField, S
 	Parameter_resonance=par_res;
 	levels=	StarkEffect->getStates()*(1+StarkEffect->getStates())*(1+2*StarkEffect->getStates())/6;
 	
-	zero_cross=true;
-	
-	for (int i=0; i<levels+1;i++)
-		k_RungeKutt[i][0]=tcomplex(0.);
-
 
 	
+
+
+
+
 	
 //allocating memory for koefficients of 4-th order Runge-Kutta method and other koeeficients of the master equation
 k_RungeKutt=new tcomplex*[levels+1];	for (int i=0;i<levels+1;i++)	k_RungeKutt[i]=new tcomplex[5];
@@ -94,6 +94,8 @@ exp_mu_El=new tcomplex**[levels+1];	for (int i=0;i<levels+1;i++)	exp_mu_El[i]=ne
 mu_Elas=new tcomplex**[levels+1];	for (int i=0;i<levels+1;i++)	mu_Elas[i]=new tcomplex*[levels+1];		for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	mu_Elas[i][j]=new tcomplex[3];
 cond=new bool*[levels+1];	for (int i=0;i<levels+1;i++)	cond[i]=new bool[levels+1];
 
+for (int i=0; i<levels+1;i++)
+	k_RungeKutt[i][0]=tcomplex(0.);
 
 if(LaserField->getPyWrapper() != NULL){
 		Py_INCREF(LaserField->getPyWrapper());
@@ -169,6 +171,7 @@ void SchrodingerEquation::CalcPopulations(int i, Bunch* bunch)	{
 void SchrodingerEquation::setupEffects(Bunch* bunch){	
 	
 	install_field_dir=true;
+
 	
 
 	if(bunch->hasParticleAttributes("Amplitudes")==0)	{
@@ -208,8 +211,6 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 	
 	for (int i=0; i<bunch->getSize();i++)
 	CalcPopulations(i, bunch);
-	
-
 
 }
 		
@@ -230,9 +231,11 @@ void SchrodingerEquation::memorizeInitParams(Bunch* bunch){
 	
 	
 }
-
+//-0.00226674 0.000171211 -0.326731 0.000842283-0.000358742 1.69601
 	
 void SchrodingerEquation::finalizeEffects(Bunch* bunch){
+	
+
 	
 	if(bunch->hasParticleAttributes("pq_coords")==1)
 		bunch->removeParticleAttributes("pq_coords");
@@ -253,7 +256,6 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 
 
 
-
 	
 			for (int i=0; i<bunch->getSize();i++)	{
 
@@ -266,58 +268,16 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	t_part	omega_part	part_t_step 
 			//in atomic units in frame of particle		
 			GetParticleFrameParameters(i,t,t_step,bunch);	
-				
 			//	This function provides step solution for density matrix using rk4	method
 			AmplSolver4step(i,bunch);	
 			
 			CalcPopulations(i, bunch);
 		
 		}	
+			
+			install_field_dir=false;
 
 }
-
-
-
-
-
-
-
-
-void	SchrodingerEquation::RotateElectricFields(double nx,double ny,double nz, tcomplex& Exl,tcomplex& Eyl,tcomplex& Ezl){
-	
-	double nxy2=nx*nx+ny*ny;
-	double n2=nxy2+nz*nz;
-	double n=sqrt(n2);
-
-
-
-		
-		tcomplex Exll=Exl;
-		tcomplex Eyll=Eyl;
-		tcomplex Ezll=Ezl;
-		
-		
-		if(nxy2>1e-40*n2)	{
-			
-		Exl=(-nx*nxy2*Ezll + Eyll*nx*ny*(-n + nz) + Exll*(n*ny*ny + nx*nx*nz))/(n*nxy2);
-		Eyl=(-ny*nxy2*Ezll + Exll*nx*ny*(-n + nz) + Eyll*(n*nx*nx + ny*ny*nz))/(n*nxy2);
-		Ezl=(Exll*nx + Eyll*ny + Ezll*nz)/n;
-
-		}
-		
-
-		else	{
-			
-			Exl=Exl;
-			Eyl=Eyl;
-			Ezl=Ezl;
-
-		}
-	
-return ;
-
-}
-
 
 
 
@@ -336,20 +296,13 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
 		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
 
-		if (zero_cross&&install_field_dir)	{
+		if (install_field_dir)	{
 		nx[i] = Ex_stat;	
 		ny[i] = Ey_stat;	
 		nz[i] = Ez_stat;
-		install_field_dir=false;
 		}	
 		
-		
-		if (!zero_cross)	{
-		nx[i] = Ex_stat;	
-		ny[i] = Ey_stat;	
-		nz[i] = Ez_stat;
-		}
-		
+
 		
 	for (int j=0; j<3;j++)	{
 							
@@ -364,7 +317,7 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 																		 Bx_las[j],By_las[j],Bz_las[j]);	
 
 
-	RotateElectricFields(nx[i],ny[i],nz[i],Ex_las[j],Ey_las[j],Ez_las[j]);
+	FieldRotation::RotateElectricFields(nx[i],ny[i],nz[i],Ex_las[j],Ey_las[j],Ez_las[j]);
 	
 	}
 
@@ -426,45 +379,37 @@ omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0
 
 
 
-
-
-
-
-
 void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 	
 
-	
 
 	tcomplex z,z1,z2,JdE, mu_x,mu_y,mu_z;
 	double dt;
 		
 	
 		StarkEffect->SetE(Ez_stat);	
-	
-		
-
-					
-			for(int n=2; n<levels+1;n++)
-			for(int m=1; m<n;m++)	
-			if (StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)		{				
-				cond[n][m]=fabs(fabs(StarkEffect->En[n]-StarkEffect->En[m])-omega_part)<Parameter_resonance*abs(2.*mu_Elas[n][m][1]);	
-			}			
+				
 
 			
 			
 			for(int n=2; n<levels+1;n++)
 			for(int m=1; m<n;m++)	
-			if (cond[n][m] && StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)	{
+			if (StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)	{
 				
 				StarkEffect->getTransition(n,m,mu_x,mu_y,mu_z);
 				
-				for(int j=0; j<3;j++)
-					mu_Elas[n][m][j]=(mu_x*conj(Ex_las[j])+mu_y*conj(Ey_las[j])+mu_z*conj(Ez_las[j]))*(J/2.);	
+				mu_Elas[n][m][1]=(mu_x*conj(Ex_las[1])+mu_y*conj(Ey_las[1])+mu_z*conj(Ez_las[1]))*(J/2.);
+				cond[n][m]=fabs(fabs(StarkEffect->En[n]-StarkEffect->En[m])-omega_part)<Parameter_resonance*abs(2.*mu_Elas[n][m][1]);
+				
+				if (cond[n][m])	{
+					
+					mu_Elas[n][m][0]=(mu_x*conj(Ex_las[0])+mu_y*conj(Ey_las[0])+mu_z*conj(Ez_las[0]))*(J/2.);	
+					mu_Elas[n][m][2]=(mu_x*conj(Ex_las[2])+mu_y*conj(Ey_las[2])+mu_z*conj(Ez_las[2]))*(J/2.);
+				}
 												
 			}
 
-//			cout<<"delta_res= "<<omega_part-(E_i[7]-E_i[1])<<"\n";
+
 
 
 
@@ -473,7 +418,7 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 		for(int m=1; m<n;m++)		
 			if (cond[n][m] && StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)		{
 				
-				JdE=J*fabs(StarkEffect->En[n]-StarkEffect->En[m]);
+				JdE=tcomplex(0,fabs(StarkEffect->En[n]-StarkEffect->En[m]));
 				z1=exp(JdE*t_part);		
 				z2=exp(JdE*part_t_step/2.);
 			
@@ -495,9 +440,9 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 			
 			if (j==4)	dt=part_t_step;	else dt=part_t_step/2.;
 
-			k_RungeKutt[m][j]=tcomplex(0.);
-			for(int k=1;k<m;k++)			if (cond[m][k])		 k_RungeKutt[m][j]-=exp_mu_El[m][k][j]*(a(i,k)+k_RungeKutt[k][j-1]*dt);	
-			for(int k=m+1;k<levels+1;k++)	if (cond[k][m]) 	 k_RungeKutt[m][j]+=conj(exp_mu_El[k][m][j])*(a(i,k)+k_RungeKutt[k][j-1]*dt); 
+			k_RungeKutt[m][j]=tcomplex(0);
+			for(int k=1;k<m;k++)			if (cond[m][k] && StarkEffect->field_thresh[k]>Ez_stat)		 k_RungeKutt[m][j]-=exp_mu_El[m][k][j]*(a(i,k)+k_RungeKutt[k][j-1]*dt);		
+			for(int k=m+1;k<levels+1;k++)	if (cond[k][m] && StarkEffect->field_thresh[k]>Ez_stat) 	 k_RungeKutt[m][j]+=conj(exp_mu_El[k][m][j])*(a(i,k)+k_RungeKutt[k][j-1]*dt); 	
 			
 			
 			k_RungeKutt[m][j]-=StarkEffect->Gamman[m]*(a(i,m)+k_RungeKutt[m][j-1]*dt)/2.;
@@ -525,27 +470,8 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 			
 	}
 	
-	
-	
+
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

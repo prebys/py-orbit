@@ -32,7 +32,7 @@
 //my = new x
 //mz = new x
 FieldOrientation::FieldOrientation()	{
-	
+
 	ax = 1;
 	bx = 0;
 	cx = 0;
@@ -71,7 +71,8 @@ FieldOrientation::~FieldOrientation()	{
 void FieldOrientation::setCoefficients(double x00, double y00,double z00,
 		  								double kx, double ky,double kz,
 		  								double mx, double my,double mz)	{
-	
+
+
 x0 = x00;
 y0 = y00;
 z0 = z00;

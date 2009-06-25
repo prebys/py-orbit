@@ -41,7 +41,6 @@
 		
 			/*this method setups electrostatic field */
 		void SetE(double E);
-		void SetEmu(double E);
 		
 		/*Allows to obtain maximum general quantum number n*/
 		int getStates();
@@ -50,6 +49,7 @@
 		double* field_thresh;	
 		double* En;
 		double* Gamman;
+		int* n_data;
 		
 		
 		private:  
@@ -62,14 +62,14 @@
 		 double** energy;
 		 double** gamma_autoionization;
 		 
-		double* E_pow_n;
+		 double* E_pow_n;
 
 		  
 		 double delta_F;
 		 double const_relax;
 		 double Ez_stat;
 		 double cEz;
-		 int n_data;
+		 
 		 int iEz;
 		 int st;
 		 int levels;

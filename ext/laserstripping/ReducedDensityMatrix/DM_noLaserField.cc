@@ -370,9 +370,8 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 			
 			k_RungeKutt[m][j]=0;
 			
-			for(int k=m+1;k<levels+1;k++)	 if (cond[k][m]) 	k_RungeKutt[m][j]+=gamma_ij[k][m]*(pop(i,k)+k_RungeKutt[k][j-1]*dt);
-			sum=0; 
-			for(int k=1;k<m;k++)			 if (cond[m][k]) 	sum+=gamma_ij[m][k];
+			for(int k=m+1;k<levels+1;k++)	 if (cond[k][m] && StarkEffect->field_thresh[k]>Ez_stat) 	k_RungeKutt[m][j]+=gamma_ij[k][m]*(pop(i,k)+k_RungeKutt[k][j-1]*dt);			 
+	  sum=0;for(int k=1;k<m;k++)			 if (cond[m][k] && StarkEffect->field_thresh[k]>Ez_stat) 	sum+=gamma_ij[m][k];
 			
 			
 			sum+=StarkEffect->Gamman[m];
@@ -396,49 +395,6 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 	}
 
 		
-
-
-
-			
-			
-			
-
-
-
-
-					
-			
-						
-			
-					
-					
-
-					
-
-
-
-
-		
-
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

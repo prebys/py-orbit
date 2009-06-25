@@ -18,7 +18,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor. */
-			PrintExtEffects(int i,char* addr_print);
+			PrintExtEffects(char* eff_name,int i,char* addr_print);
 			
 			/** Destructor. */
 			~PrintExtEffects();
@@ -42,12 +42,16 @@ namespace LaserStripping{
 		  private:
 
 		  
-			  int print_par;
-			  int max_print_par;
+
+			  int Num;
+			  int num_print;
 			  char* addr_print;
+			  char* eff_name;
 			  char addr_name[1024];
 			  
 			  int rank_MPI,size_MPI;
+			  bool setup_par;
+			  double t_in;
 			  
 			  			 
 

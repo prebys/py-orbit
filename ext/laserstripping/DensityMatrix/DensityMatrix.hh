@@ -7,7 +7,7 @@
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
-#include "HydrogenStarkParam.hh"
+#include "Stark.hh"
 #include "ParticleAttributes.hh"
 
 
@@ -20,7 +20,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor */
-			DensityMatrix(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, HydrogenStarkParam* Stark,double par_res);
+			DensityMatrix(OrbitUtils::BaseLaserFieldSource*	BaseLaserField, Stark* Stark_ef,double par_res);
 
 			
 			/** Destructor. */
@@ -51,7 +51,7 @@ namespace LaserStripping{
 		  
 			  
 			  OrbitUtils::BaseLaserFieldSource*	LaserField;
-			  HydrogenStarkParam* StarkEffect;
+			  Stark* StarkEffect;
 			  
 			  //this array is used on each step of solution of density matrix equation at definite field  
 			  tcomplex*** exp_mu_El;
@@ -61,6 +61,7 @@ namespace LaserStripping{
 			  double* E_i;
 			  double** gamma_ij;
 			  bool** cond;
+			  bool** cond_lev;
 
 			  
 			  int levels;
@@ -110,8 +111,6 @@ namespace LaserStripping{
 				/*this method gives laser and static fields transformed by rotation relatively z axes  */
 				void GetParticleFrameFields(int i, double t,double t_step,   Bunch* bunch,  OrbitUtils::BaseFieldSource* fieldSource);
 				
-				/*This method provides rotational transformation of statis and laser field in frame of particle to z axes */
-				double	RotateElectricFields(double Ex_s, double Ey_s, double Ez_s,tcomplex& Ex_l,tcomplex& Ey_l,tcomplex& Ez_l);
 				
 
 				

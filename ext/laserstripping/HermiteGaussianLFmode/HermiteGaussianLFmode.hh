@@ -34,7 +34,7 @@ namespace OrbitUtils{
 	class  HermiteGaussianLFmode: public BaseLaserFieldSource{
 		public:
 		
-			HermiteGaussianLFmode(double Cnm,int n,int m,double wx,double wy,double f_x,double f_y,double la);
+			HermiteGaussianLFmode(tcomplex Cnm,int n,int m,double wx,double wy,double f_x,double f_y,double la);
 			~HermiteGaussianLFmode();
 		
 			void getLaserElectricMagneticField(double x, double y, double z, double t, 
@@ -51,6 +51,8 @@ namespace OrbitUtils{
 										double k_x, double k_y, double k_z,
 										double m_x, double m_y, double m_z,
 										double n_Ex, double n_Ey, double n_Ez);
+			
+			void setLocalParameters(double rx, double ry, double ax, double ay);
 			
 			
 
@@ -74,6 +76,8 @@ namespace OrbitUtils{
 			  double wy;
 			  double fx;
 			  double fy;
+			  double k;
+			  tcomplex Cnm;
 			
 			  //parameters of orientation of laser field
 			  double nHx, nHy, nHz, nEx, nEy, nEz;	  
