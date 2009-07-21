@@ -55,7 +55,7 @@ Stark::Stark(char* addressEG,int states)
 	const_relax = 4*alpha*alpha*alpha/3;
 	levels=st*(1+st)*(1+2*st)/6;
 
-	
+
 	
   	field_thresh = new double[levels+1];
   	n_data = new int[levels+1];
@@ -65,12 +65,13 @@ Stark::Stark(char* addressEG,int states)
 
 	
 	if(rank_MPI == 0) {
+		n_data[0] = 1;
 		
 		sprintf(nameEG,"%s000.txt",addressEG);	
-		file.open(nameEG);	file>>F>>F>>F>>delta_F; file.close();
+		file.open(nameEG);	file>>F>>F>>F>>delta_F; file.clear();file.close();
 		
 		sprintf(nameEG,"%stransitions.txt",addressEG);
-		file.open(nameEG);	file>>ff>>ff>>ff>>dump>>ff>>ff>>ff; fi=0;	while(dump2!=dump)	{file>>dump2;fi++;} file.close(); order_trans = (fi-4)/3;
+		file.open(nameEG);	file>>ff>>ff>>ff>>dump>>ff>>ff>>ff; fi=0;	while(dump2!=dump)	{file>>dump2;fi++;} file.clear();file.close(); order_trans = (fi-4)/3;
 		
 		
 		for(int n=1;n<states+1;n++){
@@ -79,7 +80,7 @@ Stark::Stark(char* addressEG,int states)
 
 					k=convert3to1level(n,n1,m);		
 					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));		
-					n_data[k]=-1;	file.open(nameEG);	while(!file.eof())	{file>>field_thresh[k]>>F>>F; n_data[k]++;} file.close();	
+					n_data[k]=-1;	file.open(nameEG);	while(!file.eof())	{file>>field_thresh[k]>>F>>F; n_data[k]++;} file.clear();file.close();	
 					
 				}
 			}
@@ -91,16 +92,15 @@ Stark::Stark(char* addressEG,int states)
 	
 	ORBIT_MPI_Bcast(&order_trans, 1, MPI_INT,0,MPI_COMM_WORLD);	
 	ORBIT_MPI_Bcast(&delta_F, 1, MPI_DOUBLE,0,MPI_COMM_WORLD);
-	ORBIT_MPI_Bcast(n_data,levels+1 ,MPI_INT,0,MPI_COMM_WORLD);
-	ORBIT_MPI_Bcast(field_thresh,levels+1 ,MPI_DOUBLE,0,MPI_COMM_WORLD);
-
+	for (int i=0;i<levels+1;i++) ORBIT_MPI_Bcast(&n_data[i],1 ,MPI_INT,0,MPI_COMM_WORLD);
+	for (int i=0;i<levels+1;i++) ORBIT_MPI_Bcast(&field_thresh[i],1 ,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
 
 
 	//allocating memory for dynamic massive of data that will be read fronm files	
 	E_pow_n = new double[order_trans];
 	
-	
+
 	
 	energy=new double*[levels+1];	
 	for (int i=0;i<levels+1;i++)	energy[i]=new double[n_data[i]];
@@ -108,7 +108,7 @@ Stark::Stark(char* addressEG,int states)
 	gamma_autoionization=new double*[levels+1];	
 	for (int i=0;i<levels+1;i++)	gamma_autoionization[i]=new double[n_data[i]];
 	
-	
+
 	
 	dipole_transition_x=new double**[levels+1];	
 	for (int i=0;i<levels+1;i++)	dipole_transition_x[i]=new double*[levels+1]; 
@@ -137,7 +137,7 @@ Stark::Stark(char* addressEG,int states)
 				
 					if(rank_MPI == 0) {
 					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));						
-					file.open(nameEG);for (fi=0; fi<n_data[k]; fi++)	{file>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file.close();
+					file.open(nameEG);for (fi=0; fi<n_data[k]; fi++)	{file>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file.clear();file.close();
 					}
 						
 					
@@ -216,11 +216,11 @@ Stark::Stark(char* addressEG,int states)
 					}
 				}
 			}
-		if(rank_MPI == 0)	{file.close();}
+		if(rank_MPI == 0)	{file.clear();file.close();}
 	
 
 
-		
+	
 		
 }
 
@@ -233,6 +233,7 @@ Stark::~Stark()	{
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_x[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_x[i];	delete	[]	dipole_transition_x;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_y[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_y[i];	delete	[]	dipole_transition_y;
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] dipole_transition_z[i][j]; for (int i=0;i<levels+1;i++)	delete [] dipole_transition_z[i];	delete	[]	dipole_transition_z;
+
 	delete [] field_thresh;
 	delete [] E_pow_n;
 	delete [] n_data;
