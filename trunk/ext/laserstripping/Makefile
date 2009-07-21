@@ -34,7 +34,7 @@ lstripping_lib = laserstripping.so
 
 #========rules=========================
 compile: $(OBJS_WRAP) $(OBJS) $(INC)
-	$(CXX) -fPIC $(SHARED_LIB) -o ../../lib/$(lstripping_lib) $(OBJS)
+	$(CXX) -fPIC $(SHARED_LIB) $(LINKFLAGS) -o ../../lib/$(lstripping_lib) $(OBJS)
 
 ./obj/wrap_%.o : wrap_%.cc $(INC)
 	$(CXX) $(CXXFLAGS) $(WRAPPER_FLAGS) $(INCLUDES_LOCAL) $(INCLUDES) -c $< -o $@;
