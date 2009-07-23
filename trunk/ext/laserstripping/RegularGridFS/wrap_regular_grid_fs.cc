@@ -36,22 +36,29 @@ extern "C" {
 
   //initializator for python  CppBaseFieldSource class
   //this is implementation of the __init__ method
+	
+	
+
   static int RegularGridFS_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
 	  
 
 	  
-	  char* file_name;
-	  char* type_of_field;
+	  const char* file_name;
+	  const char* type_of_field;
 	  double field_mult;
 	  double coord_mult;
+	  
 
 
 		 if(!PyArg_ParseTuple(	args,"ssdd:",&file_name, &type_of_field, &coord_mult, &field_mult)){
 			 		          error("HydrogenStarkParam(file_name , type_of_field, coodr_mult, field_mult) - params. are needed");
 			 			 		        }  
 		 else	{
+			 
+			  std::string name_str_name(file_name);
+			  std::string name_str_field(type_of_field);
 
-		 self->cpp_obj =  new  RegularGridFS(file_name, type_of_field, coord_mult, field_mult);
+		 self->cpp_obj =  new  RegularGridFS(name_str_name, name_str_field, coord_mult, field_mult);
 		 ((RegularGridFS*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	
@@ -119,10 +126,8 @@ extern "C" {
            else
            cpp_fields->getElectricMagneticField(x,y,z,t,Ex,Ey,Ez,Bx,By,Bz);
            
-           if (Ex==0.0&&Ey==0.0&&Ez==0.0)
-           return Py_BuildValue("ddd",Bx,By,Bz);
-           if (Bx==0.0&&By==0.0&&Bz==0.0)
-           return Py_BuildValue("ddd",Ex,Ey,Ez);
+           if (Ex==0.0&&Ey==0.0&&Ez==0.0) return Py_BuildValue("ddd",Bx,By,Bz);
+           if (Bx==0.0&&By==0.0&&Bz==0.0) return Py_BuildValue("ddd",Ex,Ey,Ez);
   }
   
   

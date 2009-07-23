@@ -7,6 +7,7 @@
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
 #include "ParticleAttributes.hh"
+#include <string>
 
 
 
@@ -19,7 +20,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor. */
-			RecordEvolution(char* effect,int ind_effect, int num);
+			RecordEvolution(std::string effect,int ind_effect, int num);
 			
 			/** Destructor. */
 			~RecordEvolution();
@@ -48,7 +49,7 @@ namespace LaserStripping{
 		  		  
 			int num_plot;
 			int index_effect;
-			char* effect_name;
+			std::string effect_name;
 			double t_per;
 			double t_step;
 			double t_in;

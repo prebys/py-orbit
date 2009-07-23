@@ -41,14 +41,16 @@ extern "C" {
   static int Stark_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
 
 	  int states;
-	  char* addressEG;
+	  const char* addressEG;
 
 		 if(!PyArg_ParseTuple(	args,"si:",&addressEG,&states)){
 			 		          error("Stark(address,states) - params. are needed");
 			 			 		        }  
 		 else	{
+			 
+			 std::string addr(addressEG);
 
-		 self->cpp_obj =  new  Stark(addressEG,states);
+		 self->cpp_obj =  new  Stark(addr,states);
 		 ((Stark*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	

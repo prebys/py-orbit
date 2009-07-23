@@ -23,7 +23,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
-#include <string>
+
 
 
 using namespace OrbitUtils;
@@ -36,7 +36,7 @@ inline int convert3to1level(int n,int n1, int m){
 
 
 
-Stark::Stark(char* addressEG,int states)
+Stark::Stark(std::string addressEG,int states)
 {		
 
 	int rank_MPI,size_MPI;
@@ -48,7 +48,7 @@ Stark::Stark(char* addressEG,int states)
 	double alpha=7.297352570e-3;
 	int k,ks,fi,nn1,nn2,mm,nn1s,nn2s,mms,ff;
 	char nameEG[1024];
-	string dump,dump2;
+	std::string dump,dump2;
 
 	
 	st=states;
@@ -67,10 +67,10 @@ Stark::Stark(char* addressEG,int states)
 	if(rank_MPI == 0) {
 		n_data[0] = 1;
 		
-		sprintf(nameEG,"%s000.txt",addressEG);	
+		sprintf(nameEG,"%s000.txt",addressEG.c_str());	
 		file.open(nameEG);	file>>F>>F>>F>>delta_F; file.clear();file.close();
 		
-		sprintf(nameEG,"%stransitions.txt",addressEG);
+		sprintf(nameEG,"%stransitions.txt",addressEG.c_str());
 		file.open(nameEG);	file>>ff>>ff>>ff>>dump>>ff>>ff>>ff; fi=0;	while(dump2!=dump)	{file>>dump2;fi++;} file.clear();file.close(); order_trans = (fi-4)/3;
 		
 		
@@ -79,7 +79,7 @@ Stark::Stark(char* addressEG,int states)
 				for(int n1=0;n1<n-abs(m)-1+1;n1++)	{
 
 					k=convert3to1level(n,n1,m);		
-					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));		
+					sprintf(nameEG,"%s%i%i%i.txt",addressEG.c_str(),n1,n-n1-abs(m)-1,abs(m));		
 					n_data[k]=-1;	file.open(nameEG);	while(!file.eof())	{file>>field_thresh[k]>>F>>F; n_data[k]++;} file.clear();file.close();	
 					
 				}
@@ -136,7 +136,7 @@ Stark::Stark(char* addressEG,int states)
 					k=convert3to1level(n,n1,m);		
 				
 					if(rank_MPI == 0) {
-					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));						
+					sprintf(nameEG,"%s%i%i%i.txt",addressEG.c_str(),n1,n-n1-abs(m)-1,abs(m));						
 					file.open(nameEG);for (fi=0; fi<n_data[k]; fi++)	{file>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file.clear();file.close();
 					}
 						
@@ -158,7 +158,7 @@ Stark::Stark(char* addressEG,int states)
 	if(rank_MPI == 0) {
 	
 
-		sprintf(nameEG,"%stransitions.txt",addressEG);
+		sprintf(nameEG,"%stransitions.txt",addressEG.c_str());
 		file.open(nameEG);
 	
 	}

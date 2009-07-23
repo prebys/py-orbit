@@ -42,7 +42,7 @@ extern "C" {
 	  
 
 
-      char* effect;
+      const char* effect;
       int ind_effect;
       int num;
 
@@ -55,7 +55,8 @@ extern "C" {
 		 else	{
 		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
 
-		 self->cpp_obj =  new  RecordEvolution(effect,ind_effect, num);
+		 std::string ef(effect);
+		 self->cpp_obj =  new  RecordEvolution(ef,ind_effect, num);
 		 ((RecordEvolution*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	

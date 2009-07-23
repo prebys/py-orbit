@@ -24,9 +24,10 @@
 #include <fstream>
 #include <iostream>
 
+
 using namespace OrbitUtils;
 
-RegularGridFS::RegularGridFS(char* file_name,char* type_of_field, double coord_mult, double field_mul)
+RegularGridFS::RegularGridFS(std::string file_name,std::string type_of_field, double coord_mult, double field_mul)
 {
 	orient = new FieldOrientation();
 	
@@ -34,7 +35,7 @@ RegularGridFS::RegularGridFS(char* file_name,char* type_of_field, double coord_m
 		e_field=true;
 	if (type_of_field[0]=='m')
 		e_field=false;
-	
+
 	
 	xyz_mult=coord_mult;
 	field_mult = field_mul;
@@ -50,13 +51,13 @@ RegularGridFS::RegularGridFS(char* file_name,char* type_of_field, double coord_m
 	
 
 	if(rank_MPI == 0) {
-		file.open(file_name);	file>>x_min>>y_min>>z_min>>F>>F>>F;  file.close();
+		file.open(file_name.c_str());	file>>x_min>>y_min>>z_min>>F>>F>>F;  file.close();
 		
-		file.open(file_name);	while(true)	{file>>x>>y>>z>>F>>F>>F;if (x>x_min+fabs(x_min)*1.0e-14) {delta_x=x-x_min; break;}} file.close();
-		file.open(file_name);	while(true)	{file>>x>>y>>z>>F>>F>>F;if (y>y_min+fabs(y_min)*1.0e-14) {delta_y=y-y_min; break;}} file.close();
-		file.open(file_name);	while(true)	{file>>x>>y>>z>>F>>F>>F;if (z>z_min+fabs(z_min)*1.0e-14) {delta_z=z-z_min; break;}} file.close();		
+		file.open(file_name.c_str());	while(true)	{file>>x>>y>>z>>F>>F>>F;if (x>x_min+fabs(x_min)*1.0e-14) {delta_x=x-x_min; break;}} file.close();
+		file.open(file_name.c_str());	while(true)	{file>>x>>y>>z>>F>>F>>F;if (y>y_min+fabs(y_min)*1.0e-14) {delta_y=y-y_min; break;}} file.close();
+		file.open(file_name.c_str());	while(true)	{file>>x>>y>>z>>F>>F>>F;if (z>z_min+fabs(z_min)*1.0e-14) {delta_z=z-z_min; break;}} file.close();		
 		
-		file.open(file_name);fi=0;	while(!file.eof())	{file>>x_max>>y_max>>z_max>>F>>F>>F;fi++;} file.close();	n_data=fi-1;
+		file.open(file_name.c_str());fi=0;	while(!file.eof())	{file>>x_max>>y_max>>z_max>>F>>F>>F;fi++;} file.close();	n_data=fi-1;
 		
 		
 		x_min *=xyz_mult; y_min *=xyz_mult; z_min *=xyz_mult;
@@ -112,7 +113,7 @@ RegularGridFS::RegularGridFS(char* file_name,char* type_of_field, double coord_m
 
 	//this loop reads magnetic fields
 	if(rank_MPI == 0) {
-		file.open(file_name); 
+		file.open(file_name.c_str()); 
 		for(int i=0;i<nx;i++){
 			for(int j=0;j<ny;j++){
 				for(int k=0;k<nz;k++)	{

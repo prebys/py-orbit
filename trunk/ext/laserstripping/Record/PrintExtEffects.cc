@@ -45,7 +45,7 @@ using namespace OrbitUtils;
 
 
 
-PrintExtEffects::PrintExtEffects(char* name,int i,char* addr)
+PrintExtEffects::PrintExtEffects(std::string name,int i,std::string addr)
 {
 
 	setRankSetup(1);
@@ -125,7 +125,7 @@ void PrintExtEffects::applyEffects(Bunch* bunch, int index,
 		if(int((t-t_in+t_step)/t_step+0.5)%(Num/num_print) == 0)		
 			
 		for (int i=0; i<bunch->getSize();i++)	{
-			sprintf(addr_name,"%s%i.dat",addr_print,i*size_MPI+rank_MPI);
+			sprintf(addr_name,"%s%i.dat",addr_print.c_str(),i*size_MPI+rank_MPI);
 			ofstream file(addr_name,ios::app);
 			file<<t;
 			

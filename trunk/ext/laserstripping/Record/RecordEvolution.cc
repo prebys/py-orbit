@@ -54,7 +54,7 @@ using namespace OrbitUtils;
 
 
 
-RecordEvolution::RecordEvolution(char* effect,int ind_effect, int num)
+RecordEvolution::RecordEvolution(std::string effect,int ind_effect, int num)
 {
 	
 

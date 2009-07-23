@@ -7,6 +7,7 @@
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
+#include <string>
 
 
 using namespace TrackerRK4;
@@ -18,7 +19,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor. */
-			PrintExtEffects(char* eff_name,int i,char* addr_print);
+			PrintExtEffects(std::string eff_name,int i,std::string addr_print);
 			
 			/** Destructor. */
 			~PrintExtEffects();
@@ -45,8 +46,8 @@ namespace LaserStripping{
 
 			  int Num;
 			  int num_print;
-			  char* addr_print;
-			  char* eff_name;
+			  std::string  addr_print;
+			  std::string  eff_name;
 			  char addr_name[1024];
 			  
 			  int rank_MPI,size_MPI;
