@@ -4,7 +4,7 @@
 
 #include "tcomplex.hh"
 #include "CppPyWrapper.hh"
-
+#include <string>
 
 
 
@@ -21,7 +21,7 @@
 			
 		public:
 		/*constructor*/	
-		Stark(char* addressEG,int states);
+		Stark(std::string addressEG,int states);
 		
 		/*destructor*/	
 		~Stark();

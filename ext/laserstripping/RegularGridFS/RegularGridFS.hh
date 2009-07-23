@@ -26,6 +26,7 @@
 #include "BaseFieldSource.hh"
 #include "FieldOrientation.hh"
 #include <vector>
+#include <string>
 
 namespace OrbitUtils{
 	
@@ -33,7 +34,7 @@ namespace OrbitUtils{
 	{
 		public:
 		
-			RegularGridFS(char* file_name,char* type_of_field, double coord_mult, double field_mul);
+			RegularGridFS(std::string file_name, std::string type_of_field, double coord_mult, double field_mul);
 			~RegularGridFS();
 			
 			void setFieldOrientation(double x_0, double y_0, double z_0,

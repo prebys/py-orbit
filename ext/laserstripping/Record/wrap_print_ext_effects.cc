@@ -41,8 +41,8 @@ extern "C" {
 	  
 
 
-      char* address;
-      char* eff_name;
+      const char* address;
+      const char* eff_name;
       int max_print;
 
 
@@ -53,8 +53,10 @@ extern "C" {
 			 			 		        }  
 		 else	{
 
-
-		 self->cpp_obj =  new  PrintExtEffects(eff_name,max_print,address);
+			 std::string name(eff_name);
+			 std::string addr(address);
+			 
+		 self->cpp_obj =  new  PrintExtEffects(name,max_print,addr);
 		 ((PrintExtEffects*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	
