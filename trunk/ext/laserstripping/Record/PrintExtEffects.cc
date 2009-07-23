@@ -125,7 +125,7 @@ void PrintExtEffects::applyEffects(Bunch* bunch, int index,
 		if(int((t-t_in+t_step)/t_step+0.5)%(Num/num_print) == 0)		
 			
 		for (int i=0; i<bunch->getSize();i++)	{
-			sprintf(addr_name,"%s%i.dat",addr_print.c_str(),i*size_MPI+rank_MPI);
+			snprintf(addr_name,MAX_LENGTH_ADDRESS,"%s%i.dat",addr_print.c_str(),i*size_MPI+rank_MPI);
 			ofstream file(addr_name,ios::app);
 			file<<t;
 			

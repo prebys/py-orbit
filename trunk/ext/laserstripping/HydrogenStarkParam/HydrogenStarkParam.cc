@@ -24,6 +24,7 @@
 #include <fstream>
 #include <iostream>
 
+#define MAX_LENGTH_ADDRESS 1024
 
 using namespace OrbitUtils;
 
@@ -43,7 +44,7 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
 	std::ifstream file;
 	double F,alpha=7.297352570e-3;
 	int k,ks,fi;
-	char nameEG[1024];
+	char nameEG[MAX_LENGTH_ADDRESS];
 	
 	st=states;
 	
@@ -51,7 +52,7 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
 	
 	
 	//this function measures parameter of input files (length, delta_F) using groung level file 000.txt
-	sprintf(nameEG,"%s000.txt",addressEG);	
+	snprintf(nameEG,MAX_LENGTH_ADDRESS,"%s000.txt",addressEG);	
 	if(rank_MPI == 0) {
 		file.open(nameEG);	file>>F>>F>>F>>delta_F; file.close();
 		file.open(nameEG);fi=0;	while(!file.eof())	{file>>F>>F>>F;fi++;} file.close();n_data=fi-1;
@@ -96,7 +97,7 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
 				for(int n1=0;n1<n-abs(m)-1+1;n1++)	{
 					std::ifstream file_in;
 					k=convert3to1level(n,n1,m);		
-					sprintf(nameEG,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));		
+					snprintf(nameEG,MAX_LENGTH_ADDRESS,"%s%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,abs(m));		
 					file_in.open(nameEG);for (fi=0; fi<n_data; fi++)	{file_in>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file_in.close();
 					
 					file.open(nameEG);	while(!file.eof())	file>>field_thresh[k]>>F>>F; file.close();
@@ -155,7 +156,7 @@ HydrogenStarkParam::HydrogenStarkParam(char* addressEG,int states)
 								ks=convert3to1level(ns,n1s,ms);
 								
 								
-								sprintf(nameEG,"%s%i%i%i---%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,m,n1s,ns-n1s-abs(ms)-1,ms);
+								snprintf(nameEG,MAX_LENGTH_ADDRESS,"%s%i%i%i---%i%i%i.txt",addressEG,n1,n-n1-abs(m)-1,m,n1s,ns-n1s-abs(ms)-1,ms);
 								file_in.open(nameEG);
 								for (fi=0; fi<n_data; fi++)	{file_in>>F>>dipole_transition_x[k][ks][fi]>>dipole_transition_y[k][ks][fi]>>dipole_transition_z[k][ks][fi];
 									
