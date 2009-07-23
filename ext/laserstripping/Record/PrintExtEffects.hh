@@ -8,7 +8,7 @@
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
 #include <string>
-
+#define MAX_LENGTH_ADDRESS 1024
 
 using namespace TrackerRK4;
 
@@ -48,7 +48,7 @@ namespace LaserStripping{
 			  int num_print;
 			  std::string  addr_print;
 			  std::string  eff_name;
-			  char addr_name[1024];
+			  char addr_name[MAX_LENGTH_ADDRESS];
 			  
 			  int rank_MPI,size_MPI;
 			  bool setup_par;
