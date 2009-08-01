@@ -27,13 +27,15 @@
 
 using namespace OrbitUtils;
 
-HermiteGaussianLFmode::HermiteGaussianLFmode(tcomplex C,int n,int m,double w_x,double w_y,double f_x,double f_y,double la)
+HermiteGaussianLFmode::HermiteGaussianLFmode(tcomplex C,int n,int m,double w_x,double w_y,double f_x,double f_y,double la,double env__peak, double env__sigma)
 {
 	Cnm=C;
 	Unm=Cnm*sqrt(2*OrbitConst::c*OrbitConst::permeability)*sqrt(pow(w_x,2*n+1)*pow(w_y,2*m+1)*MathPolynomial::Factorial(n)*MathPolynomial::Factorial(m)*pow(2,n+m+1)/(MathPolynomial::Factorial(2*n)*MathPolynomial::Factorial(2*m)*OrbitConst::PI));
 
 	orient = new FieldOrientation();  
 	Laser_lambda=la;
+	env_peak = env__peak;
+	env_sigma = env__sigma;
 	fx=f_x;
 	fy=f_y;
 	wx=w_x;
@@ -155,7 +157,8 @@ void HermiteGaussianLFmode::getLaserElectricMagneticField(double x, double y, do
 tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
 
 
-
+			double ex = (z - env_peak - OrbitConst::c*t)/env_sigma;
+			E *= exp(-ex*ex/4);
 
 tcomplex	H=E/OrbitConst::c;
 

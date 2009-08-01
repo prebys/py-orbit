@@ -83,7 +83,12 @@ void QuadEMfield::getElectricMagneticField(double x, double y, double z, double 
 	 
 	 B_x = Bx0v+cxBxv*x+cyBxv*y+czBxv*z; 
 	 B_y = By0v+cxByv*x+cyByv*y+czByv*z; 
-	 B_z = Bz0v+cxBzv*x+cyBzv*y+czBzv*z; 
+	 B_z = Bz0v+cxBzv*x+cyBzv*y+czBzv*z;
+
+
+
+	 
+	 return;
 
 }
 

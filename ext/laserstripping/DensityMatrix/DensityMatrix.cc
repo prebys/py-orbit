@@ -315,7 +315,7 @@ void DensityMatrix::GetParticleFrameFields(int i,double t,double t_step,  Bunch*
 																		 Bx_las[j],By_las[j],Bz_las[j]);	
 	
 	
-	Ez=FieldRotation::RotateElectricFields(Ex_stat,Ey_stat,Ez_stat,Ex_las[j],Ey_las[j],Ez_las[j]);
+	Ez=FieldRotation::RotateElectricFieldsV(Ex_stat,Ey_stat,Ez_stat,Ex_las[j],Ey_las[j],Ez_las[j]);
 	
 	}
 
