@@ -3,37 +3,51 @@
 
 
 
-double	FieldRotation::RotateElectricFields(double vx,double vy,double vz, tcomplex& Exl,tcomplex& Eyl,tcomplex& Ezl){
+double	FieldRotation::RotateElectricFieldsV(double vx,double vy,double vz, tcomplex& Exl,tcomplex& Eyl,tcomplex& Ezl){
 	
-	double vxy2=vx*vx+vy*vy;
-	double v2=vxy2+vz*vz;
-	double v=sqrt(v2);
+	double v = sqrt(vx*vx+vy*vy+vz*vz);
+	
+	double nx = vx/v;
+	double ny = vy/v;
+	double nz = vz/v;
+	
+	double n = 1./(nz + 1.);
+	double nxy = -nx*ny*n;
 
 
-
-		
 		tcomplex Exll=Exl;
 		tcomplex Eyll=Eyl;
 		tcomplex Ezll=Ezl;
 		
-		
-		if(vxy2>1e-40*v2)	{
-			
-		Exl=(-vx*vxy2*Ezll + Eyll*vx*vy*(-v + vz) + Exll*(v*vy*vy + vx*vx*vz))/(v*vxy2);
-		Eyl=(-vy*vxy2*Ezll + Exll*vx*vy*(-v + vz) + Eyll*(v*vx*vx + vy*vy*vz))/(v*vxy2);
-		Ezl=(Exll*vx + Eyll*vy + Ezll*vz)/v;
+					
+		Exl=Exll*(1-nx*nx*n) + Eyll*nxy - Ezll*nx;
+		Eyl=Exll*nxy + Eyll*(1-ny*ny*n) - Ezll*ny;
+		Ezl=Exll*nx + Eyll*ny + Ezll*nz;
 
-		}
-		
-
-		else	{
-			
-			Exl=Exl;
-			Eyl=Eyl;
-			Ezl=Ezl;
-
-		}
-	
 return v;
 
 }
+
+
+
+void	FieldRotation::RotateElectricFieldsN(double nx,double ny,double nz, tcomplex& Exl,tcomplex& Eyl,tcomplex& Ezl){
+	
+
+	double n = 1/(nz + 1);
+	double nxy = -nx*ny*n;
+
+
+		tcomplex Exll=Exl;
+		tcomplex Eyll=Eyl;
+		tcomplex Ezll=Ezl;
+		
+					
+		Exl=Exll*(1-nx*nx*n)+ Eyll*nxy-Ezll*nx;
+		Eyl=Exll*nxy+ Eyll*(1-ny*ny*n)-Ezll*ny;
+		Ezl=Exll*nx+ Eyll*ny+Ezll*nz;
+
+
+return;
+
+}
+
