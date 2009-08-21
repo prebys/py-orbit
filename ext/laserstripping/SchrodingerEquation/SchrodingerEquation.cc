@@ -132,10 +132,7 @@ SchrodingerEquation::~SchrodingerEquation()
 	
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
 
-	
-	delete [] nx;
-	delete [] ny;
-	delete [] nz;
+
 	
 
 	
@@ -172,7 +169,6 @@ void SchrodingerEquation::CalcPopulations(int i, Bunch* bunch)	{
 
 void SchrodingerEquation::setupEffects(Bunch* bunch){	
 	
-	install_field_dir=true;
 	
 	
 	
@@ -214,10 +210,19 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 	AmplAttr = bunch->getParticleAttributes("Amplitudes");
 	PopAttr = bunch->getParticleAttributes("Populations");
 	
+	
+	
 
 	nx=new double[bunch->getSize()];
 	ny=new double[bunch->getSize()];
 	nz=new double[bunch->getSize()];
+	
+	install_field_dir=new bool [bunch->getSize()];
+	
+	for (int i=0; i<bunch->getSize();i++)
+		install_field_dir[i] = true;
+		
+		
 	
 	for (int i=0; i<bunch->getSize();i++)
 	CalcPopulations(i, bunch);
@@ -250,6 +255,12 @@ void SchrodingerEquation::finalizeEffects(Bunch* bunch){
 	if(bunch->hasParticleAttributes("pq_coords")==1)
 		bunch->removeParticleAttributes("pq_coords");
 	
+	delete [] nx;
+	delete [] ny;
+	delete [] nz;
+	
+	delete [] install_field_dir;
+	
 }
 
 
@@ -265,14 +276,10 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 															RungeKuttaTracker* tracker)			{
 
 
-			for (int i=0; i<bunch->getSize();i++)	{
+			for (int i=0; i<bunch->getSize();i++)	
+				if(x(i)*1.22020387566 - 0.005 < z(i) && z(i) < x(i)*1.22020387566 + 0.005)	//Temporal condition
+		{
 				
-
-
-
-
-			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
-			//in natural unts (Volt per meter)	in the frame of particle
 
 			GetParticleFrameFields(i, t, t_step,bunch,fieldSource);
 	
@@ -288,7 +295,7 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 		
 		}	
 			
-			install_field_dir=false;
+
 
 }
 
@@ -309,10 +316,11 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
 		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
 		
-		if (install_field_dir)	{
+		if (install_field_dir[i])	{
 		nx[i] = Ex_stat;	
 		ny[i] = Ey_stat;	
 		nz[i] = Ez_stat;
+		install_field_dir[i]=false;
 		}	
 		
 
@@ -413,7 +421,7 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 				StarkEffect->getTransition(n,m,mu_x,mu_y,mu_z);
 				dE = fabs(StarkEffect->En[n]-StarkEffect->En[m]);
 				JdEdt = tcomplex(0.,dE*part_t_step);
-				int_E[n][m][i] += JdEdt;
+				
 
 				mu_Elas[n][m][1]=(mu_x*conj(Ex_las[1])+mu_y*conj(Ey_las[1])+mu_z*conj(Ez_las[1]))*(J/2.);
 				cond[n][m]=fabs(dE - omega_part)<Parameter_resonance*abs(2.*mu_Elas[n][m][1]);
@@ -436,6 +444,8 @@ void SchrodingerEquation::AmplSolver4step(int i, Bunch* bunch)	{
 					
 					
 				}
+				
+				int_E[n][m][i] += JdEdt;
 												
 			}
 
