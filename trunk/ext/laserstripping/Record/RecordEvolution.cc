@@ -189,6 +189,7 @@ void RecordEvolution::applyEffects(Bunch* bunch, int index,
 if(int((t-t_in+t_step)/t_step+0.5)%(Num/num_plot) == 0)		
 for (int i=0; i<bunch->getSize();i++)	{
 	Evol->attArr(i)[int((t-t_in+t_step)/t_step+0.5)/(Num/num_plot)] = RecEff->attArr(i)[index_effect];
+//	Evol->attArr(i)[int((t-t_in+t_step)/t_step+0.5)/(Num/num_plot)] = bunch->x(i);
 
 }
 

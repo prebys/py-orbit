@@ -277,7 +277,7 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 
 
 			for (int i=0; i<bunch->getSize();i++)	
-				if(x(i)*1.22020387566 - 0.005 < z(i) && z(i) < x(i)*1.22020387566 + 0.005)	//Temporal condition
+				if(LaserField->region(x(i),y(i),z(i)))
 		{
 				
 
@@ -327,7 +327,7 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 		
 	for (int j=0; j<3;j++)	{
 							
-		LaserField->getLaserElectricMagneticField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
+		LaserField->getLaserEMField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
 				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
 		
 
@@ -387,7 +387,6 @@ Ez_stat/=Ea;
 
 
 omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
-
 
 	
 }

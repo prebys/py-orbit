@@ -87,6 +87,7 @@ namespace LaserStripping{
 			  tcomplex By_las[3];
 			  tcomplex Bz_las[3];
 			  
+			  
 			  double Ex_stat;
 			  double Ey_stat;
 			  double Ez_stat;

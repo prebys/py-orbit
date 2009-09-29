@@ -282,11 +282,13 @@ void RegularGridFS::getElectricMagneticField(double x, double y, double z, doubl
 	 orient->OrientCoordinates(x,y,z);
 	 getConstructedNonOrientedField(F_x, F_y, F_z, B_x, B_y, B_z, x, y, z, t);	 	
 	 orient->OrientVector(F_x,F_y,F_z);
+	 
+
 	
 	if (e_field)	 { H_x = 0.0; H_y = 0.0; H_z = 0.0; E_x = F_x; E_y = F_y; E_z = F_z;}
 	if (!e_field)	 { E_x = 0.0; E_y = 0.0; E_z = 0.0; H_x = F_x; H_y = F_y; H_z = F_z;}
 
-
+	
 //    std::cout<< e_field<<E_x<<"  "<<E_y<<"  "<<E_z<<"  "<<H_x<<"  "<<H_y<<"  "<<H_z<<"\n";	 
 
 

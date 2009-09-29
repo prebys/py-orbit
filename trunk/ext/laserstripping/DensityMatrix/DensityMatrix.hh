@@ -57,6 +57,7 @@ namespace LaserStripping{
 			  tcomplex*** exp_mu_El;
 			  tcomplex*** k_RungeKutt;
 			  tcomplex*** mu_Elas;
+			  tcomplex*** int_E;
 			  double* Gamma_i;
 			  double* E_i;
 			  double** gamma_ij;
@@ -77,7 +78,6 @@ namespace LaserStripping{
 			  //time and frequensy of laser in frame of particle
 			  double omega_part;
 			  double part_t_step;
-			  double t_part;
 			  					  
 			  //Fields in the particle frame  
 			  tcomplex Ex_las[3];

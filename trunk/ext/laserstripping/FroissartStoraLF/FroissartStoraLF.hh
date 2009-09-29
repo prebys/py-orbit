@@ -36,7 +36,7 @@ namespace OrbitUtils{
 			FroissartStoraLF(double Om,double G,double El);
 			~FroissartStoraLF();
 		
-			void getLaserElectricMagneticField(double x, double y, double z, double t, 
+			tcomplex getLaserEMField(double x, double y, double z, double t, 
 					tcomplex& E_x, tcomplex& E_y, tcomplex& E_z,
 					tcomplex& H_x, tcomplex& H_y, tcomplex& H_z);
 
@@ -48,7 +48,7 @@ namespace OrbitUtils{
 			
 			void setLaserFieldPolarization(double n_Ex, double n_Ey, double n_Ez);
 			
-			
+
 
 			
 		private:
@@ -66,6 +66,7 @@ namespace OrbitUtils{
 			  double Omega;
 			  double Gamma;
 			  double amp_ELas;
+
 
 			
 			  //parameters of polarization of laser field

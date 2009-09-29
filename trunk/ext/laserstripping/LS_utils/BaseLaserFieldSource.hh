@@ -29,11 +29,15 @@ namespace OrbitUtils{
 		BaseLaserFieldSource();
 		virtual ~BaseLaserFieldSource();
 		
-		virtual void getLaserElectricMagneticField(double x, double y, double z, double t, 
+		virtual tcomplex getLaserEMField(double x, double y, double z, double t, 
 				tcomplex& E_x, tcomplex& E_y, tcomplex& E_z,
 				tcomplex& H_x, tcomplex& H_y, tcomplex& H_z);
+		
+		virtual bool region(double x, double y, double z);
+		
 
 		virtual double getFrequencyOmega(double m,double x, double y, double z, double px, double py, double pz, double t);
+
 		
 		
 

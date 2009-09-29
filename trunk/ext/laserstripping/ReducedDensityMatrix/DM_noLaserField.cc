@@ -72,6 +72,8 @@ inline int convert3to1level(int n,int n1, int m){
 
 DM_noLaserField::DM_noLaserField(Stark* Starkef)
 {
+	
+
 	setName("unnamed");
 	
 
@@ -83,11 +85,10 @@ DM_noLaserField::DM_noLaserField(Stark* Starkef)
 
 
 //allocating memory for koefficients of 4-th order Runge-Kutta method and other koeeficients of the master equation
+
 k_RungeKutt=new double*[levels+1]; for (int i=0;i<levels+1;i++) k_RungeKutt[i]=new double[5];
 gamma_ij=new double*[levels+1];	for (int i=0;i<levels+1;i++)	gamma_ij[i]=new double[levels+1];
 cond=new bool*[levels+1];	for (int i=0;i<levels+1;i++)	cond[i]=new bool[levels+1];
-
-
 
 for(int n=1;n<st+1;n++){
 	for(int m=-(n-1);m<(n-1)+1;m++){
@@ -157,7 +158,7 @@ void DM_noLaserField::CalcPopulations(int i, Bunch* bunch)	{
 void DM_noLaserField::setupEffects(Bunch* bunch){	
 	
 
-	
+
 
 	if(bunch->hasParticleAttributes("Amplitudes")==1)	{
 		bunch->removeParticleAttributes("Amplitudes");
@@ -172,7 +173,7 @@ void DM_noLaserField::setupEffects(Bunch* bunch){
 			bunch->getParticleAttributes("Populations")->attValue(i,1) = 1;
 		}
 	
-	
+
 	
 	
 	if (bunch->hasParticleAttributes("pq_coords")==0)	{
@@ -180,7 +181,7 @@ void DM_noLaserField::setupEffects(Bunch* bunch){
 	part_attr_dict["size"] = 6;
 	bunch->addParticleAttributes("pq_coords",part_attr_dict);
 	}
-	
+
 	Coords = bunch->getParticleAttributes("pq_coords");
 	PopAttr = bunch->getParticleAttributes("Populations");
 	
@@ -246,6 +247,8 @@ void DM_noLaserField::applyEffects(Bunch* bunch, int index,
 			AmplSolver4step(i,bunch);	
 		
 			CalcPopulations(i, bunch);
+
+
 		
 		}	
 

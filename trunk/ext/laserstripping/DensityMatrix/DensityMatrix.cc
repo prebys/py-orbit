@@ -181,6 +181,14 @@ void DensityMatrix::CalcPopulations(int i, Bunch* bunch)	{
 
 void DensityMatrix::setupEffects(Bunch* bunch){		
 	
+	
+	int_E=new tcomplex**[levels+1];	for (int i=0;i<levels+1;i++)	int_E[i]=new tcomplex*[levels+1]; for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	int_E[i][j]=new tcomplex[bunch->getSize()];
+	
+	for(int i=0; i<bunch->getSize();i++)
+	for(int n=1; n<levels+1;n++)
+	for(int m=1; m<levels+1;m++)
+	int_E[n][m][i] = tcomplex(0.,0.);
+	
 	if(bunch->hasParticleAttributes("Amplitudes")==0)	{
 		std::map<std::string,double> part_attr_dict;
 		part_attr_dict["size"] = 2*levels*levels+1;
@@ -196,9 +204,6 @@ void DensityMatrix::setupEffects(Bunch* bunch){
 			part_attr_dict["size"] = levels+1;
 			bunch->addParticleAttributes("Populations",part_attr_dict);
 		}
-	
-	
-
 	
 	
 	
@@ -238,6 +243,9 @@ void DensityMatrix::memorizeInitParams(Bunch* bunch){
 	
 void DensityMatrix::finalizeEffects(Bunch* bunch){
 	
+	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] int_E[i][j]; for (int i=0;i<levels+1;i++)	delete [] int_E[i];	delete	[]	int_E;
+	
+	
 	if(bunch->hasParticleAttributes("pq_coords")==1)
 		bunch->removeParticleAttributes("pq_coords");
 	
@@ -259,7 +267,8 @@ void DensityMatrix::applyEffects(Bunch* bunch, int index,
 
 
 	
-		for (int i=0; i<bunch->getSize();i++)	{
+		for (int i=0; i<bunch->getSize();i++)	
+			if(LaserField->region(x(i),y(i),z(i)))	{
 
 			
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
@@ -306,7 +315,7 @@ void DensityMatrix::GetParticleFrameFields(int i,double t,double t_step,  Bunch*
 		
 	for (int j=0; j<3;j++)	{
 							
-		LaserField->getLaserElectricMagneticField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
+		LaserField->getLaserEMField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
 				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
 			
 	LorentzTransformationEM::complex_transform(bunch->getMass(),
@@ -348,7 +357,6 @@ double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
 double coeff=1./(gamma*ta);
 
 part_t_step=t_step*coeff;	//time step in frame of particle (in atomic units)
-t_part=t*coeff;	 
 
 
 
@@ -389,8 +397,8 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 	
 	
 
-	tcomplex JdE, z,z1,z2,mu_x,mu_y,mu_z;
-	double dt,sum;
+	tcomplex JdEdt, z,z1,z2,mu_x,mu_y,mu_z;
+	double dt,sum, dE;
 	
 	
 	
@@ -405,36 +413,35 @@ void DensityMatrix::AmplSolver4step(int i, Bunch* bunch)	{
 	for(int m=1; m<n;m++)	
 	if (StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)	{
 		
-		gamma_ij[n][m]=StarkEffect->getRelaxTransition(n,m,mu_x,mu_y,mu_z);
+		gamma_ij[n][m] = StarkEffect->getRelaxTransition(n,m,mu_x,mu_y,mu_z);
+		dE = fabs(StarkEffect->En[n]-StarkEffect->En[m]);
+		JdEdt = tcomplex(0.,dE*part_t_step);
 		
 		mu_Elas[n][m][1]=(mu_x*conj(Ex_las[1])+mu_y*conj(Ey_las[1])+mu_z*conj(Ez_las[1]))*(J/2.);
-		cond[n][m]=fabs(fabs(StarkEffect->En[n]-StarkEffect->En[m])-omega_part)<Parameter_resonance*abs(2.*mu_Elas[n][m][1]);
+		cond[n][m]=fabs(dE - omega_part) < Parameter_resonance*abs(2.*mu_Elas[n][m][1]);
 		
 		if (cond[n][m])	{
 			
 			mu_Elas[n][m][0]=(mu_x*conj(Ex_las[0])+mu_y*conj(Ey_las[0])+mu_z*conj(Ez_las[0]))*(J/2.);	
 			mu_Elas[n][m][2]=(mu_x*conj(Ex_las[2])+mu_y*conj(Ey_las[2])+mu_z*conj(Ez_las[2]))*(J/2.);
+			
+			z1=exp(int_E[n][m][i]);		
+			z2=exp(JdEdt/2.);
+		
+		exp_mu_El[n][m][1]=z1*mu_Elas[n][m][0];			
+		exp_mu_El[n][m][2]=z1*z2*mu_Elas[n][m][1];
+		exp_mu_El[n][m][3]=exp_mu_El[n][m][2];
+		exp_mu_El[n][m][4]=z1*z2*z2*mu_Elas[n][m][2];
+		
 		}
+		
+		int_E[n][m][i] += JdEdt;
 										
 	}
 
 
 
 
-
-		for(int n=2; n<levels+1;n++)
-		for(int m=1; m<n;m++)		
-			if (cond[n][m] && StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)		{
-				JdE=tcomplex(0,fabs(StarkEffect->En[n]-StarkEffect->En[m]));
-				z1=exp(JdE*t_part);		
-				z2=exp(JdE*part_t_step/2.);
-			
-			exp_mu_El[n][m][1]=z1*mu_Elas[n][m][0];			
-			exp_mu_El[n][m][2]=z1*z2*mu_Elas[n][m][1];
-			exp_mu_El[n][m][3]=exp_mu_El[n][m][2];
-			exp_mu_El[n][m][4]=z1*z2*z2*mu_Elas[n][m][2];	
-			
-		}
 
 
 					
