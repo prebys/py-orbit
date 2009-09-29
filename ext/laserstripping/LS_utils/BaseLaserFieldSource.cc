@@ -26,12 +26,19 @@ BaseLaserFieldSource::~BaseLaserFieldSource()
 {
 }
 
-void BaseLaserFieldSource::getLaserElectricMagneticField(double x, double y, double z, double t, 
+tcomplex BaseLaserFieldSource::getLaserEMField(double x, double y, double z, double t, 
 		tcomplex& E_x, tcomplex& E_y, tcomplex& E_z,
 		tcomplex& H_x, tcomplex& H_y, tcomplex& H_z)
 {	
   E_x = 0.0; E_y = 0.0; E_z = 0.0; 
   H_x = 0.0; H_y = 0.0; H_z = 0.0; 
+  
+  return tcomplex(0.,0.);
+}
+
+bool BaseLaserFieldSource::region(double x, double y, double z){
+	
+	return true;
 }
 
 
@@ -39,5 +46,6 @@ double BaseLaserFieldSource::getFrequencyOmega(double m,double x, double y, doub
 {	
 		return 0.;
 }
+
 
 

@@ -177,24 +177,37 @@ double gammay = (1+ay*ay)/by;
 double ex = 240.0e-6;
 double ey = 240.0e-6;
 
-double x_bump = 0.02;
-double y_bump = 0.00;
+double x_bump = 0.015;
+double y_bump = 0.016;
 
-double x0 = -0.09679+x_bump;
-double y0 = 0+y_bump;
-double z0 = 4.430187;
+double xf = -0.09679;			//position of input flange
+double yf = 0;					//position of input flange
+double zf = 4.430187;			//position of input flange
+
+double x0 = xf+x_bump;			//position of Cl orb bmp end at the emittance aceptance point
+double y0 = yf+y_bump;			//position of Cl orb bmp end at the emittance aceptance point
+double z0 = zf;					//position of Cl orb bmp end at the emittance aceptance point
+
+
+
+
 
 double xp = px(i)/pz(i);
 double yp = py(i)/pz(i);
 
+double x1 = x(i)-xf;
+double y1 = y(i)-yf;
 
 double x = x(i)-x0;
 double y = y(i)-y0;
 
+
+
 double R = 0.093115;
 
 
-double bg = 1.807618407842236;
+
+
 
 
 
@@ -207,7 +220,15 @@ if(
 		
 //		((z0(i)<=4.442887)&&(4.442887<=z(i))&&((x(i)+0.09679)*(x(i)+0.09679)+(y(i)-0)*(y(i)-0)<=0.0103476))	//position of ring flange
 		
-		((z0(i)<=z0)&&(z0<=z(i))&&(x*x+y*y<=R*R)&&(x*x*gammax+2*ax*x*xp+bx*xp*xp<=ex/bg)&&(y*y*gammay+2*ay*y*yp+by*yp*yp<=ey/bg))	//emittance of the ring beam 
+		((z0(i)<=z0)&&(z0<=z(i))		//intersection of flange z plane
+				
+		&&
+				
+		(x1*x1+y1*y1<=R*R)		//position of ring flange 
+					
+		&&
+		
+		(x*x*gammax+2*ax*x*xp+bx*xp*xp < ex)&&(y*y*gammay+2*ay*y*yp+by*yp*yp < ey))	//emittance of the ring beam 
 		
 
 

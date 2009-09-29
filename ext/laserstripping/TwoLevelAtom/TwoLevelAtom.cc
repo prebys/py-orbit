@@ -214,7 +214,9 @@ void TwoLevelAtom::applyEffects(Bunch* bunch, int index,
 
 
 	
-		for (int i=0; i<bunch->getSize();i++)	{
+		for (int i=0; i<bunch->getSize();i++)	{	
+			if(LaserField->region(x(i),y(i),z(i)))
+
 
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
 			//in natural unts (Volt per meter)	in the frame of particle				
@@ -257,10 +259,11 @@ void TwoLevelAtom::GetParticleFrameFields(int i,double t,double t_step,  Bunch* 
 		
 	double E_x,E_y,E_z,nx,ny,nz,Eabs;
 
+
 	
 	for (int j=0; j<3;j++)	{
 							
-		LaserField->getLaserElectricMagneticField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
+		exp_phasa[j] = LaserField->getLaserEMField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
 				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
 
 	LorentzTransformationEM::complex_electric_transform(bunch->getMass(),
@@ -275,15 +278,19 @@ void TwoLevelAtom::GetParticleFrameFields(int i,double t,double t_step,  Bunch* 
 		Eabs=sqrt(pow(E_x,2)+pow(E_y,2)+pow(E_z,2));
 	}
 
-	
-	Ez_las[j]=(Ex_las[j]*E_x+Ey_las[j]*E_y+Ez_las[j]*E_z)/Eabs;
 
+	Ez_las[j] = Eabs*exp_phasa[j];
 
 	
 	}
-			
-}
+	
 
+	
+//	cout<<exp(1e-1000)<<"\n";
+
+
+
+}
 
 
 
@@ -307,11 +314,12 @@ t_part=t*coeff;
 
 
 //Convertion form SI units to atomic units
-for(int j=0;j<3;j++)		
+for(int j=0;j<3;j++)	{		
 	Ez_las[j]/=Ea; 
 
+}
 
-
+//cout<<gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t)<<"\n";	
 
 }
 
@@ -344,7 +352,7 @@ void TwoLevelAtom::AmplSolver4step(int i, Bunch* bunch)	{
 	
 
 			
-			z1=exp(J*t_part*fabs(d_Energy));		
+			z1=exp(J*t_part*fabs(d_Energy));
 			z2=exp(J*part_t_step*fabs(d_Energy)/2.);
 
 			

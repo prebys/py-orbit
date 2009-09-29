@@ -89,18 +89,20 @@ tcomplex FroissartStoraLF::getNonOrientedU(double t){
 
 
 
-void FroissartStoraLF::getLaserElectricMagneticField(double x, double y, double z, double t, 
+tcomplex FroissartStoraLF::getLaserEMField(double x, double y, double z, double t, 
 		tcomplex& E_x, tcomplex& E_y, tcomplex& E_z,
 		tcomplex& H_x, tcomplex& H_y, tcomplex& H_z){
 	
 	
 tcomplex	E=getNonOrientedU(t);
 
+
 	E_x=E*nEx;	E_y=E*nEy;	E_z=E*nEz;
 	H_x=0;	H_y=0;	H_z=0;
 	
+	return E/abs(E);
+	
 }
-
 
 
 

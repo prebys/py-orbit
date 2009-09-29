@@ -27,6 +27,7 @@
 #include "Python.h"
 
 #include "BaseLaserFieldSource.hh"
+#include <vector>
 
 
 namespace OrbitUtils{
@@ -45,10 +46,7 @@ namespace OrbitUtils{
 			
 		private:
 			
-			  //Laser parameters
-		//	  double Laser_omega;
-		//	  double LaserPower;
-		//	  double Laser_half_angle;
+			std::vector<BaseLaserFieldSource*>	ref;
 			
 
 	};
