@@ -5,6 +5,7 @@
 #include "tcomplex.hh"
 #include "CppPyWrapper.hh"
 #include <string>
+#include <mpc.h>
 
 
 
@@ -18,16 +19,18 @@
 			
 		public:
 		/*constructor*/	
-		Functions(int n1,int n2, int m, int n_stepss, double stepp, int nsumm);
+		Functions(int n11,int n22, int mm, int point11);
 		
 		/*destructor*/	
 		~Functions();
 		
-		void setupE(double E);
+		int setupPrecision(std::string field,std::string c_energy, std::string c_Z1);
+
+
 			
 
 
-		double getMfunctionModulus(double E, double Gamma, double reZ, double imZ);
+		std::string getM(std::string c_F,std::string c_energy, std::string c_Z1);
 
 
 		
@@ -35,15 +38,39 @@
 
 		private:  
 			
+
+			
 			int n1;
 			int n2;
 			int m;
+			int n;
 			
-			int n_steps;
-			double step;
-			int nsum;
+			int point1;
+			int point2;
+			int point4;
+			int nsum1;
 			
-			double E;
+			int prec_bit;
+			int precision;
+			int out_len;
+			
+
+			
+
+			
+//			tcomplex* C;
+			mpc_t *C;
+			
+			mpc_t Z1;
+			mpc_t Z2;
+			mpc_t E;
+			mpc_t M;
+			
+			mpc_t temp;
+
+
+			
+
 			
 
 
