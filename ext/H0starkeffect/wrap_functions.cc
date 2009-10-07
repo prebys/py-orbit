@@ -41,19 +41,17 @@ extern "C" {
   static int Functions_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
 
 	  int n1,n2,m;
-	  
-	  int n_steps;
-      double step;
-      int nsum;
+      int point1; 
 
 
-		 if(!PyArg_ParseTuple(	args,"iiiidi:",&n1, &n2, &m, &n_steps, &step, &nsum)){
-			 		          error("Functions(n1, n2, m, address) - params. are needed");
+
+		 if(!PyArg_ParseTuple(	args,"iiii:",&n1, &n2, &m, &point1)){
+			 		          error("Functions(n1, n2, m, point1) - params. are needed");
 			 			 		        }  
 		 else	{
 			 
 
-		 self->cpp_obj =  new  Functions(n1,n2,m, n_steps, step, nsum);
+		 self->cpp_obj =  new  Functions(n1,n2,m, point1);
 		 ((Functions*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	
@@ -66,42 +64,45 @@ extern "C" {
   
   
   
-  static PyObject* Functions_getMfunctionModulus(PyObject *self, PyObject *args){
+  static PyObject* Functions_getM(PyObject *self, PyObject *args){
 	  Functions* cpp_Functions = (Functions*)((pyORBIT_Object*) self)->cpp_obj;
   				       
- 
-	   double E;
-	   double Gamma;
-	   double reZ;
-	   double imZ;
-       
-       double val;
+	  const char* c_energy;
+	  const char* c_Z1;
+	  const char* c_F;
+
        
        
 
            //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
-           if(!PyArg_ParseTuple(	args,"dddd:",&E,&Gamma,&reZ, &imZ))
-             error(" getMfunctionModulus(k, step, nsum) - parameters are needed");
+           if(!PyArg_ParseTuple(	args,"sss:",&c_F,&c_energy,&c_Z1))
+             error(" getM(k, step, nsum) - parameters are needed");
            else
-           val = cpp_Functions->getMfunctionModulus(E, Gamma, reZ, imZ);
-           return Py_BuildValue("d",val);
+
+           return Py_BuildValue("s",cpp_Functions->getM(c_F, c_energy, c_Z1).c_str());
   }
   
   
-  static PyObject* Functions_setupE(PyObject *self, PyObject *args){
+  static PyObject* Functions_setupPrecision(PyObject *self, PyObject *args){
 	  Functions* cpp_Functions = (Functions*)((pyORBIT_Object*) self)->cpp_obj;			       
-       double E;
+	  const char* c_field;
+	  const char* c_energy;
+	  const char* c_Z1;
+	  int val;
            //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
-           if(!PyArg_ParseTuple(	args,"d:",&E))
-             error(" SetupsetupE(E - parameter is needed");
+           if(!PyArg_ParseTuple(	args,"sss:",&c_field,&c_energy,&c_Z1))
+             error(" setupPrecision(E - parameter is needed");
            else 	  
-        	   cpp_Functions->setupE(E);
+        	   val = cpp_Functions->setupPrecision(c_field,c_energy,c_Z1);
          
-  		    Py_INCREF(Py_None);
-  		    return Py_None;
+  		  return Py_BuildValue("i",val);
+  		    
+  		    
   }
   
   
+
+
   	
   
 
@@ -119,9 +120,9 @@ extern "C" {
 	// defenition of the methods of the python PyBaseFieldSource wrapper class
 	// they will be vailable from python level
   static PyMethodDef FunctionsClassMethods[] = {
-		    { "getMfunctionModulus",  Functions_getMfunctionModulus,         		METH_VARARGS,"gets M-function Modulus"},
-			{ "setupE",         Functions_setupE,				         			METH_VARARGS,"Sets the parameter of electric field."},
-/*			{ "setLaserPower",         HermiteGaussianLFmode_setLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},
+		    { "getM",  Functions_getM,         		METH_VARARGS,"gets M-function Modulus"},
+			{ "setupPrecision",         Functions_setupPrecision,				         			METH_VARARGS,"Sets the parameter of electric field."},
+/*			{ "getPrecision",         Functions_getPrecision,         				METH_VARARGS,"Sreturns working precision."},
 			{ "setLaser_lambda",         HermiteGaussianLFmode_setLaser_lambda,         METH_VARARGS,"Sets or returns the name of effects."},
 			{ "getLaserHalfAngle",         HermiteGaussianLFmode_getLaserHalfAngle,         METH_VARARGS,"Sets or returns the name of effects."},
 			{ "getLaserPower",         HermiteGaussianLFmode_getLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},
