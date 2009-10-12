@@ -19,18 +19,27 @@
 			
 		public:
 		/*constructor*/	
-		Functions(int n11,int n22, int mm, int point11);
+		Functions(int n11,int n22, int mm, int point11, int _err_exp);
 		
 		/*destructor*/	
 		~Functions();
 		
-		int setupPrecision(std::string field,std::string c_energy, std::string c_Z1);
+		long int calcPrecisionForM(std::string field,std::string c_energy, std::string c_Z1);
 
 
 			
 
 
 		std::string getM(std::string c_F,std::string c_energy, std::string c_Z1);
+		
+		long int getfastN( std::string&  str_N, std::string&str_derN,std::string c_F,std::string c_energy, std::string c_Z2);
+		long int getN( std::string&  str_N, std::string&str_derN,std::string c_F,std::string c_energy, std::string c_Z2);
+		
+		void getfast_a( std::string&  str_N, std::string&str_derN,std::string c_F,std::string c_energy, std::string c_Z2);
+		long int get_a( std::string&  str_N, std::string&str_derN,std::string c_F,std::string c_energy, std::string c_Z2);
+		
+		void getfast_b( std::string&  str_N, std::string&str_derN,std::string c_F,std::string c_energy, std::string c_Z2);
+		long int get_b( std::string&  str_N, std::string&str_derN,std::string c_F,std::string c_energy, std::string c_Z2);
 
 
 		
@@ -45,31 +54,36 @@
 			int m;
 			int n;
 			
-			int point1;
-			int point2;
-			int point4;
-			int nsum1;
+			long int point1;
+			long int point2;
 			
-			int prec_bit;
-			int precision;
-			int out_len;
+			long int pointN1;
+			long int pointN2;
+			long int out_lenN;
+			
+			long int precisionN;
+			long int prec_bitN;
+
+			long int nsum1;
+			long int nsumN;
+			
+			long int err_exp;
+			
+			long int prec_bit;
+			long int precision;
+			long int out_len;
 			
 
 			
 
 			
-//			tcomplex* C;
+
 			mpc_t *C;
+			mpc_t *a;
+			mpc_t *b;
 			
-			mpc_t Z1;
-			mpc_t Z2;
-			mpc_t E;
-			mpc_t M;
-			
-			mpc_t temp;
 
-
-			
+		
 
 			
 
