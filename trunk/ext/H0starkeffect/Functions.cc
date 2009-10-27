@@ -44,12 +44,12 @@ Functions::Functions(int n11,int n22, int mm, int point11, int _err_exp)	{
 	
 	out_lenN = 100;
 	
-	pointN1 = 80;
+	pointN1 = 55;
 	pointN2 = pointN1*pointN1;
 	
 	
-	precisionN = 3000;
-	nsumab = 1000000;
+	precisionN = 1000;
+	nsumab = 100000;
 	prec_bitN = (int)(precisionN*3.3219280948873626);
 
 	err_exp = _err_exp;
@@ -88,6 +88,13 @@ long int Functions::calcPrecisionForM(std::string c_field,std::string c_energy, 
 	
 	mpfr_t temp_mpfr;
 	mpc_t temp_mpc;
+
+		
+		
+		
+	
+	
+	
 	
 	for (int j=0;j<2;j++) 	{
 
@@ -112,6 +119,7 @@ long int Functions::calcPrecisionForM(std::string c_field,std::string c_energy, 
 
 
 		Mstr = getM(c_field,c_energy, c_Z1);
+
 		
 		if (line != Mstr)	{
 			line.clear();
@@ -149,6 +157,7 @@ long int Functions::calcPrecisionForM(std::string c_field,std::string c_energy, 
 		mpc_clear(temp_mpc);
 		
 	}	
+
 	
 	
 //	out_len = precision;
@@ -195,7 +204,6 @@ std::string Functions::getM(std::string c_F, std::string c_energy, std::string c
 	mpc_init2(Ci, prec_bit);
 	
 	
-	
 	mpfr_set_str(F, &c_F[0], 10, GMP_RNDN);
 	mpc_set_str(E, &c_energy[0], 10, MPC_RNDNN);
 	mpc_set_str(Z1, &c_Z1[0], 10, MPC_RNDNN);
@@ -224,6 +232,7 @@ std::string Functions::getM(std::string c_F, std::string c_energy, std::string c
 		mpc_div_ui(Ci,Ci,i + m,MPC_RNDNN);
 
 		mpc_add(sum_M,sum_M,Ci,MPC_RNDNN);
+
 			
 		mpc_set(Ci_3,Ci_2,MPC_RNDNN);
 		mpc_set(Ci_2,Ci_1,MPC_RNDNN);
@@ -232,16 +241,19 @@ std::string Functions::getM(std::string c_F, std::string c_energy, std::string c
 		
 	}
 
-	
+
 	mpc_set_ui(temp,1 + 2*m, MPC_RNDNN);
 	mpc_div_ui(temp,temp,2, MPC_RNDNN);
 	mpc_set_ui(temp1, point1, MPC_RNDNN);
 	mpc_pow(temp, temp1,temp, MPC_RNDNN);
 	
 	mpc_mul(M,sum_M,temp,MPC_RNDNN);
-	
-	str = (std::string)mpc_get_str(10, out_len, M, MPC_RNDNN);
-	
+		
+
+	char* gg = mpc_get_str(10, out_len, M, MPC_RNDNN);
+	str = gg;
+	delete gg;
+
 	mpfr_clear(F);
 	mpc_clear(E);
 	mpc_clear(Z1);
@@ -274,8 +286,8 @@ long int Functions::calcPrecisionForN(std::string& str_N, std::string& str_derN,
 		if (crit>=500)	{pointN1++; pointN2 = pointN1*pointN1;}
 		if (crit<=300)	{pointN1--; pointN2 = pointN1*pointN1;}
 		if ((crit>300)&&(crit<500))	break;
-		cout<<"pointN1 = "<<pointN1<<"\n";
 	}
+	cout<<"pointN1 = "<<pointN1<<"\n";
 //	cout<<"crit = "<<crit<<"\n";
 	return (int)(out_lenN*3.3219280948873626);
 }
@@ -381,8 +393,8 @@ long int Functions::getN(std::string& str_N, std::string& str_der_N,std::string 
 			if (i%100==0)	{
 //				std::cout<<"pointN1 = "<<pointN1<<" i= "<<i<<" "<<"sum_der_N = "<<mpc_get_str(10, out_lenN, sum_der_N, MPC_RNDNN)<<"  sum = "<<mpc_get_str(10, out_lenN, sum_N, MPC_RNDNN)<<"\n";
 			
-			str_N = mpc_get_str(10, out_lenN, sum_N, MPC_RNDNN);
-			str_der_N = mpc_get_str(10, out_lenN, sum_der_N, MPC_RNDNN);
+			char* gg = mpc_get_str(10, out_lenN, sum_N, MPC_RNDNN); str_N = gg; delete gg;
+			char* hh = mpc_get_str(10, out_lenN, sum_der_N, MPC_RNDNN); str_der_N = hh; delete hh;
 			
 			if((str_N != temp_str_N)&&(temp_str_der_N != str_der_N))
 			{
@@ -413,8 +425,8 @@ long int Functions::getN(std::string& str_N, std::string& str_der_N,std::string 
 		
 
 		
-		str_N = mpc_get_str(10, out_lenN, N, MPC_RNDNN);
-		str_der_N = mpc_get_str(10, out_lenN, der_N, MPC_RNDNN);
+		char* gg = mpc_get_str(10, out_lenN, N, MPC_RNDNN); str_N = gg; delete gg;
+		char* hh = mpc_get_str(10, out_lenN, der_N, MPC_RNDNN); str_der_N = hh; delete hh;
 		
 		
 		mpfr_log10(Ci_max,Ci_max,GMP_RNDN);
@@ -541,7 +553,7 @@ long int Functions::get_a(std::string& str_a, std::string& str_der_a,std::string
 
 	mpc_set(sum_a,Ci_1,MPC_RNDNN);	
 	mpc_set(sum_der_a,Ci_1,MPC_RNDNN);
-	for (i=2;i<nsumab + 1;i++)	{
+	for (i=2;i<nsumab;i++)	{
 		
 		mpc_set_si(Ci,2*i-5, MPC_RNDNN);
 		mpc_mul_si(Ci,Ci,5-2*i, MPC_RNDNN);
@@ -564,9 +576,9 @@ long int Functions::get_a(std::string& str_a, std::string& str_der_a,std::string
 		
 		if (i%10==0)	{
 //			std::cout<<"pointN1 = "<<pointN1<<" i= "<<i<<" "<<"sum_der_a = "<<mpc_get_str(10, out_lenN, sum_der_a, MPC_RNDNN)<<"  sum_a = "<<mpc_get_str(10, out_lenN, sum_a, MPC_RNDNN)<<"\n";
-		
-		str_a = mpc_get_str(10, out_lenN, sum_a, MPC_RNDNN);
-		str_der_a = mpc_get_str(10, out_lenN, sum_der_a, MPC_RNDNN);
+//			std::cout<<i<<"\n";
+		char* gg  = mpc_get_str(10, out_lenN, sum_a, MPC_RNDNN); str_a = gg; delete gg;
+		char* hh = mpc_get_str(10, out_lenN, sum_der_a, MPC_RNDNN); str_der_a = hh; delete hh;
 		
 		if((str_a != temp_str_a)&&(temp_str_der_a != str_der_a))
 		{
@@ -616,8 +628,8 @@ long int Functions::get_a(std::string& str_a, std::string& str_der_a,std::string
 	mpc_div_ui(der_a,der_a,pointN1,MPC_RNDNN);
 
 	
-	str_a = mpc_get_str(10, out_lenN, a, MPC_RNDNN);
-	str_der_a = mpc_get_str(10, out_lenN, der_a, MPC_RNDNN);
+	char* gg = mpc_get_str(10, out_lenN, a, MPC_RNDNN); str_a = gg; delete gg;
+	char* hh = mpc_get_str(10, out_lenN, der_a, MPC_RNDNN); str_der_a = hh; delete hh;
 	
 
 	
@@ -742,7 +754,7 @@ long int Functions::get_b(std::string& str_b, std::string& str_der_b,std::string
 
 	mpc_set(sum_b,Ci_1,MPC_RNDNN);	
 	mpc_set(sum_der_b,Ci_1,MPC_RNDNN);
-	for (i=2;i<nsumab + 1;i++)	{
+	for (i=2;i<nsumab;i++)	{
 		
 		mpc_set_si(Ci,2*i-5, MPC_RNDNN); 
 		mpc_mul_si(Ci,Ci,5-2*i, MPC_RNDNN);
@@ -767,8 +779,8 @@ long int Functions::get_b(std::string& str_b, std::string& str_der_b,std::string
 		if (i%10==0)	{
 //			std::cout<<"pointN1 = "<<pointN1<<" i= "<<i<<" "<<"sum_der_b = "<<mpc_get_str(10, out_lenN, sum_der_b, MPC_RNDNN)<<"  sum_b = "<<mpc_get_str(10, out_lenN, sum_b, MPC_RNDNN)<<"\n";
 		
-		str_b = mpc_get_str(10, out_lenN, sum_b, MPC_RNDNN);
-		str_der_b = mpc_get_str(10, out_lenN, sum_der_b, MPC_RNDNN);
+		char* gg = mpc_get_str(10, out_lenN, sum_b, MPC_RNDNN); str_b = gg; delete gg;
+		char* hh = mpc_get_str(10, out_lenN, sum_der_b, MPC_RNDNN); str_der_b = hh; delete hh;
 		
 		if((str_b != temp_str_b)&&(temp_str_der_b != str_der_b))
 		{
@@ -818,8 +830,8 @@ long int Functions::get_b(std::string& str_b, std::string& str_der_b,std::string
 	mpc_div_ui(der_b,der_b,pointN1,MPC_RNDNN);
 
 	
-	str_b = mpc_get_str(10, out_lenN, b, MPC_RNDNN);
-	str_der_b = mpc_get_str(10, out_lenN, der_b, MPC_RNDNN);
+	char* gg = mpc_get_str(10, out_lenN, b, MPC_RNDNN);str_b = gg; delete gg;
+	char* hh = mpc_get_str(10, out_lenN, der_b, MPC_RNDNN);str_der_b = hh; delete hh;
 	
 
 	
@@ -904,9 +916,13 @@ std::string Functions::getB(std::string c_F,std::string c_energy, std::string c_
 	mpc_mul(temp2,a,der_b,MPC_RNDNN);
 	mpc_sub(temp1,temp1,temp2,MPC_RNDNN);
 	mpc_div(B,B,temp1,MPC_RNDNN);
-	
 
-	str_B = mpc_get_str(10, out_lenN, B, MPC_RNDNN);
+	if((na==nsumab)||(nb==nsumab))
+	str_B="(0 0)";
+	else{
+	char* gg = mpc_get_str(10, out_lenN, B, MPC_RNDNN); str_B = gg; delete gg;
+	}
+	
 	mpc_clear(a);
 	mpc_clear(der_a);
 	mpc_clear(b);
