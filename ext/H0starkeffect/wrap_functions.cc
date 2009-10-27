@@ -42,16 +42,17 @@ extern "C" {
 
 	  int n1,n2,m;
       int point1; 
+      int err_exp;
 
 
 
-		 if(!PyArg_ParseTuple(	args,"iiii:",&n1, &n2, &m, &point1)){
+		 if(!PyArg_ParseTuple(	args,"iiiii:",&n1, &n2, &m, &point1, &err_exp)){
 			 		          error("Functions(n1, n2, m, point1) - params. are needed");
 			 			 		        }  
 		 else	{
 			 
 
-		 self->cpp_obj =  new  Functions(n1,n2,m, point1);
+		 self->cpp_obj =  new  Functions(n1,n2,m, point1,err_exp);
 		 ((Functions*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	
@@ -71,6 +72,7 @@ extern "C" {
 	  const char* c_Z1;
 	  const char* c_F;
 
+
        
        
 
@@ -83,7 +85,107 @@ extern "C" {
   }
   
   
-  static PyObject* Functions_setupPrecision(PyObject *self, PyObject *args){
+  static PyObject* Functions_calcPrecisionForN(PyObject *self, PyObject *args){
+	  Functions* cpp_Functions = (Functions*)((pyORBIT_Object*) self)->cpp_obj;
+ 	 
+
+	  const char* c_energy;
+	  const char* c_Z1;
+	  const char* c_F;
+	  int prec;
+	  std::string N = "fff";
+	  std::string derN = "hhh";
+
+
+	  	//NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
+       		if(!PyArg_ParseTuple(	args,"sss:",&c_F,&c_energy,&c_Z1))
+       				error(" getN(c_F, c_energy, c_Z1) - parameters are needed");
+       		else	{
+       			prec = cpp_Functions->calcPrecisionForN(N, derN, c_F, c_energy, c_Z1);
+ 
+       		}
+       		
+                
+       		return Py_BuildValue("iss",prec, N.c_str(), derN.c_str());
+
+    }	
+  
+  
+  
+  static PyObject* Functions_get_a(PyObject *self, PyObject *args){
+	  Functions* cpp_Functions = (Functions*)((pyORBIT_Object*) self)->cpp_obj;
+ 	 
+
+	  const char* c_energy;
+	  const char* c_Z2;
+	  const char* c_F;
+	  std::string a;
+	  std::string der_a;
+
+
+	  	//NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
+       		if(!PyArg_ParseTuple(	args,"sss:",&c_F,&c_energy,&c_Z2))
+       				error(" get_a(c_F, c_energy, c_Z2) - parameters are needed");
+       		else	
+       			cpp_Functions->get_a(a, der_a, c_F, c_energy, c_Z2);
+                
+       		return Py_BuildValue("ss", a.c_str(), der_a.c_str());
+
+    }	
+  
+  
+  static PyObject* Functions_get_b(PyObject *self, PyObject *args){
+	  Functions* cpp_Functions = (Functions*)((pyORBIT_Object*) self)->cpp_obj;
+ 	 
+
+	  const char* c_energy;
+	  const char* c_Z2;
+	  const char* c_F;
+	  std::string b;
+	  std::string der_b;
+
+
+	  	//NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
+       		if(!PyArg_ParseTuple(	args,"sss:",&c_F,&c_energy,&c_Z2))
+       				error(" get_b(c_F, c_energy, c_Z2) - parameters are needed");
+       		else	
+       			cpp_Functions->get_b(b, der_b, c_F, c_energy, c_Z2);
+                
+       		return Py_BuildValue("ss", b.c_str(), der_b.c_str());
+
+    }	
+  
+  
+  static PyObject* Functions_getB(PyObject *self, PyObject *args){
+	  Functions* cpp_Functions = (Functions*)((pyORBIT_Object*) self)->cpp_obj;
+ 	 
+
+	  const char* c_energy;
+	  const char* c_Z2;
+	  const char* c_F;
+
+	  std::string B;
+
+
+	  	//NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
+       		if(!PyArg_ParseTuple(	args,"sss:",&c_F,&c_energy,&c_Z2))
+       				error(" get_b(c_F, c_energy, c_Z2) - parameters are needed");
+       		else	
+       				B = cpp_Functions->getB(c_F, c_energy, c_Z2);
+                
+       		return Py_BuildValue("s", B.c_str());
+
+    }	
+  
+  
+  
+  
+  
+	
+  
+  
+  
+  static PyObject* Functions_calcPrecisionForM(PyObject *self, PyObject *args){
 	  Functions* cpp_Functions = (Functions*)((pyORBIT_Object*) self)->cpp_obj;			       
 	  const char* c_field;
 	  const char* c_energy;
@@ -91,9 +193,9 @@ extern "C" {
 	  int val;
            //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
            if(!PyArg_ParseTuple(	args,"sss:",&c_field,&c_energy,&c_Z1))
-             error(" setupPrecision(E - parameter is needed");
+             error(" calcPrecisionForM(c_field,c_energy,c_Z1) - parameter is needed");
            else 	  
-        	   val = cpp_Functions->setupPrecision(c_field,c_energy,c_Z1);
+        	   val = cpp_Functions->calcPrecisionForM(c_field,c_energy,c_Z1);
          
   		  return Py_BuildValue("i",val);
   		    
@@ -120,13 +222,13 @@ extern "C" {
 	// defenition of the methods of the python PyBaseFieldSource wrapper class
 	// they will be vailable from python level
   static PyMethodDef FunctionsClassMethods[] = {
-		    { "getM",  Functions_getM,         		METH_VARARGS,"gets M-function Modulus"},
-			{ "setupPrecision",         Functions_setupPrecision,				         			METH_VARARGS,"Sets the parameter of electric field."},
-/*			{ "getPrecision",         Functions_getPrecision,         				METH_VARARGS,"Sreturns working precision."},
-			{ "setLaser_lambda",         HermiteGaussianLFmode_setLaser_lambda,         METH_VARARGS,"Sets or returns the name of effects."},
-			{ "getLaserHalfAngle",         HermiteGaussianLFmode_getLaserHalfAngle,         METH_VARARGS,"Sets or returns the name of effects."},
-			{ "getLaserPower",         HermiteGaussianLFmode_getLaserPower,         METH_VARARGS,"Sets or returns the name of effects."},
-			{ "getLaser_lambda",         HermiteGaussianLFmode_getLaser_lambda,         METH_VARARGS,"Sets or returns the name of effects."},
+		    { "getM",  					Functions_getM,         							METH_VARARGS,"gets M-function Modulus"},
+			{ "calcPrecisionForM",      Functions_calcPrecisionForM,				        METH_VARARGS,"Sets the parameter of electric field."},
+			{ "calcPrecisionForN",      Functions_calcPrecisionForN,         				METH_VARARGS,"gets N-function Modulus"},
+			{ "get_a",         			Functions_get_a,         							METH_VARARGS,"Gets value and derivative of a - function."},
+			{ "get_b",         			Functions_get_b,         							METH_VARARGS,"Gets value and derivative of b - function."},
+			{ "getB",         			Functions_getB,         							METH_VARARGS,"Gets amplitude of incoming wave ."},
+/*			{ "getLaser_lambda",         HermiteGaussianLFmode_getLaser_lambda,         METH_VARARGS,"Sets or returns the name of effects."},
 			{ "setLaserFieldOrientation",  HermiteGaussianLFmode_setLaserFieldOrientation,         METH_VARARGS,"Sets or returns the name of effects."},
 */
     {NULL}
