@@ -241,13 +241,13 @@ std::string Functions::getM(std::string c_F, std::string c_energy, std::string c
 		
 	}
 
-
-	mpc_set_ui(temp,1 + 2*m, MPC_RNDNN);
-	mpc_div_ui(temp,temp,2, MPC_RNDNN);
-	mpc_set_ui(temp1, point1, MPC_RNDNN);
-	mpc_pow(temp, temp1,temp, MPC_RNDNN);
 	
+	mpc_set_ui(temp,point1, MPC_RNDNN);
+	mpc_set_ui(temp1,m, MPC_RNDNN);
+	mpc_pow(temp, temp,temp1, MPC_RNDNN);
 	mpc_mul(M,sum_M,temp,MPC_RNDNN);
+	
+
 		
 
 	char* gg = mpc_get_str(10, out_len, M, MPC_RNDNN);
