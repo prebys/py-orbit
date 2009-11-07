@@ -88,7 +88,6 @@ WaveFunction::WaveFunction(int n11,int n22, int mm, long int point11, long int p
 	
 		else	{
 		mpfr_ui_div(h,1,sqrtF,GMP_RNDN);
-		mpfr_set_ui(h,mpfr_get_ui(h,GMP_RNDZ)+1,GMP_RNDN);
 //		mpfr_set_ui(h,50,GMP_RNDN);
 		
 		if(mpfr_cmp_ui(h,pointN) != 1)	{
@@ -98,7 +97,7 @@ WaveFunction::WaveFunction(int n11,int n22, int mm, long int point11, long int p
 			pointN2 = pointN1*pointN1;
 		}
 		}
-		else {mode = 2;}
+		else {mode = 2; mpfr_set_ui(h,mpfr_get_ui(h,GMP_RNDZ)+1,GMP_RNDN);}
 		
 		}
 		
@@ -1433,7 +1432,6 @@ std::string WaveFunction::getFastNbelow(std::string mu0){
 	mpfr_init2(mu, prec_bitN);
 	mpc_init2(N, prec_bitN);
 	mpc_init2(ctemp, prec_bitN);
-	
 	mpfr_set_str(mu, &mu0[0], 10, GMP_RNDN);
 	mpfr_div_ui(temp,mu,pointN1,GMP_RNDN);
 	mpfr_mul_ui(temp,temp,ndivN,GMP_RNDN);
