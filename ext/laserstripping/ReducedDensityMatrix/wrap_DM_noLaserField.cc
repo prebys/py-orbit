@@ -39,29 +39,26 @@ extern "C" {
   //initializator for python  PyExternalEffects class
   //this is implementation of the __init__ method
   static int DM_noLaserField_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
-	  
-
-	  
 	  PyObject*	pyStarkEffect=NULL;
-
+		
 	  int nVars = PyTuple_Size(args);
 	  
 	  if(!PyArg_ParseTuple(	args,"O:",&pyStarkEffect))
-	  			 		      {error("DM_noLaserField(StarkEffect) - param.  needed");}	
+		{
+			error("DM_noLaserField(StarkEffect) - param.  needed");
+		}	
 	  
 	  else	{
-	 	
-	 		 Stark* Starkef = (Stark*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
-	 		 self->cpp_obj =  new  DM_noLaserField(Starkef);
-	 		 ((DM_noLaserField*) self->cpp_obj)->setPyWrapper((PyObject*) self);
-	 		 }
-	 		
-	  
- 
+			
+			Stark* Starkef = (Stark*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
+			self->cpp_obj =  new  DM_noLaserField(Starkef);
+			((DM_noLaserField*) self->cpp_obj)->setPyWrapper((PyObject*) self);
+		}
+		
     return 0;
   }
   
-		
+	
   
 	// name([name]) - sets or returns the name of the External Effeects class 
   static PyObject* DM_noLaserField_name(PyObject *self, PyObject *args){
@@ -77,23 +74,6 @@ extern "C" {
 		return Py_BuildValue("s",cpp_DM_noLaserField->getName().c_str());
   }	
   
-  
-
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-	
   //-----------------------------------------------------
   //destructor for python PyExternalEffects class (__del__ method).
   //-----------------------------------------------------
@@ -107,7 +87,6 @@ extern "C" {
 	// they will be vailable from python level
   static PyMethodDef DM_noLaserFieldClassMethods[] = {
 		{ "name",        			 DM_noLaserField_name,        		METH_VARARGS,"Sets or returns the name of effects."},
-
     {NULL}
   };
 

@@ -1,15 +1,11 @@
 #ifndef TWOLEVELATOM_HH_
 #define TWOLEVELATOM_HH_
 
-
-
 #include "Python.h"
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
 #include "ParticleAttributes.hh"
-
-
 
 using namespace TrackerRK4;
 
@@ -38,21 +34,14 @@ namespace LaserStripping{
 		void finalizeEffects(Bunch* bunch);
 
 		/** It applies the external effects to a particle with certain index. */
-		void applyEffects(Bunch* bunch, int index, 
-	                            double* y_in_vct, double* y_out_vct, 
-														  double t, double t_step, 
-														  OrbitUtils::BaseFieldSource* fieldSource,
-															RungeKuttaTracker* tracker);	
+		void applyEffects(Bunch* bunch,
+											double t, double t_step, 
+											OrbitUtils::BaseFieldSource* fieldSource,
+											RungeKuttaTracker* tracker);	
 		
-
-
 		  private:
-
-		  
-			  
+	  
 			  OrbitUtils::BaseLaserFieldSource*	LaserField;
-
-			  
 			  //this array is used on each step of solution of density matrix equation at definite field  
 
 			  tcomplex mu_Elas[5];
@@ -93,10 +82,6 @@ namespace LaserStripping{
 			  double Bx_stat;
 			  double By_stat;
 			  double Bz_stat;
-			  
-
-			  			 
-
 			  	
 				/**Solver for Amplitudes**/
 				void AmplSolver4step(int i,Bunch* bunch);
@@ -108,11 +93,7 @@ namespace LaserStripping{
 				void GetParticleFrameParameters(int i, double t, double t_step, Bunch* bunch);
 				
 				/*this method gives laser and static fields transformed by rotation relatively z axes  */
-				void GetParticleFrameFields(int i, double t,double t_step,  Bunch* bunch);
-				
-								
-
-				
+				void GetParticleFrameFields(int i, double t,double t_step,  Bunch* bunch);				
 	};
 };
 

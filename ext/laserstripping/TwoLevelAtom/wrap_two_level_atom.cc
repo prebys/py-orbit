@@ -39,31 +39,24 @@ extern "C" {
   //initializator for python  PyExternalEffects class
   //this is implementation of the __init__ method
   static int TwoLevelAtom_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
-	  
-
 
 	  double delta_E=0;
 	  double dipole_tr=0;
 
 	  PyObject*	pyBaseLaserField=NULL;
 
-
 		 if(!PyArg_ParseTuple(	args,"Odd:",&pyBaseLaserField,&delta_E,&dipole_tr)){
 			 		          error("TwoLevelAtom(LaserField,delta_E,dipole_transition) - params. are needed");
-			 			 		        }  
+		 }  
 		 else	{
-		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
+		   BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
 
-		 self->cpp_obj =  new  TwoLevelAtom(lfs,delta_E,dipole_tr);
+		   self->cpp_obj =  new  TwoLevelAtom(lfs,delta_E,dipole_tr);
 		     ((TwoLevelAtom*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
-	
-
     return 0;
   }
-  
-		
-  
+
 	// name([name]) - sets or returns the name of the External Effeects class 
   static PyObject* TwoLevelAtom_name(PyObject *self, PyObject *args){
 	  TwoLevelAtom* cpp_TwoLevelAtom = (TwoLevelAtom*) ((pyORBIT_Object*) self)->cpp_obj;
@@ -78,9 +71,6 @@ extern "C" {
 		return Py_BuildValue("s",cpp_TwoLevelAtom->getName().c_str());
   }	
   
-
-  
-	
   //-----------------------------------------------------
   //destructor for python PyExternalEffects class (__del__ method).
   //-----------------------------------------------------

@@ -1,7 +1,6 @@
 #ifndef RECORDEVOLUTION_HH_
 #define RECORDEVOLUTION_HH_
 
-
 #include "Python.h"
 
 #include "ExternalEffects.hh"
@@ -9,22 +8,20 @@
 #include "ParticleAttributes.hh"
 #include <string>
 
-
-
 using namespace TrackerRK4;
 
 namespace LaserStripping{
 	
 	class  RecordEvolution: public ExternalEffects
 	{
-		public:
+	public:
 		
-			/** Constructor. */
-			RecordEvolution(std::string effect,int ind_effect, int num);
-			
-			/** Destructor. */
-			~RecordEvolution();
-			
+		/** Constructor. */
+		RecordEvolution(std::string effect,int ind_effect, int num);
+		
+		/** Destructor. */
+		~RecordEvolution();
+		
 		
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
@@ -34,19 +31,15 @@ namespace LaserStripping{
 		
 		/** It finalizes effects. */
 		void finalizeEffects(Bunch* bunch);
-
-		/** It applies the external effects to a particle with certain index. */
-		void applyEffects(Bunch* bunch, int index, 
-	                            double* y_in_vct, double* y_out_vct, 
-														  double t, double t_step, 
-														  OrbitUtils::BaseFieldSource* fieldSource,
-															RungeKuttaTracker* tracker);	
 		
-
-
-		  private:
-
-		  		  
+		/** ?????????????????. */
+		void applyEffects(Bunch* bunch,
+			double t, double t_step, 
+			OrbitUtils::BaseFieldSource* fieldSource,
+			RungeKuttaTracker* tracker);	
+		
+		private:
+			
 			int num_plot;
 			int index_effect;
 			std::string effect_name;
@@ -60,8 +53,6 @@ namespace LaserStripping{
 			ParticleAttributes* RecEff;
 			ParticleAttributes* Coords;
 			ParticleAttributes* Evol;
-			   
-				
 	};
 };
 

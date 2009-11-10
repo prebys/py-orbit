@@ -70,24 +70,12 @@ RecordEvolution::RecordEvolution(std::string effect,int ind_effect, int num)
 
 }
 
-
-
-
 RecordEvolution::~RecordEvolution() 
 {
 }
 
-
-
-
-
-
 void RecordEvolution::setupEffects(Bunch* bunch){
-		
-
 	setup_par = true;
-
-	
 	
 	if(bunch->hasParticleAttributes("Evolution")==1)
 		bunch->removeParticleAttributes("Evolution");
@@ -97,7 +85,6 @@ void RecordEvolution::setupEffects(Bunch* bunch){
 	bunch->addParticleAttributes("Evolution",part_attr_dict);
 	
 	Evol = bunch->getParticleAttributes("Evolution");
-	
 	
 	if (bunch->hasParticleAttributes("pq_coords")==0)	{
 	std::map<std::string,double> part_attr_dict;
@@ -111,17 +98,10 @@ void RecordEvolution::setupEffects(Bunch* bunch){
 
 	for (int i=0; i<bunch->getSize();i++)                        
 	Evol->attArr(i)[0] = RecEff->attArr(i)[index_effect];
-
-	
-
-	
 }
 
-
-
 void RecordEvolution::memorizeInitParams(Bunch* bunch){
-	
-	for (int i=0; i<bunch->getSize();i++)		{
+	for (int i=0; i<bunch->getSize();i++){
 		x0(i)=bunch->coordArr()[i][0];
 		y0(i)=bunch->coordArr()[i][2];
 		z0(i)=bunch->coordArr()[i][4];
@@ -129,71 +109,41 @@ void RecordEvolution::memorizeInitParams(Bunch* bunch){
 		px0(i)=bunch->coordArr()[i][1];
 		py0(i)=bunch->coordArr()[i][3];
 		pz0(i)=bunch->coordArr()[i][5];
-
 	}
-	
-	
 }
-	
 		
-
-	
 void RecordEvolution::finalizeEffects(Bunch* bunch) {
-
-	if(bunch->hasParticleAttributes("pq_coords")==1)
+	if(bunch->hasParticleAttributes("pq_coords")==1){
 		bunch->removeParticleAttributes("pq_coords");
-
+	}
 }
 
-
-
-
-
-
-
-void RecordEvolution::applyEffects(Bunch* bunch, int index, 
-	                            double* y_in_vct, double* y_out_vct, 
+void RecordEvolution::applyEffects(Bunch* bunch, 
 														  double t, double t_step, 
 														  BaseFieldSource* fieldSource,
 															RungeKuttaTracker* tracker)			{
 
-	
-	
-	
-
 	if (setup_par == true)	{
-
-	Num = tracker->getStepsNumber();
-	
-	if(Num<num_plot)	{cout<<"The number of evolution points must be equal or less then the number of steps \n"; abort();}
-	if(Num%num_plot!=0)	{cout<<"The number of steps must be divisible by the number of evolution point \n"; abort();}
-	
-	
-	for (int i=0; i<bunch->getSize();i++)	{
-	x0_ev(i) = x0(i);
-	y0_ev(i) = y0(i);
-	z0_ev(i) = z0(i);
-	t_step_ev(i) = Num*t_step/num_plot;
-	}
-	
-	setup_par = false;
-	t_in = t;
-
+		Num = tracker->getStepsNumber();
+		
+		if(Num<num_plot)	{cout<<"The number of evolution points must be equal or less then the number of steps \n"; abort();}
+		if(Num%num_plot!=0)	{cout<<"The number of steps must be divisible by the number of evolution point \n"; abort();}
+		
+		for (int i=0; i<bunch->getSize();i++)	{
+			x0_ev(i) = x0(i);
+			y0_ev(i) = y0(i);
+			z0_ev(i) = z0(i);
+			t_step_ev(i) = Num*t_step/num_plot;
+		}
+		setup_par = false;
+		t_in = t;
 	}
 
+	if(int((t-t_in+t_step)/t_step+0.5)%(Num/num_plot) == 0) {
+		for (int i=0; i<bunch->getSize();i++)	{
+			Evol->attArr(i)[int((t-t_in+t_step)/t_step+0.5)/(Num/num_plot)] = RecEff->attArr(i)[index_effect];
+			//	Evol->attArr(i)[int((t-t_in+t_step)/t_step+0.5)/(Num/num_plot)] = bunch->x(i);
+		}
+	}
 	
-	
-
-
-	
-if(int((t-t_in+t_step)/t_step+0.5)%(Num/num_plot) == 0)		
-for (int i=0; i<bunch->getSize();i++)	{
-	Evol->attArr(i)[int((t-t_in+t_step)/t_step+0.5)/(Num/num_plot)] = RecEff->attArr(i)[index_effect];
-//	Evol->attArr(i)[int((t-t_in+t_step)/t_step+0.5)/(Num/num_plot)] = bunch->x(i);
-
-}
-
-
-
-
 }
