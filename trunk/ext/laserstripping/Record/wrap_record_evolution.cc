@@ -39,28 +39,21 @@ extern "C" {
   //initializator for python  PyExternalEffects class
   //this is implementation of the __init__ method
   static int RecordEvolution_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
-	  
-
-
-      const char* effect;
-      int ind_effect;
-      int num;
-
-	  PyObject*	pyBaseLaserField=NULL;
-
-
-		 if(!PyArg_ParseTuple(	args,"sii:",&effect, &ind_effect, &num)){
-			 		          error("RecordEvolution(LaserField,delta_E,dipole_transition) - params. are needed");
-			 			 		        }  
-		 else	{
-		 BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
-
-		 std::string ef(effect);
-		 self->cpp_obj =  new  RecordEvolution(ef,ind_effect, num);
-		 ((RecordEvolution*) self->cpp_obj)->setPyWrapper((PyObject*) self);
-		 }
-	
-
+		const char* effect;
+		int ind_effect;
+		int num;
+		PyObject*	pyBaseLaserField=NULL;
+		
+		if(!PyArg_ParseTuple(	args,"sii:",&effect, &ind_effect, &num)){
+			error("RecordEvolution(LaserField,delta_E,dipole_transition) - params. are needed");
+		}  
+		else	{
+			BaseLaserFieldSource* lfs = (BaseLaserFieldSource*) ((pyORBIT_Object*) pyBaseLaserField)->cpp_obj;
+			std::string ef(effect);
+			self->cpp_obj =  new  RecordEvolution(ef,ind_effect, num);
+			((RecordEvolution*) self->cpp_obj)->setPyWrapper((PyObject*) self);
+		}
+		
     return 0;
   }
   
@@ -95,7 +88,6 @@ extern "C" {
 	// they will be vailable from python level
   static PyMethodDef RecordEvolutionClassMethods[] = {
 		{ "name",        			 RecordEvolution_name,        		METH_VARARGS,"Sets or returns the name of effects."},
-
     {NULL}
   };
 

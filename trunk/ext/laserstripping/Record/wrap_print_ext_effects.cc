@@ -22,7 +22,7 @@ extern "C" {
 #endif
 
 	//---------------------------------------------------------
-	//Python CppExternalEffects class definition
+	//Python ??????????????????????????/
 	//---------------------------------------------------------
 
 	//constructor for python class wrapping CppExternalEffects instance
@@ -38,33 +38,21 @@ extern "C" {
   //initializator for python  PyExternalEffects class
   //this is implementation of the __init__ method
   static int PrintExtEffects_init(pyORBIT_Object *self, PyObject *args, PyObject *kwds){
-	  
-
-
       const char* address;
       const char* eff_name;
       int max_print;
 
-
-
-
 		 if(!PyArg_ParseTuple(	args,"sis:",&eff_name,&max_print,&address)){
-			 		          error("PrintExtEffects(eff_name,max_print,address) - params. are needed");
-			 			 		        }  
+			  error("PrintExtEffects(eff_name,max_print,address) - params. are needed");
+		 }  
 		 else	{
-
 			 std::string name(eff_name);
 			 std::string addr(address);
-			 
-		 self->cpp_obj =  new  PrintExtEffects(name,max_print,addr);
-		 ((PrintExtEffects*) self->cpp_obj)->setPyWrapper((PyObject*) self);
+		   self->cpp_obj =  new  PrintExtEffects(name,max_print,addr);
+		   ((PrintExtEffects*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
-	
-
     return 0;
   }
-  
-		
   
 	// name([name]) - sets or returns the name of the External Effeects class 
   static PyObject* PrintExtEffects_name(PyObject *self, PyObject *args){
@@ -80,8 +68,7 @@ extern "C" {
 		return Py_BuildValue("s",cpp_PrintExtEffects->getName().c_str());
   }	
   
-  
-	
+
   //-----------------------------------------------------
   //destructor for python PyExternalEffects class (__del__ method).
   //-----------------------------------------------------
@@ -95,7 +82,6 @@ extern "C" {
 	// they will be vailable from python level
   static PyMethodDef PrintExtEffectsClassMethods[] = {
 		{ "name",        			 PrintExtEffects_name,        		METH_VARARGS,"Sets or returns the name of effects."},
-
     {NULL}
   };
 
@@ -165,5 +151,4 @@ extern "C" {
 }
 #endif
 
-//end of namespace wrap_tracker3dfield
 }

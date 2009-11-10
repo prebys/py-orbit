@@ -1,13 +1,12 @@
 #ifndef PRINTEXTEFFECTS_HH_
 #define PRINTEXTEFFECTS_HH_
 
-
-
 #include "Python.h"
 
 #include "ExternalEffects.hh"
 #include "BaseLaserFieldSource.hh"
 #include <string>
+
 #define MAX_LENGTH_ADDRESS 1024
 
 using namespace TrackerRK4;
@@ -24,26 +23,18 @@ namespace LaserStripping{
 			/** Destructor. */
 			~PrintExtEffects();
 			
-		
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
+
+
+		/** ??????????????????. */
+		void applyEffects(Bunch* bunch, 
+											 double t, double t_step, 
+											 OrbitUtils::BaseFieldSource* fieldSource,
+											 RungeKuttaTracker* tracker);	
 		
-		/** It finalizes effects. */
-		void finalizeEffects(Bunch* bunch);
-
-		/** It applies the external effects to a particle with certain index. */
-		void applyEffects(Bunch* bunch, int index, 
-	                            double* y_in_vct, double* y_out_vct, 
-														  double t, double t_step, 
-														  OrbitUtils::BaseFieldSource* fieldSource,
-															RungeKuttaTracker* tracker);	
-		
-
-
 		  private:
-
-		  
-
+				
 			  int Num;
 			  int num_print;
 			  std::string  addr_print;
@@ -52,14 +43,7 @@ namespace LaserStripping{
 			  
 			  int rank_MPI,size_MPI;
 			  bool setup_par;
-			  double t_in;
-			  
-			  			 
-
-
-								
-
-				
+			  double t_in;	
 	};
 };
 
