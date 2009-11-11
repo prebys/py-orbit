@@ -2,7 +2,7 @@
 
 #---------------------------------------------------------
 #This will beautify the transition file for Timofei Gorlov
-# personally
+# personally.
 #---------------------------------------------------------
 
 import sys
