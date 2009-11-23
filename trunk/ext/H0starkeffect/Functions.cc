@@ -31,7 +31,7 @@ using namespace std;
 
 
 
-Functions::Functions(int n11,int n22, int mm, int point11, int _err_exp)	{		
+Functions::Functions(int n11,int n22, int mm, int point11)	{		
 	
 
 	n1 = n11;
@@ -52,13 +52,10 @@ Functions::Functions(int n11,int n22, int mm, int point11, int _err_exp)	{
 	nsumab = 100000;
 	prec_bitN = (int)(precisionN*3.3219280948873626);
 
-	err_exp = _err_exp;
 	
 	nsum1 = 10;
 	precision = 10;
 	prec_bit = (int)(precision*3.3219280948873626);
-	
-
 
 
 }
@@ -75,7 +72,7 @@ Functions::~Functions()	{
 
 
 
-long int Functions::calcPrecisionForM(std::string c_field,std::string c_energy, std::string c_Z1)	{
+long int Functions::calcPrecisionForM(int& err_exp, int exp_minG, int max_err_exp, std::string c_field,std::string c_energy, std::string c_Z1)	{
 
 
 	std::string line = "empty line", Mstr;
@@ -89,8 +86,7 @@ long int Functions::calcPrecisionForM(std::string c_field,std::string c_energy, 
 	mpfr_t temp_mpfr;
 	mpc_t temp_mpc;
 
-		
-		
+			
 		
 	
 	
@@ -114,8 +110,19 @@ long int Functions::calcPrecisionForM(std::string c_field,std::string c_energy, 
 		prec_bit = (int)(precision*3.3219280948873626);
 		
 
+		
 		if(j==0) out_len = 10;
-		if(j==1) out_len = exponent - err_exp;
+		if(j==1) 
+			
+		{
+			if ((exponent - max_err_exp)>=(20 - exp_minG))
+				{err_exp = max_err_exp;}
+			else
+				{err_exp = exponent + exp_minG - 20;}
+			out_len = exponent - err_exp;
+			cout<<"out_len = "<<out_len<<"\n";
+			cout<<"err_exp = "<<err_exp<<"\n";
+		}
 
 
 		Mstr = getM(c_field,c_energy, c_Z1);
@@ -155,10 +162,11 @@ long int Functions::calcPrecisionForM(std::string c_field,std::string c_energy, 
 		
 		mpfr_clear(temp_mpfr);
 		mpc_clear(temp_mpc);
+
 		
 	}	
 
-	
+
 	
 //	out_len = precision;
 	
@@ -287,9 +295,10 @@ long int Functions::calcPrecisionForN(std::string& str_N, std::string& str_derN,
 		if (crit<=300)	{pointN1--; pointN2 = pointN1*pointN1;}
 		if ((crit>300)&&(crit<500))	break;
 	}
-	cout<<"pointN1 = "<<pointN1<<"\n";
+//	cout<<"pointN1 = "<<pointN1<<"\n";
 //	cout<<"crit = "<<crit<<"\n";
-	return (int)(out_lenN*3.3219280948873626);
+//	return (int)(out_lenN*3.3219280948873626);
+	return pointN1;
 }
 
 

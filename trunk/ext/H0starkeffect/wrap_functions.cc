@@ -42,17 +42,17 @@ extern "C" {
 
 	  int n1,n2,m;
       int point1; 
-      int err_exp;
 
 
 
-		 if(!PyArg_ParseTuple(	args,"iiiii:",&n1, &n2, &m, &point1, &err_exp)){
-			 		          error("Functions(n1, n2, m, point1) - params. are needed");
+      
+		 if(!PyArg_ParseTuple(	args,"iiii:",&n1, &n2, &m, &point1)){
+			 		          error("Functions(n1, n2, m, point1,err_exp, exp_minG) - params. are needed");
 			 			 		        }  
 		 else	{
 			 
 
-		 self->cpp_obj =  new  Functions(n1,n2,m, point1,err_exp);
+		 self->cpp_obj =  new  Functions(n1,n2,m, point1);
 		 ((Functions*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	
@@ -71,6 +71,7 @@ extern "C" {
 	  const char* c_energy;
 	  const char* c_Z1;
 	  const char* c_F;
+	  std::string M;
 
 
        
@@ -80,8 +81,9 @@ extern "C" {
            if(!PyArg_ParseTuple(	args,"sss:",&c_F,&c_energy,&c_Z1))
              error(" getM(k, step, nsum) - parameters are needed");
            else
+        	   M = cpp_Functions->getM(c_F, c_energy, c_Z1);
 
-           return Py_BuildValue("s",cpp_Functions->getM(c_F, c_energy, c_Z1).c_str());
+           return Py_BuildValue("s",M.c_str());
   }
   
   
@@ -92,7 +94,7 @@ extern "C" {
 	  const char* c_energy;
 	  const char* c_Z1;
 	  const char* c_F;
-	  int prec;
+	  int pointN;
 	  std::string N = "fff";
 	  std::string derN = "hhh";
 
@@ -101,12 +103,12 @@ extern "C" {
        		if(!PyArg_ParseTuple(	args,"sss:",&c_F,&c_energy,&c_Z1))
        				error(" getN(c_F, c_energy, c_Z1) - parameters are needed");
        		else	{
-       			prec = cpp_Functions->calcPrecisionForN(N, derN, c_F, c_energy, c_Z1);
+       			pointN = cpp_Functions->calcPrecisionForN(N, derN, c_F, c_energy, c_Z1);
  
        		}
        		
                 
-       		return Py_BuildValue("iss",prec, N.c_str(), derN.c_str());
+       		return Py_BuildValue("i",pointN);
 
     }	
   
@@ -191,13 +193,17 @@ extern "C" {
 	  const char* c_energy;
 	  const char* c_Z1;
 	  int val;
+	  int exp_minG;
+	  int max_err_exp;
+	  int err_exp;
+	  
            //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
-           if(!PyArg_ParseTuple(	args,"sss:",&c_field,&c_energy,&c_Z1))
+           if(!PyArg_ParseTuple(	args,"iisss:",&exp_minG, &max_err_exp, &c_field,&c_energy,&c_Z1))
              error(" calcPrecisionForM(c_field,c_energy,c_Z1) - parameter is needed");
            else 	  
-        	   val = cpp_Functions->calcPrecisionForM(c_field,c_energy,c_Z1);
+        	   val = cpp_Functions->calcPrecisionForM(err_exp,exp_minG, max_err_exp,c_field,c_energy,c_Z1);
          
-  		  return Py_BuildValue("i",val);
+  		  return Py_BuildValue("ii",val,err_exp);
   		    
   		    
   }

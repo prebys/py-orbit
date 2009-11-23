@@ -43,19 +43,20 @@ extern "C" {
 	  int n1,n2,m;
       int point1; 
       int pointN;
+      int precEZ;
       const char* c_energy;
       const char* c_Z1;
       const char* c_F;
 
 
 
-		 if(!PyArg_ParseTuple(	args,"iiiiisss:",&n1, &n2, &m, &point1, &pointN, &c_energy, &c_Z1, &c_F)){
-			 		          error("WaveFunction(n1, n2, m, point1, pointN,c_energy, c_Z1, c_F) - params. are needed");
+		 if(!PyArg_ParseTuple(	args,"iiiiiisss:",&n1, &n2, &m, &point1, &pointN,&precEZ, &c_energy, &c_Z1, &c_F)){
+			 		          error("WaveFunction(n1, n2, m, point1, pointN,precEZ, c_energy, c_Z1, c_F) - params. are needed");
 			 			 		        }  
 		 else	{
 			 
 
-		 self->cpp_obj =  new  WaveFunction(n1,n2,m,point1, pointN, c_energy, c_Z1, c_F);
+		 self->cpp_obj =  new  WaveFunction(n1,n2,m,point1, pointN, precEZ, c_energy, c_Z1, c_F);
 		 ((WaveFunction*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		 }
 	
@@ -72,14 +73,16 @@ extern "C" {
 	  WaveFunction* cpp_WaveFunction = (WaveFunction*)((pyORBIT_Object*) self)->cpp_obj;
   				       
 	  const char* mu;
+	  std::string  M;
        
 
            //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
            if(!PyArg_ParseTuple(	args,"s:",&mu))
              error(" getM(mu) - parameters are needed");
            else
+        	   M = cpp_WaveFunction->getFastM(mu);
 
-           return Py_BuildValue("s",cpp_WaveFunction->getFastM(mu).c_str());
+           return Py_BuildValue("s",M.c_str());
   }
   
   
@@ -87,14 +90,33 @@ extern "C" {
 	  WaveFunction* cpp_WaveFunction = (WaveFunction*)((pyORBIT_Object*) self)->cpp_obj;
   				       
 	  const char* mu;
+	  std::string N;
        
 
            //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
            if(!PyArg_ParseTuple(	args,"s:",&mu))
              error(" Nb(mu) - parameters are needed");
            else
+        	   N = cpp_WaveFunction->getFastN(mu);
 
-           return Py_BuildValue("s",cpp_WaveFunction->getFastN(mu).c_str());
+           return Py_BuildValue("s",N.c_str());
+  }
+  
+  
+  static PyObject* WaveFunction_getMN(PyObject *self, PyObject *args){
+	  WaveFunction* cpp_WaveFunction = (WaveFunction*)((pyORBIT_Object*) self)->cpp_obj;
+  				       
+
+	  double psi,mu,nu;
+       
+
+           //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
+           if(!PyArg_ParseTuple(	args,"dd:",&mu,&nu))
+             error(" getMN(mu.nu) - parameters are needed");
+           else
+        	   psi = cpp_WaveFunction->getMN(mu,nu);
+
+           return Py_BuildValue("d",psi);
   }
   
   
@@ -102,14 +124,18 @@ extern "C" {
 	  WaveFunction* cpp_WaveFunction = (WaveFunction*)((pyORBIT_Object*) self)->cpp_obj;
   				       
 	  const char* mu;
+	  int mode;
+
        
 
            //NO NEW OBJECT CREATED BY PyArg_ParseTuple! NO NEED OF Py_DECREF()
            if(!PyArg_ParseTuple(	args,""))
              error(" getMode() -no parameters are needed");
            else
+        	   
+        	   mode = cpp_WaveFunction->getMode();
 
-           return Py_BuildValue("i",cpp_WaveFunction->getMode());
+           return Py_BuildValue("i",mode);
   }
   
   /* 
@@ -213,8 +239,8 @@ extern "C" {
 	// they will be vailable from python level
   static PyMethodDef WaveFunctionClassMethods[] = {
 		    { "M",  					WaveFunction_M,         								METH_VARARGS,"gets M-function "},
-			{ "N",      				WaveFunction_N,				       					 METH_VARARGS,"Calculates N-function below point N1"},
-//			{ "calcPrecisionForN",      WaveFunction_calcPrecisionForN,         				METH_VARARGS,"gets N-function Modulus"},
+			{ "N",      				WaveFunction_N,				       					 	METH_VARARGS,"Calculates N-function below point N1"},
+			{ "getMN",     				WaveFunction_getMN,         							METH_VARARGS,"gets MN-perturbation functions"},
 //			{ "get_a",         			WaveFunction_get_a,         							METH_VARARGS,"Gets value and derivative of a - function."},
 //			{ "get_b",         			WaveFunction_get_b,         							METH_VARARGS,"Gets value and derivative of b - function."},
 			{ "getMode",         		WaveFunction_getMode,         							METH_VARARGS,"mode of wave function ."},
