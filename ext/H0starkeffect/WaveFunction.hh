@@ -6,6 +6,8 @@
 #include "CppPyWrapper.hh"
 #include <string>
 #include <mpc.h>
+#include "MathPolynomial.hh"
+
 
 
 
@@ -19,7 +21,7 @@
 			
 		public:
 		/*constructor*/	
-		WaveFunction(int n11,int n22, int mm, long int point11, long int pointN, std::string c_energy, std::string c_Z1,std::string c_F);
+		WaveFunction(int n11,int n22, int mm,  int point11,  int pointN,  int precEZ, std::string c_energy, std::string c_Z1,std::string c_F);
 		
 		/*destructor*/	
 		~WaveFunction();
@@ -44,8 +46,8 @@
 		void getN(mpfr_t mu,mpc_t N);
 		void get_ab(mpfr_t mu,std::string c_F,std::string c_energy, mpc_t ab);
 		
-		long int ndivN_b(std::string c_energy,std::string c_F);
-		long int ndivN_h(std::string c_energy,std::string c_F);
+		double ndivN_b(std::string c_energy,std::string c_F);
+		double ndivN_h(std::string c_energy,std::string c_F);
 
 		
 		std::string getFastM(std::string  mu);
@@ -61,11 +63,15 @@
 		long int getN(  std::string&  str_N, std::string& str_der_N,std::string c_F,std::string c_energy, std::string c_Z2);
 		
 		int getMode();
+		
+		void getArrayb();
+		double getMN(double mu,double nu);
+		double f(long int k, long int _m, double x);
 
 		
 		
 		
-
+		  
 
 
 		
@@ -106,6 +112,9 @@
 			
 			int mode;
 			
+			double Fd;
+			double A;
+			
 
 			
 
@@ -135,6 +144,8 @@
 			mpc_t *a;
 			mpc_t *b;
 			mpfr_t h;
+			
+			long int*** bp;
 			
 
 			

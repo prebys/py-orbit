@@ -20,6 +20,25 @@ INC += $(wildcard *.h)
 INC += $(foreach dir,$(DIRS),$(wildcard ./$(dir)/*.hh))
 INC += $(foreach dir,$(DIRS),$(wildcard ./$(dir)/*.h))
 
+#-------------------------------------------------------------------------------
+# libraries files locations
+#-------------------------------------------------------------------------------
+
+LIBS +=  -L/home/tg4/tools/gmp-4.2.4/lib  -lgmp
+LIBS +=  -L/home/tg4/tools/mpc-0.7/lib    -lmpc
+LIBS +=  -L/home/tg4/tools/mpfr-2.4.1/lib -lmpfr
+
+
+#-------------------------------------------------------------------------------
+# include file locations
+#-------------------------------------------------------------------------------
+
+
+INCLUDES +=    -I/home/tg4/tools/mpc-0.7/include
+INCLUDES +=    -I/home/tg4/tools/gmp-4.2.4/include
+INCLUDES +=    -I/home/tg4/tools/mpfr-2.4.1/include
+
+
 #wrappers CC FLAGS
 WRAPPER_FLAGS = -fno-strict-aliasing
 
@@ -34,7 +53,7 @@ seffect_lib = starkeffect.so
 
 #========rules=========================
 compile: $(OBJS_WRAP) $(OBJS) $(INC)
-	$(CXX) -fPIC $(SHARED_LIB) $(LINKFLAGS) -o ../../lib/$(seffect_lib) $(OBJS)
+	$(CXX) -fPIC $(SHARED_LIB) $(LIBS) $(LINKFLAGS) -o ../../lib/$(seffect_lib) $(OBJS)
 
 ./obj/wrap_%.o : wrap_%.cc $(INC)
 	$(CXX) $(CXXFLAGS) $(WRAPPER_FLAGS) $(INCLUDES_LOCAL) $(INCLUDES) -c $< -o $@;

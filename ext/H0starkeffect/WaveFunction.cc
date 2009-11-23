@@ -24,6 +24,11 @@
 
 
 
+#define MAX_DIV_ARRAY 100000
+#define MIN_DIV_ARRAY 10000
+
+
+
 
 using namespace OrbitUtils;
 using namespace std;
@@ -31,7 +36,12 @@ using namespace std;
 
 
 
-WaveFunction::WaveFunction(int n11,int n22, int mm, long int point11, long int pointN, std::string c_energy, std::string c_Z1, std::string c_F)	{		
+WaveFunction::WaveFunction(int n11,int n22, int mm,  int point11,  int pointN,  int precEZ, std::string c_energy, std::string c_Z1, std::string c_F)	{		
+	
+
+
+
+
 	
 	std::string str_A;
 	std::string str_B;
@@ -42,11 +52,10 @@ WaveFunction::WaveFunction(int n11,int n22, int mm, long int point11, long int p
 	std::string str_b;
 	std::string str_der_b;
 	
-	long int nsuma, nsumb;
+	int nsuma, nsumb;
 	
 	mpfr_t sqrtF;
 	mpfr_t F;
-	
 	
 
 	mode = 3;
@@ -56,12 +65,17 @@ WaveFunction::WaveFunction(int n11,int n22, int mm, long int point11, long int p
 	m = abs(mm);
 	n = n1 + n2 + m + 1; 
 	
+	
+	getArrayb();
+	A = sqrt(2*MathPolynomial::FactorialDouble(n1+m)*MathPolynomial::FactorialDouble(n2+m)/(MathPolynomial::FactorialDouble(n1)*MathPolynomial::FactorialDouble(n2)))/(n*n);
+
+
+
+	
 	precisionN = 1000;
 	prec_bitN = (long int)(precisionN*3.3219280948873626);
 	
-	precision = c_Z1.length();
-	if(precision<200)
-		precision = 200;
+	precision = precEZ;
 	prec_bit = (long int)(precision*3.3219280948873626);
 	
 	out_lenN = 100;
@@ -73,6 +87,8 @@ WaveFunction::WaveFunction(int n11,int n22, int mm, long int point11, long int p
 	
 	mpfr_set_str(F, &c_F[0], 10, GMP_RNDN);
 	mpfr_sqrt(sqrtF,F,GMP_RNDN);
+	Fd = mpfr_get_d(F,GMP_RNDN);
+	
 	
 	point1 = point11;
 	point2 = point1*point1;
@@ -85,9 +101,11 @@ WaveFunction::WaveFunction(int n11,int n22, int mm, long int point11, long int p
 	
 	if (mpfr_cmp_ui(F,0) == 0)
 		{mode = 0;}
-	
+
 		else	{
-		mpfr_ui_div(h,1,sqrtF,GMP_RNDN);
+		mpfr_ui_div(h,2,sqrtF,GMP_RNDN);
+		mpfr_add_ui(h,h,point1*point1,GMP_RNDN);
+		mpfr_sqrt(h,h,GMP_RNDN);
 //		mpfr_set_ui(h,50,GMP_RNDN);
 		
 		if(mpfr_cmp_ui(h,pointN) != 1)	{
@@ -101,26 +119,40 @@ WaveFunction::WaveFunction(int n11,int n22, int mm, long int point11, long int p
 		
 		}
 		
-		
-	
+
+//	mode = 0;
 	
 	if(mode != 0)	{
-		ndivN = ndivN_b(c_energy, c_F);	
-		if (ndivN<10000)
-			ndivN = 10000;
-		if (ndivN>100000)
-			mode = 0;
+		double _ndivN = ndivN_b(c_energy, c_F);
+
 		
-		ndivM = 10000;
+		if (_ndivN<MAX_DIV_ARRAY)		
+			ndivN = (int)_ndivN;	
+		else 
+			mode = 0;
+
+		
+		if (ndivN<MIN_DIV_ARRAY)
+			ndivN = MIN_DIV_ARRAY;
+
+		ndivM = MIN_DIV_ARRAY;
 	}
 	
 	
+	
+
 	if(mode == 2){
-		ndivab = ndivN_h(c_energy, c_F);
-		if (ndivab<10000)
-			ndivab = 10000;
-		if (ndivab>100000)
+		double _ndivab = ndivN_h(c_energy, c_F);
+
+
+		if (_ndivab<MAX_DIV_ARRAY)
+			ndivab = (int)_ndivab;
+		else
 			mode = 0;
+		
+		
+		if (ndivab<MIN_DIV_ARRAY)
+			ndivab = MIN_DIV_ARRAY;
 	}
 	
 
@@ -315,6 +347,7 @@ if (mode == 2)	{
 WaveFunction::~WaveFunction()	{
 	
 	mpfr_clear(h);
+	for (int i=0;i<15;i++) for (int j=0;j<15;j++)	delete [] bp[i][j]; for (int i=0;i<15;i++)	delete [] bp[i];	delete	[]	bp;
 	
 	if (mode != 0 )	{
 	
@@ -367,7 +400,7 @@ if (mode == 2)		{
 
 
 
-long int WaveFunction::ndivN_b(std::string c_energy, std::string c_F){
+double WaveFunction::ndivN_b(std::string c_energy, std::string c_F){
 	
 	mpfr_t F;
 	mpfr_t sqrtF;
@@ -395,7 +428,7 @@ long int WaveFunction::ndivN_b(std::string c_energy, std::string c_F){
 	mpfr_div(temp2,temp2,sqrtF,GMP_RNDN);
 	mpfr_add(temp,temp,temp2,GMP_RNDN);
 	mpfr_mul_ui(temp,temp,2*pointN1,GMP_RNDN);
-	long int number = mpfr_get_ui(temp,GMP_RNDN);
+	double number = mpfr_get_d(temp,GMP_RNDN);
 	
 	
 	
@@ -413,9 +446,9 @@ long int WaveFunction::ndivN_b(std::string c_energy, std::string c_F){
 
 
 
-long int WaveFunction::ndivN_h(std::string c_energy, std::string c_F){
+double WaveFunction::ndivN_h(std::string c_energy, std::string c_F){
 	
-	long int number;
+
 	
 	mpfr_t F;
 	mpfr_t sqrtF;
@@ -437,16 +470,18 @@ long int WaveFunction::ndivN_h(std::string c_energy, std::string c_F){
 	mpfr_sqrt(sqrtF,F,GMP_RNDN);
 
 
-	mpc_real(temp2,E,GMP_RNDN);
-	mpfr_add_ui(temp2,temp2,1,GMP_RNDN);
-	mpfr_mul(temp2,temp2,h,GMP_RNDN);
 	
-	mpfr_sub_ui(temp,h,pointN1,GMP_RNDN);
+	mpfr_sqrt(sqrtF,F,GMP_RNDN);
+	mpfr_mul(temp,sqrtF,h,GMP_RNDN);
+	mpfr_mul(temp,temp,h,GMP_RNDN);
+	
+	mpc_real(temp2,E,GMP_RNDN);
+	mpfr_div(temp2,temp2,sqrtF,GMP_RNDN);
+	mpfr_add(temp,temp,temp2,GMP_RNDN);
+	mpfr_sub_ui(temp2,h,pointN1,GMP_RNDN);
 	mpfr_mul(temp,temp,temp2,GMP_RNDN);
 	mpfr_mul_ui(temp,temp,2,GMP_RNDN);
-	
-
-	number = mpfr_get_ui(temp,GMP_RNDN);
+	double number = mpfr_get_d(temp,GMP_RNDN);
 
 	
 	
@@ -2808,7 +2843,9 @@ std::string WaveFunction::getFastN(std::string nu0){
 		mpfr_set_ui(nu,0,GMP_RNDN);
 		nu0 = "0";
 	}
-	
+		
+
+
 	
 if(mode==1||mode==2){
 	
@@ -2843,3 +2880,123 @@ int WaveFunction::getMode()	{
 	
 	return mode;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////Below is the functions wave functions for perturbation theory of the second order
+
+void WaveFunction::getArrayb()	{
+
+	bp = new long int**[15];	for (int i=0;i<15;i++)	bp[i]=new long int*[15]; for (int i=0;i<15;i++) for (int j=0;j<15;j++)	bp[i][j]=new long int[15];
+	
+	
+	for (long int i=0;i<15;i++)
+		for (long int j=0;j<15;j++)
+			for (long int k=0;k<15;k++)
+				bp[k][i][j] = 0;
+    
+    int dn = n1 - n2;
+    
+    bp[0][0][0] = 1;
+
+    bp[1][-2  +2][0  +2] = n1*(-1+n1);
+    bp[1][-1  +2][0  +2] = -2*(-2-dn+2*n)*n1;
+    bp[1][0   +2][0  +2] = 6*dn;
+    bp[1][1   +2][0  +2] = 2*(2-dn+2*n)*(1+m+n1);
+    bp[1][2   +2][0  +2] = -(1+m+n1)*(2+m+n1);
+    bp[1][0   +2][-2 +2] = -(-1+n2)*n2;
+    bp[1][0   +2][-1 +2] = 2*(-2+dn+2*n)*n2;
+    bp[1][0   +2][1  +2] = -2*(2+dn+2*n)*(1+m+n2);
+    bp[1][0   +2][2  +2] = (1+m+n2)*(2+m+n2);
+    
+    bp[2][-2  +4][-2  +4] = -(-1+n1)*n1*(-1+n2)*n2;
+    bp[2][-1  +4][-1  +4] = -4*(-2-dn+2*n)*(-2+dn+2*n)*n1*n2;
+    bp[2][0  +4][0  +4] = (-1289+74*dn*dn-17*dn*dn*dn*dn+650*m*m+18*dn*dn*m*m-m*m*m*m-1494*n*n+42*dn*dn*n*n+66*m*m*n*n-65*n*n*n*n)/8;
+    bp[2][1  +4][1  +4] = -4*(2-dn+2*n)*(2+dn+2*n)*(1+m+n1)*(1+m+n2);
+    bp[2][2  +4][2  +4] = -(1+m+n1)*(2+m+n1)*(1+m+n2)*(2+m+n2);  
+    bp[2][-4  +4][0  +4] = (-3+n1)*(-2+n1)*(-1+n1)*n1/2;
+    bp[2][-3  +4][0  +4] = -2*(-14-3*dn+6*n)*(-2+n1)*(-1+n1)*n1/3;
+    bp[2][-2  +4][-1  +4] = 2*(-2+dn+2*n)*(-1+n1)*n1*n2;
+    bp[2][-2  +4][0  +4] = 2*(-8-dn+2*n)*(-3-dn+2*n)*(-1+n1)*n1;
+    bp[2][-2  +4][1  +4] = -2*(2+dn+2*n)*(-1+n1)*n1*(1+m+n2)   ;     
+    bp[2][-2  +4][2  +4] = (-1+n1)*n1*(1+m+n2)*(2+m+n2);
+    bp[2][-1  +4][0  +4] = (78+75*dn+36*dn*dn-dn*dn*dn+26*m*m+dn*m*m-234*n-66*dn*n-2*m*m*n+58*n*n+3*dn*n*n+2*n*n*n)*n1/2;
+    bp[2][-1  +4][1  +4] = 4*(-2-dn+2*n)*(2+dn+2*n)*n1*(1+m+n2);
+    bp[2][-1  +4][2  +4] = -2*(-2-dn+2*n)*n1*(1+m+n2)*(2+m+n2);
+    bp[2][0  +4][1  +4] = (-78-75*dn-36*dn*dn+dn*dn*dn-26*m*m-dn*m*m-234*n-66*dn*n-2*m*m*n-58*n*n-3*dn*n*n+2*n*n*n)*(1+m+n2)/2   ;     
+    bp[2][0  +4][2  +4] = 2*(3+dn+2*n)*(8+dn+2*n)*(1+m+n2)*(2+m+n2);
+    bp[2][0  +4][3  +4] = -2*(14+3*dn+6*n)*(1+m+n2)*(2+m+n2)*(3+m+n2)/3;
+    bp[2][0  +4][4  +4] = (1+m+n2)*(2+m+n2)*(3+m+n2)*(4+m+n2)/2;
+    bp[2][1  +4][2  +4] = 2*(2-dn+2*n)*(1+m+n1)*(1+m+n2)*(2+m+n2);        
+    bp[2][0  +4][-4  +4] = (-3+n2)*(-2+n2)*(-1+n2)*n2/2;
+    bp[2][0  +4][-3  +4] = -2*(-14+3*dn+6*n)*(-2+n2)*(-1+n2)*n2/3;
+    bp[2][-1  +4][-2  +4] = 2*(-2-dn+2*n)*(-1+n2)*n1*n2;
+    bp[2][0  +4][-2  +4] = 2*(-8+dn+2*n)*(-3+dn+2*n)*(-1+n2)*n2;
+    bp[2][1  +4][-2  +4] = -2*(2-dn+2*n)*(-1+n2)*n2*(1+m+n1);
+    bp[2][2  +4][-2  +4] =  (-1+n2)*n2*(1+m+n1)*(2+m+n1);
+    bp[2][0  +4][-1  +4] = (78-75*dn+36*dn*dn+dn*dn*dn+26*m*m-dn*m*m-234*n+66*dn*n-2*m*m*n+58*n*n-3*dn*n*n+2*n*n*n)*n2/2;
+    bp[2][1  +4][-1  +4] = 4*(-2+dn+2*n)*(2-dn+2*n)*n2*(1+m+n1);
+    bp[2][2  +4][-1  +4] = -2*(-2+dn+2*n)*n2*(1+m+n1)*(2+m+n1);
+    bp[2][1  +4][0  +4] = (-78+75*dn-36*dn*dn-dn*dn*dn-26*m*m+dn*m*m-234*n+66*dn*n-2*m*m*n-58*n*n+3*dn*n*n+2*n*n*n)*(1+m+n1)/2;
+    bp[2][2  +4][0  +4] = 2*(3-dn+2*n)*(8-dn+2*n)*(1+m+n1)*(2+m+n1);
+    bp[2][3  +4][0  +4] = -2*(14-3*dn+6*n)*(1+m+n1)*(2+m+n1)*(3+m+n1)/3;
+    bp[2][4  +4][0  +4] = (1+m+n1)*(2+m+n1)*(3+m+n1)*(4+m+n1)/2;
+    bp[2][2  +4][1  +4] = 2*(2+dn+2*n)*(1+m+n2)*(1+m+n1)*(2+m+n1);
+
+
+	
+return;	
+	
+}
+
+
+double WaveFunction::f(long int k, long int _m, double x){
+	
+	double val = 0;
+	int co = 1;
+	for (int p=0;p<k+1;p++)	{
+		val += co*MathPolynomial::FactorialDouble(k)*pow(x,p+0.5*_m)/(MathPolynomial::FactorialDouble(k-p)*MathPolynomial::FactorialDouble(_m+p)*MathPolynomial::FactorialDouble(p));
+		co = -co;
+	}
+		
+	return val*exp(-x*0.5);
+}
+
+
+double WaveFunction::getMN(double mu,double nu){
+
+	double sum1,sum2,sum3;
+	double PI = 3.14159265358979323846264338;
+	
+		sum1 = 0;
+		for ( int N=0;N<2+1;N++)	{
+			sum2 = 0;
+			for ( int i=-2*N;i<2*N+1;i++){
+				sum3 = 0;
+				for ( int j=-2*N;j<2*N+1;j++)	{
+					
+					sum3 += bp[N][i+2*N][j+2*N]*f(n2+j,m,nu*nu/n);
+					
+				}
+				sum2 += sum3*f(n1+i,m,mu*mu/n);
+			}
+			sum1 += sum2*pow(Fd,N)*pow(n*0.5,3*N);
+		}
+		
+	return A*sum1/sqrt(2*PI);
+}
+
+
+
+

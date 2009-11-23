@@ -19,13 +19,13 @@
 			
 		public:
 		/*constructor*/	
-		Functions(int n11,int n22, int mm, int point11, int _err_exp);
+		Functions(int n11,int n22, int mm, int point11);
 		
 		/*destructor*/	
 		~Functions();
 		
-		long int calcPrecisionForM(std::string field,std::string c_energy, std::string c_Z1);
-		long int calcPrecisionForN( std::string&  str_N, std::string& str_der_N,std::string c_F,std::string c_energy, std::string c_Z2);
+		long int calcPrecisionForM(int& err_exp, int exp_minG, int max_err_exp, std::string field,std::string c_energy, std::string c_Z1);
+		long int calcPrecisionForN(std::string&  str_N, std::string& str_der_N,std::string c_F,std::string c_energy, std::string c_Z2);
 
 
 			
@@ -68,11 +68,10 @@
 			long int nsumab;
 			long int nsumN;
 			
-			long int err_exp;
-			
 			long int prec_bit;
 			long int precision;
 			long int out_len;
+
 			
 
 			
