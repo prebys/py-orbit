@@ -45,6 +45,7 @@ Stark::Stark(std::string addressEG,int states)
 	
 	std::ifstream file;
 	double F;
+	char G_ch[200];
 	double alpha=7.297352570e-3;
 	int k,ks,fi,nn1,nn2,mm,nn1s,nn2s,mms,ff;
 	char nameEG[MAX_LENGTH_ADDRESS];
@@ -69,6 +70,7 @@ Stark::Stark(std::string addressEG,int states)
 		
 		snprintf(nameEG,MAX_LENGTH_ADDRESS,"%s000.txt",addressEG.c_str());	
 		file.open(nameEG);	file>>F>>F>>F>>delta_F; file.clear();file.close();
+
 		
 		snprintf(nameEG,MAX_LENGTH_ADDRESS,"%stransitions.txt",addressEG.c_str());
 		file.open(nameEG);	file>>ff>>ff>>ff>>dump>>ff>>ff>>ff; fi=0;	while(dump2!=dump)	{file>>dump2;fi++;} file.clear();file.close(); order_trans = (fi-4)/3;
@@ -80,14 +82,14 @@ Stark::Stark(std::string addressEG,int states)
 
 					k=convert3to1level(n,n1,m);		
 					snprintf(nameEG,MAX_LENGTH_ADDRESS,"%s%i%i%i.txt",addressEG.c_str(),n1,n-n1-abs(m)-1,abs(m));		
-					n_data[k]=-1;	file.open(nameEG);	while(!file.eof())	{file>>field_thresh[k]>>F>>F; n_data[k]++;} file.clear();file.close();	
+					n_data[k]=-1;	file.open(nameEG);	while(!file.eof())	{file>>field_thresh[k]>>F>>G_ch; n_data[k]++;} file.clear();file.close();	
 					
 				}
 			}
 		}
 		
-	}
-	
+	}		
+
 
 	
 	ORBIT_MPI_Bcast(&order_trans, 1, MPI_INT,0,MPI_COMM_WORLD);	
@@ -137,7 +139,7 @@ Stark::Stark(std::string addressEG,int states)
 				
 					if(rank_MPI == 0) {
 					snprintf(nameEG,MAX_LENGTH_ADDRESS,"%s%i%i%i.txt",addressEG.c_str(),n1,n-n1-abs(m)-1,abs(m));						
-					file.open(nameEG);for (fi=0; fi<n_data[k]; fi++)	{file>>F>>energy[k][fi]>>gamma_autoionization[k][fi];}	file.clear();file.close();
+					file.open(nameEG);for (fi=0; fi<n_data[k]; fi++)	{file>>F>>energy[k][fi]>>G_ch; gamma_autoionization[k][fi] = atof(G_ch);}	file.clear();file.close();
 					}
 						
 					

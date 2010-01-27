@@ -38,8 +38,7 @@ namespace LaserStripping{
 		void finalizeEffects(Bunch* bunch);
 
 		/** It applies the external effects to a particle with certain index. */
-		void applyEffects(Bunch* bunch, int index, 
-	                            double* y_in_vct, double* y_out_vct, 
+		void applyEffects(Bunch* bunch, 
 														  double t, double t_step, 
 														  OrbitUtils::BaseFieldSource* fieldSource,
 															RungeKuttaTracker* tracker);	

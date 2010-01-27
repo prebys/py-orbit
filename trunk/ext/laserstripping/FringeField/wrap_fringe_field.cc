@@ -86,8 +86,7 @@ extern "C" {
              error(" getField(x,y,z,t) - parameters are needed");
            else
            cpp_fields->getElectricMagneticField(x,y,z,t,Ex,Ey,Ez,Bx,By,Bz);
-           
-           return Py_BuildValue("d",By);
+           return Py_BuildValue("d",Bx);
 
   }
   

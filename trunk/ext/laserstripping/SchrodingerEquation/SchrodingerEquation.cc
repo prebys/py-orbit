@@ -46,24 +46,8 @@
 #define Re(i,m) AmplAttr->attArr(i)[m]		//i-part index, n,m-attr index
 #define Im(i,m) AmplAttr->attArr(i)[m+levels]
 
-#define x0(i) 	 Coords->attArr(i)[0]
-#define y0(i)  	 Coords->attArr(i)[2]
-#define z0(i)  	 Coords->attArr(i)[4]
-#define px0(i)   Coords->attArr(i)[1]
-#define py0(i)   Coords->attArr(i)[3]
-#define pz0(i)   Coords->attArr(i)[5]
 
-#define x(i) 	 bunch->coordArr()[i][0]
-#define y(i)  	 bunch->coordArr()[i][2]
-#define z(i)  	 bunch->coordArr()[i][4]
-#define px(i)    bunch->coordArr()[i][1]
-#define py(i)    bunch->coordArr()[i][3]
-#define pz(i)    bunch->coordArr()[i][5]
-
-#define a(i,m) tcomplex(AmplAttr->attArr(i)[m],AmplAttr->attArr(i)[m+levels])
-
-
-
+#define a(i,m) tcomplex(Re(i,m),Im(i,m))
 
 
 using namespace LaserStripping;
@@ -197,16 +181,7 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 		}
 	
 	
-	
-	
-	
-	if (bunch->hasParticleAttributes("pq_coords")==0)	{
-	std::map<std::string,double> part_attr_dict;
-	part_attr_dict["size"] = 6;
-	bunch->addParticleAttributes("pq_coords",part_attr_dict);
-	}
-	
-	Coords = bunch->getParticleAttributes("pq_coords");
+
 	AmplAttr = bunch->getParticleAttributes("Amplitudes");
 	PopAttr = bunch->getParticleAttributes("Populations");
 	
@@ -231,29 +206,14 @@ void SchrodingerEquation::setupEffects(Bunch* bunch){
 		
 
 
-void SchrodingerEquation::memorizeInitParams(Bunch* bunch){
-	
-	for (int i=0; i<bunch->getSize();i++)		{
-		x0(i)=bunch->coordArr()[i][0];
-		y0(i)=bunch->coordArr()[i][2];
-		z0(i)=bunch->coordArr()[i][4];
-		
-		px0(i)=bunch->coordArr()[i][1];
-		py0(i)=bunch->coordArr()[i][3];
-		pz0(i)=bunch->coordArr()[i][5];
 
-	}
 
-	
-}
 //-0.00226674 0.000171211 -0.326731 0.000842283-0.000358742 1.69601
 	
 void SchrodingerEquation::finalizeEffects(Bunch* bunch){
 	
 	for (int i=0;i<levels+1;i++) for (int j=0;j<levels+1;j++)	delete [] int_E[i][j]; for (int i=0;i<levels+1;i++)	delete [] int_E[i];	delete	[]	int_E;
 	
-	if(bunch->hasParticleAttributes("pq_coords")==1)
-		bunch->removeParticleAttributes("pq_coords");
 	
 	delete [] nx;
 	delete [] ny;
@@ -269,17 +229,20 @@ void SchrodingerEquation::finalizeEffects(Bunch* bunch){
 
 
 
-void SchrodingerEquation::applyEffects(Bunch* bunch, int index, 
-	                            double* y_in_vct, double* y_out_vct, 
-														  double t, double t_step, 
-														  BaseFieldSource* fieldSource,
-															RungeKuttaTracker* tracker)			{
+void SchrodingerEquation::applyEffectsForEach(Bunch* bunch, int i, 
+			                            double* y_in_vct, double* y_out_vct, 
+																  double t, double t_step, 
+																  OrbitUtils::BaseFieldSource* fieldSource,
+																	RungeKuttaTracker* tracker)		{
+	
+x0 = y_in_vct[0];y0 = y_in_vct[1];z0 = y_in_vct[2];
+px0 = y_in_vct[3];py0 = y_in_vct[4];pz0 = y_in_vct[5];
+x = y_out_vct[0];y = y_out_vct[1];z = y_out_vct[2];
+px = y_out_vct[3];py = y_out_vct[4];pz = y_out_vct[5];
 
 
-			for (int i=0; i<bunch->getSize();i++)	
-				if(LaserField->region(x(i),y(i),z(i)))
-		{
-				
+
+					
 
 			GetParticleFrameFields(i, t, t_step,bunch,fieldSource);
 	
@@ -291,9 +254,7 @@ void SchrodingerEquation::applyEffects(Bunch* bunch, int index,
 			AmplSolver4step(i,bunch);	
 			
 			
-			CalcPopulations(i, bunch);
-		
-		}	
+			CalcPopulations(i, bunch);		
 			
 
 
@@ -313,8 +274,8 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 	
 
 
-		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
-		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
+		fieldSource->getElectricMagneticField(x0,y0,z0,t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
+		LorentzTransformationEM::transform(bunch->getMass(),px0,py0,pz0,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);	
 		
 		if (install_field_dir[i])	{
 		nx[i] = Ex_stat;	
@@ -323,17 +284,23 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 		install_field_dir[i]=false;
 		}	
 		
+		
+		Ez_stat=sqrt(Ex_stat*Ex_stat+Ey_stat*Ey_stat+Ez_stat*Ez_stat);
+		Ex_stat=0;	
+		Ey_stat=0;
+		
 
+	if(LaserField->region(x,y,z))	{
 		
 	for (int j=0; j<3;j++)	{
 							
-		LaserField->getLaserEMField(x0(i)+j*(x(i)-x0(i))/2,y0(i)+j*(y(i)-y0(i))/2,z0(i)+j*(z(i)-z0(i))/2,
+		LaserField->getLaserEMField(x0+j*(x-x0)/2,y0+j*(y-y0)/2,z0+j*(z-z0)/2,
 				t+j*t_step/2,Ex_las[j],Ey_las[j],Ez_las[j],Bx_las[j],By_las[j],Bz_las[j]);
 		
 
 			
 	LorentzTransformationEM::complex_transform(bunch->getMass(),
-											px0(i),py0(i),pz0(i),
+																px0,py0,pz0,
 																		 Ex_las[j],Ey_las[j],Ez_las[j],
 																		 Bx_las[j],By_las[j],Bz_las[j]);	
 
@@ -341,12 +308,13 @@ void SchrodingerEquation::GetParticleFrameFields(int i,double t, double t_step, 
 	FieldRotation::RotateElectricFieldsV(nx[i],ny[i],nz[i],Ex_las[j],Ey_las[j],Ez_las[j]);
 	
 	}
-
-	
-	Ez_stat=sqrt(Ex_stat*Ex_stat+Ey_stat*Ey_stat+Ez_stat*Ez_stat);
-	Ex_stat=0;	
-	Ey_stat=0;		
-
+	}
+	else 	
+		for(int j=0;j<3;j++)	{		
+			Ex_las[j] = 0.;
+			Ey_las[j] = 0.;
+			Ez_las[j] = 0.;
+	}
 	
 			
 }
@@ -366,7 +334,7 @@ void	SchrodingerEquation::GetParticleFrameParameters(int i, double t,double t_st
 	double m=bunch->getMass();
 
 //This line calculates relyativistic factor-Gamma
-double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
+double gamma=sqrt(m*m+px0*px0+py0*py0+pz0*pz0)/m;
 double coeff=1./(gamma*ta);
 
 part_t_step=t_step*coeff;	//time step in frame of particle (in atomic units)
@@ -386,7 +354,7 @@ Ez_stat/=Ea;
 
 
 
-omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t);		// frequensy of laser in particle frame (in atomic units)
+omega_part=gamma*ta*LaserField->getFrequencyOmega(m,x0,y0,z0,px0,py0,pz0,t);		// frequensy of laser in particle frame (in atomic units)
 
 	
 }

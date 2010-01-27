@@ -22,7 +22,7 @@ extern "C" {
 #endif
 
 	//---------------------------------------------------------
-	//Python ??????????????????????????/
+	//
 	//---------------------------------------------------------
 
 	//constructor for python class wrapping CppExternalEffects instance

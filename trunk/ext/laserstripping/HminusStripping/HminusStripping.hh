@@ -29,15 +29,13 @@ namespace LaserStripping{
 		
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
-		
-		/*it memorizes initial coordinates and impulses before rk step*/
-		void memorizeInitParams(Bunch* bunch);
+
 		
 		/** It finalizes effects. */
 		void finalizeEffects(Bunch* bunch);
 
 		/** It applies the external effects to a particle with certain index. */
-		void applyEffects(Bunch* bunch, int index, 
+		void applyEffectsForEach(Bunch* bunch, int index, 
 	                            double* y_in_vct, double* y_out_vct, 
 														  double t, double t_step, 
 														  OrbitUtils::BaseFieldSource* fieldSource,
@@ -57,14 +55,25 @@ namespace LaserStripping{
 
 			  double* k_RungeKutt;
 			  double* prob;
-
-
-
 			  
+			  double x0;
+			  double y0;
+			  double z0;
+			  double px0;
+			  double py0;
+			  double pz0;
+			  
+			  double x;
+			  double y;
+			  double z;
+			  double px;
+			  double py;
+			  double pz;
+
+
 
 			  
 			  ParticleAttributes* PopAttr;
-			  ParticleAttributes* Coords;
 			  
 
  			 

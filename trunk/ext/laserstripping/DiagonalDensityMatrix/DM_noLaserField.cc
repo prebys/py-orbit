@@ -24,12 +24,6 @@
 
 #define pop(i,n) PopAttr->attArr(i)[n]		//i-part index, n,m-attr index
 
-#define x0(i) 	 Coords->attArr(i)[0]
-#define y0(i)  	 Coords->attArr(i)[2]
-#define z0(i)  	 Coords->attArr(i)[4]
-#define px0(i)   Coords->attArr(i)[1]
-#define py0(i)   Coords->attArr(i)[3]
-#define pz0(i)   Coords->attArr(i)[5]
 
 using namespace LaserStripping;
 using namespace OrbitUtils;
@@ -82,7 +76,7 @@ DM_noLaserField::DM_noLaserField(Stark* Starkef)
 
 DM_noLaserField::~DM_noLaserField()
 {
-	for (int i=0;i<levels+1;i++) delete [] k_RungeKutt[i]; 	delete	[]	k_RungeKutt;
+	for (int i=0;i<levels+1;i++) 	delete [] k_RungeKutt[i]; 	delete	[]	k_RungeKutt;
 	for (int i=0;i<levels+1;i++)	delete	[]	gamma_ij[i];	delete	[]	gamma_ij;
 	for (int i=0;i<levels+1;i++)	delete	[]	cond[i];		delete	[]	cond;
 	
@@ -103,9 +97,6 @@ void DM_noLaserField::CalcPopulations(int i, Bunch* bunch)	{
 
 
 void DM_noLaserField::setupEffects(Bunch* bunch){	
-	if(bunch->hasParticleAttributes("Amplitudes")==1)	{
-		bunch->removeParticleAttributes("Amplitudes");
-	}
 	
 	if(bunch->hasParticleAttributes("Populations")==0)	{
 		std::map<std::string,double> part_attr_dict;
@@ -116,43 +107,30 @@ void DM_noLaserField::setupEffects(Bunch* bunch){
 			bunch->getParticleAttributes("Populations")->attValue(i,1) = 1;
 	}
 	
-	if (bunch->hasParticleAttributes("pq_coords")==0)	{
-		std::map<std::string,double> part_attr_dict;
-		part_attr_dict["size"] = 6;
-		bunch->addParticleAttributes("pq_coords",part_attr_dict);
-	}
 	
-	Coords = bunch->getParticleAttributes("pq_coords");
 	PopAttr = bunch->getParticleAttributes("Populations");
 	
 	for (int i=0; i<bunch->getSize();i++)
 		CalcPopulations(i, bunch);
 }
 		
-void DM_noLaserField::memorizeInitParams(Bunch* bunch){
-	for (int i=0; i<bunch->getSize();i++)		{
-		x0(i)=bunch->coordArr()[i][0];
-		y0(i)=bunch->coordArr()[i][2];
-		z0(i)=bunch->coordArr()[i][4];
-		
-		px0(i)=bunch->coordArr()[i][1];
-		py0(i)=bunch->coordArr()[i][3];
-		pz0(i)=bunch->coordArr()[i][5];
-	}
-}
+
+
+
+
+
+void DM_noLaserField::applyEffectsForEach(Bunch* bunch, int i, 
+			                            double* y_in_vct, double* y_out_vct, 
+																  double t, double t_step, 
+																  OrbitUtils::BaseFieldSource* fieldSource,
+																	RungeKuttaTracker* tracker)		{
 	
-void DM_noLaserField::finalizeEffects(Bunch* bunch){
-	if(bunch->hasParticleAttributes("pq_coords")==1){
-		bunch->removeParticleAttributes("pq_coords");
-	}
-}
+x0 = y_in_vct[0];y0 = y_in_vct[1];z0 = y_in_vct[2];
+px0 = y_in_vct[3];py0 = y_in_vct[4];pz0 = y_in_vct[5];
 
 
-void DM_noLaserField::applyEffects(Bunch* bunch, 
-														  double t, double t_step, 
-														  BaseFieldSource* fieldSource,
-															RungeKuttaTracker* tracker)			{
-		for (int i=0; i<bunch->getSize();i++)	{
+
+
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
 			//in natural unts (Volt per meter)	in the frame of particle				
 			GetParticleFrameFields(i, t,t_step, bunch,fieldSource);
@@ -165,15 +143,15 @@ void DM_noLaserField::applyEffects(Bunch* bunch,
 			AmplSolver4step(i,bunch);	
 		
 			CalcPopulations(i, bunch);
-		}	
+
 //	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\n";
 }
 
 void DM_noLaserField::GetParticleFrameFields(int i,double t,double t_step,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
 	double Ez;
 	
-	fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
-	LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);
+	fieldSource->getElectricMagneticField(x0,y0,z0,t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
+	LorentzTransformationEM::transform(bunch->getMass(),px0,py0,pz0,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);
 	
 	Ez=sqrt(Ex_stat*Ex_stat+Ey_stat*Ey_stat+Ez_stat*Ez_stat);
 	
@@ -183,12 +161,13 @@ void DM_noLaserField::GetParticleFrameFields(int i,double t,double t_step,  Bunc
 }
 
 void	DM_noLaserField::GetParticleFrameParameters(int i, double t,double t_step, Bunch* bunch)	{		
+	
 	double ta=2.418884326505e-17;			//atomic unit of time
 	double Ea=5.14220642e011;				//Atomic unit of electric field
 	double m=bunch->getMass();
 	
 	//This line calculates relyativistic factor-Gamma
-	double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
+	double gamma=sqrt(m*m+px0*px0+py0*py0+pz0*pz0)/m;
 	double coeff=1./(gamma*ta);
 	
 	part_t_step=t_step*coeff;	//time step in frame of particle (in atomic units)
@@ -199,6 +178,8 @@ void	DM_noLaserField::GetParticleFrameParameters(int i, double t,double t_step, 
 	Ey_stat/=Ea;		
 	Ez_stat/=Ea;	
 }
+
+
 
 void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 
