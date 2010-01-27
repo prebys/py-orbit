@@ -2,7 +2,7 @@
 
 #include "wrap_functions.hh"
 #include "wrap_wave_function.hh"
-
+#include "wrap_funct.hh"
 
 static PyMethodDef StarkeffectMethods[] = { {NULL,NULL} };
 
@@ -15,6 +15,7 @@ extern "C" {
     PyObject* module = Py_InitModule("starkeffect",StarkeffectMethods);
 		wrap_functions::initFunctions(module);
 		wrap_wave_function::initWaveFunction(module);
+		wrap_funct::initFunct(module);
 
 		
   }
