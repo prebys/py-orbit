@@ -206,11 +206,22 @@ double y = y(i)-y0;
 double R = 0.093115;
 
 
+/*
+cout<<x(i)<<" "<<z(i)<<"\n";
 
+if(((z0(i)<=2.936809)&&(2.936809<=z(i))&&(0.118921>=x(i))&&(x(i)>=0.026719)))	cout<<"foil"<<"\n";
+	
 
-
-
-
+if(((z0(i)<=z0)&&(z0<=z(i))		//intersection of flange z plane
+				
+		&&
+				
+		(x1*x1+y1*y1<=R*R)		//position of ring flange 
+					
+		&&
+		
+		(x*x*gammax+2*ax*x*xp+bx*xp*xp < ex)&&(y*y*gammay+2*ay*y*yp+by*yp*yp < ey)))	cout<<"ring"<<"\n";
+*/
 
 if(
 	
@@ -254,15 +265,13 @@ else
 
 
 
-
-void Walls::applyEffects(Bunch* bunch, int index, 
-	                            double* y_in_vct, double* y_out_vct, 
+void Walls::applyEffects(Bunch* bunch,
 														  double t, double t_step, 
 														  BaseFieldSource* fieldSource,
 															RungeKuttaTracker* tracker)			{
 
 
-	
+
 		for (int i=0; i<bunch->getSize();i++)	{
 
 			if(crossSurface(i,bunch))

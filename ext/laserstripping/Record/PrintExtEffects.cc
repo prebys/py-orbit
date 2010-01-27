@@ -45,10 +45,13 @@ void PrintExtEffects::setupEffects(Bunch* bunch){
 	setup_par = true;
 }
 
-void PrintExtEffects::applyEffects(Bunch* bunch, 
-														  double t, double t_step, 
-														  BaseFieldSource* fieldSource,
-															RungeKuttaTracker* tracker)			{
+
+	
+void PrintExtEffects::applyEffectsForEach(Bunch* bunch, int i, 
+				                            double* y_in_vct, double* y_out_vct, 
+																	  double t, double t_step, 
+																	  OrbitUtils::BaseFieldSource* fieldSource,
+																		RungeKuttaTracker* tracker)		{
 
 	if (setup_par == true)	{
 		Num = tracker->getStepsNumber();

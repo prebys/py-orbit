@@ -27,17 +27,13 @@ namespace LaserStripping{
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
 		
-		/*it memorizes initial coordinates and impulses before rk step*/
-		void memorizeInitParams(Bunch* bunch);
-		
-		/** It finalizes effects. */
-		void finalizeEffects(Bunch* bunch);
 
 		/** It applies the external effects to a particle with certain index. */
-		void applyEffects(Bunch* bunch,
-											double t, double t_step, 
-											OrbitUtils::BaseFieldSource* fieldSource,
-											RungeKuttaTracker* tracker);	
+		void applyEffectsForEach(Bunch* bunch, int index, 
+			                            double* y_in_vct, double* y_out_vct, 
+																  double t, double t_step, 
+																  OrbitUtils::BaseFieldSource* fieldSource,
+																	RungeKuttaTracker* tracker);	
 		
 		  private:
 	  
@@ -51,10 +47,23 @@ namespace LaserStripping{
 			  double d_Energy;
 			  double dip_transition;
 			  
-
+			  
+			  double x0;
+			  double y0;
+			  double z0;
+			  double px0;
+			  double py0;
+			  double pz0;
+			  
+			  double x;
+			  double y;
+			  double z;
+			  double px;
+			  double py;
+			  double pz;
+			  
 			  ParticleAttributes* AmplAttr;
 			  ParticleAttributes* PopAttr;
-			  ParticleAttributes* Coords;
 		  
 
 			  			 

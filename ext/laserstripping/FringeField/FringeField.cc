@@ -30,7 +30,7 @@ FringeField::FringeField(double d,double F, int derivative)
 {
 	
 	gap = d;
-	By = F;
+	Bx = F;
 	der = derivative;
 
 }
@@ -71,7 +71,7 @@ void FringeField::getElectricMagneticField(double x, double y, double z, double 
 	H_y=0;
 	H_z=0;
 	
-	H_x=By/(1+exp(0.478959+1.911289*coeff_2-1.185953*coeff_3+1.630554*coeff_4-1.082657*coeff_5+0.318111*coeff_6));
+	H_x=Bx/(1+exp(0.478959+1.911289*coeff_2-1.185953*coeff_3+1.630554*coeff_4-1.082657*coeff_5+0.318111*coeff_6));
 
 
 return;

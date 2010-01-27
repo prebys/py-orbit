@@ -48,16 +48,6 @@
 #define pop(i,n) PopAttr->attArr(i)[n]		//i-part index, n,m-attr index
 
 
-#define x0(i) 	 Coords->attArr(i)[0]
-#define y0(i)  	 Coords->attArr(i)[2]
-#define z0(i)  	 Coords->attArr(i)[4]
-#define px0(i)   Coords->attArr(i)[1]
-#define py0(i)   Coords->attArr(i)[3]
-#define pz0(i)   Coords->attArr(i)[5]
-
-
-
-
 using namespace LaserStripping;
 using namespace OrbitUtils;
 
@@ -119,15 +109,6 @@ void HminusStripping::setupEffects(Bunch* bunch){
 		}
 	
 	
-	
-	
-	if (bunch->hasParticleAttributes("pq_coords")==0)	{
-	std::map<std::string,double> part_attr_dict;
-	part_attr_dict["size"] = 6;
-	bunch->addParticleAttributes("pq_coords",part_attr_dict);
-	}
-	
-	Coords = bunch->getParticleAttributes("pq_coords");
 	PopAttr = bunch->getParticleAttributes("Populations");
 	
 
@@ -135,27 +116,8 @@ void HminusStripping::setupEffects(Bunch* bunch){
 }
 		
 
-void HminusStripping::memorizeInitParams(Bunch* bunch){
-	
-	for (int i=0; i<bunch->getSize();i++)		{
-		x0(i)=bunch->coordArr()[i][0];
-		y0(i)=bunch->coordArr()[i][2];
-		z0(i)=bunch->coordArr()[i][4];
-		
-		px0(i)=bunch->coordArr()[i][1];
-		py0(i)=bunch->coordArr()[i][3];
-		pz0(i)=bunch->coordArr()[i][5];
-		
-	}
-	
-
-}
 	
 void HminusStripping::finalizeEffects(Bunch* bunch){
-	
-	
-	if(bunch->hasParticleAttributes("pq_coords")==1)
-		bunch->removeParticleAttributes("pq_coords");
 	
 	
 	if(index==1)	{
@@ -171,18 +133,17 @@ void HminusStripping::finalizeEffects(Bunch* bunch){
 
 
 
-void HminusStripping::applyEffects(Bunch* bunch, int index, 
+void HminusStripping::applyEffectsForEach(Bunch* bunch, int i, 
 	                            double* y_in_vct, double* y_out_vct, 
 														  double t, double t_step, 
 														  BaseFieldSource* fieldSource,
 															RungeKuttaTracker* tracker)			{
 
 
-
-
-	
-		for (int i=0; i<bunch->getSize();i++)	{
-			
+	x0 = y_in_vct[0];y0 = y_in_vct[1];z0 = y_in_vct[2];
+	px0 = y_in_vct[3];py0 = y_in_vct[4];pz0 = y_in_vct[5];
+	x = y_out_vct[0];y = y_out_vct[1];z = y_out_vct[2];
+	px = y_out_vct[3];py = y_out_vct[4];pz = y_out_vct[5];
 
 	
 			
@@ -198,7 +159,7 @@ void HminusStripping::applyEffects(Bunch* bunch, int index,
 			AmplSolver4step(t_step, i,bunch);	
 			
 				
-		}	
+
 
 //	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\n";
 
@@ -225,8 +186,8 @@ void HminusStripping::GetParticleFrameFields(int i,double t,double t_step,  Bunc
 
 	double Ez;
 	
-		fieldSource->getElectricMagneticField(x0(i),y0(i),z0(i),t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
-		LorentzTransformationEM::transform(bunch->getMass(),px0(i),py0(i),pz0(i),Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);
+		fieldSource->getElectricMagneticField(x0,y0,z0,t,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);		
+		LorentzTransformationEM::transform(bunch->getMass(),px0,py0,pz0,Ex_stat,Ey_stat,Ez_stat,Bx_stat,By_stat,Bz_stat);
 
 		
 		
@@ -256,7 +217,7 @@ void	HminusStripping::GetParticleFrameParameters(int i, double t,double t_step, 
 	double m=bunch->getMass();
 
 //This line calculates relyativistic factor-Gamma
-double gamma=sqrt(m*m+px0(i)*px0(i)+py0(i)*py0(i)+pz0(i)*pz0(i))/m;
+double gamma=sqrt(m*m+px0*px0+py0*py0+pz0*pz0)/m;
 double coeff=1./(gamma*ta);
 
 part_t_step=t_step*coeff;	//time step in frame of particle (in atomic units)
@@ -324,9 +285,6 @@ void HminusStripping::AmplSolver4step(double t_step, int i, Bunch* bunch)	{
 		
 		if((index == 1)&&(flag == 0))	{
 			
-	        double px = bunch->px(i);
-	        double py = bunch->py(i);
-	        double pz = bunch->pz(i);
 	        double mass = bunch->getMass();
 	        double vp = t_step*299792458/sqrt(px*px+py*py+pz*pz+mass*mass);
 	        

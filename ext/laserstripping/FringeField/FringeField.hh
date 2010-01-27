@@ -48,7 +48,7 @@ namespace OrbitUtils{
 		private:
 			
 			double gap;
-			double By;
+			double Bx;
 			int der;
 			
 			

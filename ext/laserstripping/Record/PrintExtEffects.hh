@@ -28,10 +28,11 @@ namespace LaserStripping{
 
 
 		/** ??????????????????. */
-		void applyEffects(Bunch* bunch, 
-											 double t, double t_step, 
-											 OrbitUtils::BaseFieldSource* fieldSource,
-											 RungeKuttaTracker* tracker);	
+		void applyEffectsForEach(Bunch* bunch, int i, 
+                double* y_in_vct, double* y_out_vct, 
+										  double t, double t_step, 
+										  OrbitUtils::BaseFieldSource* fieldSource,
+											RungeKuttaTracker* tracker);	
 		
 		  private:
 				

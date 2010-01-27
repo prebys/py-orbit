@@ -164,9 +164,10 @@ tcomplex	E=Unm*getNonOrientedU(n_moda,m_moda,x,y,z,t);
 			if ((absp != absp)||(fabs(absp-1.)>1.0e-3))
 			exp_phasa = tcomplex(0.,0.);
 
-
+			if(env_sigma>0)	{
 			double ex = ((z - env_peak)/OrbitConst::c - t)/env_sigma;
 			E *= exp(-ex*ex/4);
+			}
 
 tcomplex	H=E/OrbitConst::c;
 
