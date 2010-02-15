@@ -27,7 +27,7 @@ INC += $(foreach dir,$(DIRS),$(wildcard ./$(dir)/*.h))
 LIBS +=  -L/home/tg4/tools/gmp-4.2.4/lib  -lgmp
 LIBS +=  -L/home/tg4/tools/mpc-0.7/lib    -lmpc
 LIBS +=  -L/home/tg4/tools/mpfr-2.4.1/lib -lmpfr
-LIBS +=  -L/home/tg4/tools/gmpfrxx 		-lgmpxx
+LIBS +=  -L/home/tg4/tools/gmpfrxx 		-lgmpfrxx
 
 
 
