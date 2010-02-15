@@ -120,8 +120,8 @@ long int Functions::calcPrecisionForM(int& err_exp, int exp_minG, int max_err_ex
 			else
 				{err_exp = exponent + exp_minG - 20;}
 			out_len = exponent - err_exp;
-			cout<<"out_len = "<<out_len<<"\n";
-			cout<<"err_exp = "<<err_exp<<"\n";
+//			cout<<"out_len = "<<out_len<<"\n";
+//			cout<<"err_exp = "<<err_exp<<"\n";
 		}
 
 
@@ -290,7 +290,7 @@ long int Functions::calcPrecisionForN(std::string& str_N, std::string& str_derN,
 
 	
 	while(true)	{
-		crit =  out_lenN + precisionN - getN(str_N,  str_derN, c_F,  c_energy,  c_Z2);
+		crit =  - out_lenN + precisionN - getN(str_N,  str_derN, c_F,  c_energy,  c_Z2);
 		if (crit>=500)	{pointN1++; pointN2 = pointN1*pointN1;}
 		if (crit<=300)	{pointN1--; pointN2 = pointN1*pointN1;}
 		if ((crit>300)&&(crit<500))	break;
@@ -440,7 +440,7 @@ long int Functions::getN(std::string& str_N, std::string& str_der_N,std::string 
 		
 		mpfr_log10(Ci_max,Ci_max,GMP_RNDN);
 		mpc_abs(abs_sum_N,sum_N,GMP_RNDN);
-		mpfr_log10(abs_sum_N,absCi,GMP_RNDN);
+		mpfr_log10(abs_sum_N,abs_sum_N,GMP_RNDN);
 		long int poww = (long int)mpfr_get_d(Ci_max,GMP_RNDN) - (long int)mpfr_get_d(abs_sum_N,GMP_RNDN);
 		
 		mpfr_clear(F);
