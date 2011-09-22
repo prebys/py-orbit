@@ -70,11 +70,11 @@ TDMcontinuum::TDMcontinuum(std::string addr_trans)
 		
 	if((dp = opendir(addr_trans.c_str())) == NULL) 		cout << "Error(" << errno << ") opening " << addr_trans << endl;
 
-
+	
 	num_files = 0;
 	levels=0;
 	while ((dirp = readdir(dp)) != NULL)	
-	if(string(dirp->d_name)!=string("..")&&string(dirp->d_name)!=string("."))	{
+	if(string(dirp->d_name)[0]==string("T")[0])	{
 		num_files++;
 		
 		snprintf(addr_file,MAX_LENGTH_ADDRESS,"%s%s",addr_trans.c_str(),string(dirp->d_name).c_str());
@@ -86,7 +86,7 @@ TDMcontinuum::TDMcontinuum(std::string addr_trans)
 		
 		deltaE = temp2 - temp1;
 		
-		temp_str = string(dirp->d_name);	temp_str.erase(0,6);	temp_str.erase(temp_str.size()-4,4);	FF[num_files] = atof(temp_str.c_str());
+		temp_str = string(dirp->d_name);	temp_str.erase(0,6);	 temp_str.erase(temp_str.size()-4,4);  	FF[num_files] = atof(temp_str.c_str());
 		
 		if(num_files == 1)	{Fmin = FF[num_files]; Fmax = FF[num_files];}
 		else	
@@ -96,6 +96,7 @@ TDMcontinuum::TDMcontinuum(std::string addr_trans)
 		}
 		
 	}
+
 	
 	closedir(dp);
 	}
@@ -174,7 +175,7 @@ TDMcontinuum::~TDMcontinuum()	{
 void	TDMcontinuum::SetE(double E){
 	
 	if(E>Fmax||E<Fmin)	{
-		cout<<"error:	Electric field in the particle rest frame lies outside of data on TDM of continuum spectra";
+		cout<<"error:	Electric field in the particle rest frame"<<"  E=  "<<E<<" lies outside of data on TDM of continuum spectra"<<" ("<<Fmin<<","<<Fmax<<") ";
 		abort();
 	}
 	else

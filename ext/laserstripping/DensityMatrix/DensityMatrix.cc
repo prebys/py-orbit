@@ -32,7 +32,7 @@
 #include <cmath>
 #include <fstream>
 
-
+#include <boost/python/module.hpp>
 
 #include "DensityMatrix.hh"
 #include "RungeKuttaTracker.hh"

@@ -71,6 +71,7 @@ void TwoLevelAtom::CalcPopulations(int i, Bunch* bunch)	{
 
 void TwoLevelAtom::setupEffects(Bunch* bunch){
 	
+	
 	if(bunch->hasParticleAttributes("Amplitudes")==0)	{
 		std::map<std::string,double> part_attr_dict;
 		part_attr_dict["size"] = 5;
@@ -111,11 +112,12 @@ void TwoLevelAtom::applyEffectsForEach(Bunch* bunch, int i,
 	px = y_out_vct[3];py = y_out_vct[4];pz = y_out_vct[5];
 	
 
-		if(LaserField->region(x,y,z)){
+
+		if(LaserField->region(x,y,z))	{
 			//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	
 			//in natural unts (Volt per meter)	in the frame of particle				
-			GetParticleFrameFields(i, t,t_step, bunch);
-		}
+		GetParticleFrameFields(i, t,t_step, bunch);
+
 		
 		//	This function gives parameters Ez_stat	Ex_las[1...3]	Ey_las[1...3]	Ez_las[1...3]	t_part	omega_part	part_t_step 
 		//in atomic units in frame of particle		
@@ -125,6 +127,8 @@ void TwoLevelAtom::applyEffectsForEach(Bunch* bunch, int i,
 		AmplSolver4step(i,bunch);	
 		
 		CalcPopulations(i, bunch);
+		
+		}
 	
 }
 

@@ -279,7 +279,7 @@ void Stark::getTransition(int k,int ks,tcomplex& mu_x,tcomplex& mu_y,tcomplex& m
 
 double Stark::getRelax(int k,int ks){
 	
-	double mu_xd, mu_yd, mu_zd;
+	double mu_xd = 0, mu_yd = 0, mu_zd = 0;
 	
 	double absdE = fabs(En[k]-En[ks]);
 	
@@ -297,7 +297,7 @@ double Stark::getRelax(int k,int ks){
 
 double Stark::getRelaxTransition(int k,int ks,tcomplex& mu_x,tcomplex& mu_y,tcomplex& mu_z){
 	
-	double mu_xd, mu_yd, mu_zd;
+	double mu_xd = 0, mu_yd = 0, mu_zd = 0;
 	double absdE = fabs(En[k]-En[ks]);
 	
 	E_pow_n[0] = 1;
