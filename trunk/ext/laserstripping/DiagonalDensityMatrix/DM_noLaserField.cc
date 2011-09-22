@@ -144,7 +144,7 @@ px0 = y_in_vct[3];py0 = y_in_vct[4];pz0 = y_in_vct[5];
 		
 			CalcPopulations(i, bunch);
 
-//	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\n";
+	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\t"<<PopAttr->attArr(i)[0]<<"\n";
 }
 
 void DM_noLaserField::GetParticleFrameFields(int i,double t,double t_step,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
@@ -191,6 +191,7 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 		for(int m=1; m<n;m++) {
 			if (cond[n][m] && StarkEffect->field_thresh[n]>Ez_stat && StarkEffect->field_thresh[m]>Ez_stat)	{
 				gamma_ij[n][m] = StarkEffect->getRelax(n,m);
+
 			}
 		}
 	}

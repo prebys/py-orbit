@@ -20,6 +20,8 @@
 #include "wrap_stark_strong_field.hh"
 #include "wrap_cone_lf_mode.hh"
 #include "wrap_hminus_stripping.hh"
+#include "wrap_continuum_ss.hh"
+#include "wrap_tdm_continuum.hh"
 
 static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
@@ -50,6 +52,8 @@ extern "C" {
 		wrap_stark_strong_field::initStarkStrongField(module);
 		wrap_cone_lf_mode::initConeLFmode(module);
 		wrap_hminus_stripping::initHminusStripping(module);
+		wrap_continuum_ss::initContinuumSS(module);
+		wrap_tdm_continuum::initTDMcontinuum(module);
 		
   }
 	

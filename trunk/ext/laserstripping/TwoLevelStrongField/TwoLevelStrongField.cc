@@ -210,6 +210,8 @@ void TwoLevelStrongField::GetParticleFrameFields(int i,double t,double t_step,  
 			E_y=abs(Ey_las[j]);
 			E_z=abs(Ez_las[j]);
 			
+			
+			
 			if(Stark->m == 0)
 			Eabs = E_z;
 			if(Stark->m == 1)
@@ -254,7 +256,10 @@ void	TwoLevelStrongField::GetParticleFrameParameters(int i, double t,double t_st
 //		if(((int)(t/t_step))%100 == 0)
 //		cout<<t<<"\t"<<Ez_stat<<"\n";
 	
-	//cout<<gamma*ta*LaserField->getFrequencyOmega(m,x0(i),y0(i),z0(i),px0(i),py0(i),pz0(i),t)<<"\n";	
+//	double omega = gamma*ta*LaserField->getFrequencyOmega(m,x0,y0,z0,px0,py0,pz0,t);	
+	
+	
+
 }
 
 void TwoLevelStrongField::AmplSolver4step(int i, Bunch* bunch)	{

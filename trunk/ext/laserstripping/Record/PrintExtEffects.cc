@@ -64,16 +64,17 @@ void PrintExtEffects::applyEffectsForEach(Bunch* bunch, int i,
 	}
 	
 	if(int((t-t_in+t_step)/t_step+0.5)%(Num/num_print) == 0)		{
-		for (int i=0; i<bunch->getSize();i++)	{
+
 			snprintf(addr_name,MAX_LENGTH_ADDRESS,"%s%i.dat",addr_print.c_str(),i*size_MPI+rank_MPI);
 			ofstream file(addr_name,ios::app);
 			file<<t;
-			for (int j=0; j<bunch->getParticleAttributes(eff_name)->getAttSize();j++)	{
+			for (int j=0; j<bunch->getParticleAttributes(eff_name)->getAttSize();j++)	
+			{
 				file<<"\t"<<bunch->getParticleAttributes(eff_name)->attArr(i)[j];
 			}
 			file<<"\n";
 			file.close();
-		}	
+
 	}
 }
 															
