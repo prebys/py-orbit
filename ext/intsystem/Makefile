@@ -27,10 +27,13 @@ WRAPPER_FLAGS = -fno-strict-aliasing
 CXXFLAGS += -fPIC
 
 #shared library flags
+#SHARED_LIB = -dynamiclib -undefined suppress -flat_namespace
 SHARED_LIB = -shared
 
 #tracker shared library
 external_lib = intsystem.so
+
+#LINKFLAGS += -L/System/Library/Frameworks/Python.framework/Versions/2.6/lib/python2.6/config -lpython2.6
 
 #========rules=========================
 compile: $(OBJS_WRAP) $(OBJS) $(INC)
