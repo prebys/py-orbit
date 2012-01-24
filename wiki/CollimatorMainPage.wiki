@@ -1,3 +1,4 @@
+#summary General summary of how to create and use a collimator
 = Summary =
 The collimator class and auxiliary classes model the propagation of protons through various materials. The module only applies to protons in the energy range of 0 - 1.5 GeV. Other particle species are not handled, and there are no secondary particles generated.
 
