@@ -36,8 +36,6 @@ A collimator must be placed in a drift section whose length is equal to or great
      * lattice: The Teapot lattice the collimator should be added to.
      * position: The start position of the collimator in the lattice.
      * collimator_node: A previously defined collimator
-  # *track(_Dict_ paramsDict)*. A method of the TeapotCollimatorNode which tracks the particles through the collimator. An implementation AccNodeBunchTracker for the teapot collimator. Variables:  
-     * paramsDict: A dictionary which should contain two items: 1) the main bunch to be collimated, and 2) the bunch to be populated with lost particles, which should have ParticleAttribute "LostParticleAttributes"
 
 = Example Scripts = 
 
