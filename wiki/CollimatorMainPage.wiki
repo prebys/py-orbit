@@ -8,12 +8,12 @@ Six materials are available for the collimator: 1=carbon, 2=aluminum, 3=iron, 4=
 The module requires input of two bunches from the Bunch class: one bunch for the alive particles being propagated, and one bunch to be populated with particles lost in the collimator. Particles are lost in the collimator when their energy is below 20 MeV, or when they suffer a nuclear inelastic scattering event. 
 
 = Associated Classes =
-  * *Collimator* - The class which defines the collimator and propagates particles. Address: $ORBIT_ROOT/src/orbit/MaterialInteractions/ .
-  * *MaterialInteractions* - Class containing a collection of particle scattering methods. Address: $ORBIT_ROOT/src/orbi/MaterialInteractions/ .
-  * *cross_sections* - This class belongs to namespace OrbitUtils.  It contains the elestic and inelastic cross sections for each material (barns), and material properties in MKS units. Address: $ORBIT_ROOT/src/orbi/MaterialInteractions/ .
-  * *num_recipes* - Numerical recipes used in scattering models. Address: $ORBIT_ROOT/src/orbi/MaterialInteractions/ .
-  * *wrap_collimator* - The python wrapper class for Collimator. Address: $ORBIT_ROOT/src/orbi/MaterialInteractions/ .
-  * *TeaPotCollimatorNode* - The python module that allows a user to  define collimator. Address: $ORBIT_ROOT/py/orbit/collimation/ .
-  * *collimatorLatticeModifications* - The python module that allows a user to  add a defined collimator to the lattice in a drift region. Address: $ORBIT_ROOT/py/orbit/collimation/ .
+  * *Collimator* - The class which defines the collimator and propagates particles. _Address_: $ORBIT_ROOT/src/orbit/MaterialInteractions/ .
+  * *MaterialInteractions* - Class containing a collection of particle scattering methods. _Address_:&nbsp;$ORBIT_ROOT/src/orbi/MaterialInteractions/ .
+  * *cross_sections* - This class belongs to namespace OrbitUtils.  It contains the elestic and inelastic cross sections for each material (barns), and material properties in MKS units. _Address_:$ORBIT_ROOT/src/orbi/MaterialInteractions/ .
+  * *num_recipes* - Numerical recipes used in scattering models. _Address_: $ORBIT_ROOT/src/orbi/MaterialInteractions/ .
+  * *wrap_collimator* - The python wrapper class for Collimator. _Address_: $ORBIT_ROOT/src/orbi/MaterialInteractions/ .
+  * *TeaPotCollimatorNode* - The python module that allows a user to  define collimator. _Address_: $ORBIT_ROOT/py/orbit/collimation/ .
+  * *collimatorLatticeModifications* - The python module that allows a user to  add a defined collimator to the lattice in a drift region. _Address_: $ORBIT_ROOT/py/orbit/collimation/ .
 
 = User Accessible Methods and Variables =
