@@ -5,3 +5,6 @@
 Methods for creating a Teapot style collimator
 
 = User-Accessible Methods =
+
+  # *track(_Dict_ paramsDict)*. A method of the TeapotCollimatorNode which tracks the particles through the collimator. An implementation AccNodeBunchTracker for the teapot collimator. Variables:  
+     * paramsDict: A dictionary which should contain two items: 1) the main bunch to be collimated, and 2) the bunch to be populated with lost particles, which should have ParticleAttribute "LostParticleAttributes"
