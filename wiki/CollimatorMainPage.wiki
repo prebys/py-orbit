@@ -1,9 +1,13 @@
-#summary One-sentence summary of this page.
 
-= Introduction =
-Hello World
+= Summary =
+The collimator class and auxiliary classes model the propagation of protons through various materials. The module only applies to protons in the energy range of 0 - 1.5 GeV. Other particle species are not handled, and there are no secondary particles generated.
 
+There are five available collimator shapes: cirlce, elliptical, one sided flat, two sided flat, and rectangular.  The shape and aperture of the collimator are specified by the user.  0 aperture corresponds to a solid slab of material. 
 
-= Details =
+Six materials are available for the collimator: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.  The black absorber acts like an aperture which absorbs a particle on impact. There is also a user-specified density factor for each material, useful for modeling materials that are layered with water or air. 
+
+The module requires input of two bunches from the Bunch class: one bunch for the alive particles being propagated, and one bunch to be populated with particles lost in the collimator. Particles are lost in the collimator when their energy is below 20 MeV, or when they suffer a nuclear inelastic scattering event. 
+
+= List of Classes =
 
 No details yet. 
