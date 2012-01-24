@@ -21,7 +21,7 @@ A collimator must be placed in a drift section whose length is equal to or great
 || collimatorLatticeModifications || The python module that allows a user to  add a defined collimator to the lattice in a drift region || $ORBIT_ROOT/py/orbit/collimation/ ||
 
 = User-Accessible Methods and Variables =
-  # *TeapotCollimatorNode(_int_ length, _int_ ma, _double_ density_fac, _int_ shape, _double_  a, _double_ b, _double_ c, _double_ d, _double_ angle, _string_ name)*. An instance of a collimator. Used to create a collimator. Variables:
+  # *TeapotCollimatorNode(_int_ length, _int_ ma, _double_ density_fac, _int_ shape, _double_  a, _double_ b, _double_ c, _double_ d, _double_ angle, _string_ name)*. An instance of a collimator. Creates a teapot style collimator and contains methods to track through this collimator. Variables:
      * length: Length of the collimator in meters
      * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
      * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
