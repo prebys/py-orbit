@@ -63,9 +63,9 @@ addTeapotColimatorNode(teapot_latt, 18.5, collimator)
 #Lost bunch initialization
 #------------------------------
 
-paramsDict = {}
 lostbunch = Bunch()
 lostbunch.addPartAttr("LostParticleAttributes")
+paramsDict = {}
 paramsDict["lostbunch"]=lostbunch
 paramsDict["bunch"]= b
 
@@ -77,5 +77,23 @@ bunch.dumpBunch()
 lostbunch.dumpBunch()
 print "Stop."
 
+
+}}}
+
+In the following piece of code a short 1.5 cm, one-sided flat copper collimator with aperture 5 cm is defined. The collimator is tilted at a 45 degree angle.
+
+{{{
+
+length = 0.015
+ma = 4
+density_fac = 1.0
+shape = 3
+a = 0.05
+b = 0
+c = 0
+d = 0
+angle = 45
+
+collimator = TeapotCollimatorNode(length, ma, density_fac, shape, a, b, c, d, angle, "Collimator Scraper")
 
 }}}
