@@ -21,7 +21,7 @@ A collimator must be placed in a drift section whose length is equal to or great
 || collimatorLatticeModifications || The python module that allows a user to  add a defined collimator to the lattice in a drift region || $ORBIT_ROOT/py/orbit/collimation/ ||
 
 = User-Accessible Methods and Variables =
-  # *!TeapotCollimatorNode(_int_ length, _int_ ma, _double_ density_fac, _int_ shape, _double_  a, _double_ b, _double_ c, _double_ d, _double_ angle, _string_ name)*. An instance of a collimator. Used to create a collimator. Variables:
+  # *TeapotCollimatorNode(_int_ length, _int_ ma, _double_ density_fac, _int_ shape, _double_  a, _double_ b, _double_ c, _double_ d, _double_ angle, _string_ name)*. An instance of a collimator. Used to create a collimator. Variables:
      * length: Length of the collimator in meters
      * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
      * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
@@ -38,3 +38,57 @@ A collimator must be placed in a drift section whose length is equal to or great
      * collimator_node: A previously defined collimator
   # *track(_Dict_ paramsDict)*. A method of the TeapotCollimatorNode which tracks the particles through the collimator. An implementation AccNodeBunchTracker for the teapot collimator. Variables:  
      * paramsDict: A dictionary which should contain two items: 1) the main bunch to be collimated, and 2) the bunch to be populated with lost particles, which should have ParticleAttribute "LostParticleAttributes"
+
+= Example Scripts = 
+
+The following example demonstrates a bunch being propagated through a circular iron collimator of length 0.5 meters and aperture 10 cm whose front face is located 18.5 meters from the start of an existing teapot lattice. The main bunch and lost particle bunches are created and then tracked through one turn of the lattice.  At the end, the main bunch and lost bunch particle parameters are printed. 
+{{{
+length = 0.5
+ma = 3
+density_fac = 1.0
+shape = 1
+a = 0.01
+b = 0
+c = 0
+d = 0
+angle = 0
+
+collimator = TeapotCollimatorNode(length, ma, density_fac, shape, a, b, c, d, angle, "Collimator 1")
+
+addTeapotColimatorNode(teapot_latt, 18.5, collimator) 
+
+#------------------------------
+#Main Bunch init
+#------------------------------
+b = Bunch()
+print "Read Bunch."
+runName = "Benchmark_Collimator"
+
+b.mass(0.93827231)
+b.macroSize(1.0e+1)
+energy = 1.0 #Gev
+# get initial bunch from ORBIT_MPI input
+bunch_orbit_to_pyorbit(teapot_latt.getLength(), energy, "Bm_KV_Uniform_100",b)
+#b.readBunch("parts_in.dat")
+
+b.getSyncParticle().kinEnergy(energy)
+
+#=====track bunch through Collimator Node============
+paramsDict = {}
+lostbunch = Bunch()
+paramsDict["lostbunch"]=lostbunch
+paramsDict["bunch"]= b
+
+lostbunch.addPartAttr("LostParticleAttributes") 
+
+#collimator.trackBunch(b,paramsDict)
+collimator.track(paramsDict)
+
+# dump ORBIT_MPI bunch to compare results
+bunch_pyorbit_to_orbit(teapot_latt.getLength(), b, "mainbunch.dat")
+bunch_pyorbit_to_orbit(teapot_latt.getLength(), lostbunch, "lostbunch.dat")
+lostbunch.dumpBunch()
+print "Stop."
+
+
+}}}
