@@ -97,3 +97,5 @@ angle = 45
 collimator = TeapotCollimatorNode(length, ma, density_fac, shape, a, b, c, d, angle, "Collimator Scraper")
 
 }}}
+
+Complete run examples can be found in $ORBIT_ROOT/examples/Collimation/ORBIT_Benchmarks/ .
