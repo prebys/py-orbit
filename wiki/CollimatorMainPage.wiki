@@ -41,8 +41,10 @@ A collimator must be placed in a drift section whose length is equal to or great
 
 = Example Scripts = 
 
-The following example demonstrates a bunch being propagated through a circular iron collimator of length 0.5 meters and aperture 10 cm whose front face is located 18.5 meters from the start of an existing teapot lattice. The main bunch and lost particle bunches are created and then tracked through one turn of the lattice.  At the end, the main bunch and lost bunch particle parameters are printed. 
+The following example demonstrates a bunch being propagated through a circular iron collimator of length 0.5 meters and aperture 10 cm whose front face is located 18.5 meters from the start of an existing teapot lattice. It is assumed that the main bunch, "b", is already defined, but that the lost bunch needs creation.  At the end, the main bunch and lost bunch particle parameters are printed. 
 {{{
+
+
 length = 0.5
 ma = 3
 density_fac = 1.0
@@ -58,35 +60,20 @@ collimator = TeapotCollimatorNode(length, ma, density_fac, shape, a, b, c, d, an
 addTeapotColimatorNode(teapot_latt, 18.5, collimator) 
 
 #------------------------------
-#Main Bunch init
+#Lost bunch initialization
 #------------------------------
-b = Bunch()
-print "Read Bunch."
-runName = "Benchmark_Collimator"
 
-b.mass(0.93827231)
-b.macroSize(1.0e+1)
-energy = 1.0 #Gev
-# get initial bunch from ORBIT_MPI input
-bunch_orbit_to_pyorbit(teapot_latt.getLength(), energy, "Bm_KV_Uniform_100",b)
-#b.readBunch("parts_in.dat")
-
-b.getSyncParticle().kinEnergy(energy)
-
-#=====track bunch through Collimator Node============
 paramsDict = {}
 lostbunch = Bunch()
+lostbunch.addPartAttr("LostParticleAttributes")
 paramsDict["lostbunch"]=lostbunch
 paramsDict["bunch"]= b
 
-lostbunch.addPartAttr("LostParticleAttributes") 
-
-#collimator.trackBunch(b,paramsDict)
+#=====track bunch through Collimator Node============
 collimator.track(paramsDict)
 
 # dump ORBIT_MPI bunch to compare results
-bunch_pyorbit_to_orbit(teapot_latt.getLength(), b, "mainbunch.dat")
-bunch_pyorbit_to_orbit(teapot_latt.getLength(), lostbunch, "lostbunch.dat")
+bunch.dumpBunch()
 lostbunch.dumpBunch()
 print "Stop."
 
