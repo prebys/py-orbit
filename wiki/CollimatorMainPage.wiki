@@ -7,9 +7,11 @@ Six materials are available for the collimator: 1=carbon, 2=aluminum, 3=iron, 4=
 
 The module requires input of two bunches from the Bunch class: one bunch for the alive particles being propagated, and one bunch to be populated with particles lost in the collimator. Particles are lost in the collimator when their energy is below 20 MeV, or when they suffer a nuclear inelastic scattering event. 
 
+A collimator must be placed in a drift section which is equal to longer than the collimator length. The space in the drift will be re-allocated to the collimator and surrounding drift region(s) such that the original drift length of the section is preserved. 
+
 = Associated Classes =
   * *Collimator* - The class which defines the collimator and propagates particles. _Address_: $ORBIT_ROOT/src/orbit/MaterialInteractions/ .
-  * *MaterialInteractions* - Class containing a collection of particle scattering methods. _Address_:&nbsp;$ORBIT_ROOT/src/orbi/MaterialInteractions/ .
+  * *MaterialInteractions* - Class containing a collection of particle scattering methods. _Address_:$ORBIT_ROOT/src/orbi/MaterialInteractions/ .
   * *cross_sections* - This class belongs to namespace OrbitUtils.  It contains the elestic and inelastic cross sections for each material (barns), and material properties in MKS units. _Address_:$ORBIT_ROOT/src/orbi/MaterialInteractions/ .
   * *num_recipes* - Numerical recipes used in scattering models. _Address_: $ORBIT_ROOT/src/orbi/MaterialInteractions/ .
   * *wrap_collimator* - The python wrapper class for Collimator. _Address_: $ORBIT_ROOT/src/orbi/MaterialInteractions/ .
@@ -17,3 +19,14 @@ The module requires input of two bunches from the Bunch class: one bunch for the
   * *collimatorLatticeModifications* - The python module that allows a user to  add a defined collimator to the lattice in a drift region. _Address_: $ORBIT_ROOT/py/orbit/collimation/ .
 
 = User Accessible Methods and Variables =
+  # TeapotCollimatorNode(_int_ length, _int_ ma, _double_ density_fac, _int_ shape, _double_  a, _double_ b, _double_ c, _double_ d, _double_ angle, _string_ name)
+     * length: length of the collimator in meters
+     * ma: material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
+     * density_fac: A multiplier on the density of chosen material
+     * shape: shape type index: 1=circle, 2=ellipse, 3=one sided flat, 4=two sided flat, 5=rectangular (outside is collimator), 6=rectangular (inside is collimator). 
+     * a: radius for circular collimator, x-axis for elliptical, horizontal right side extent for flat and rectangular.
+     * b: y-axis for elliptical, left side horizontal extent for two-sided flat or rectangular. 
+     * c: upper side vertical extent for rectangular. 
+     * d: lower side vertical extent for rectangular.
+     * angle: tilt angle of the collimator defined in degrees.
+     * name: the name of the collimator.  
