@@ -8,8 +8,8 @@ None of the methods in this class are directly accessible from the python level.
 
 = Methods =
 
-  # *momentumKick(double t, double p, double& dpx, double& dpy)*. This routine applies a random, uniformly distributed 2D momentum kick. See Monte Carlo Methods in PDG, or the K2 code description in the PhD thesis of Nuria Catalan-Lasheras.
-  # *mcsJackson(double stepsize, double z, double a, double rho, long& idum, double beta, double pfac, double& x, double& y, double& px, double& py)*. Applies a multiple coulomb scattering kick following JD Jackson, Chapter 13, () edition.
-  # *ruthScattJackson(double stepsize, double z, double a, double rho, long& idum, double beta, int trackit, double pfac, double& thetax, double& thetay)*. Applies large angle Rutherford scattering kicks following JD Jackson, Chapter 13 () edition.
-  # *elastic_t(double p, double a, long& idum)* Routine to generate a random momentum transfer for low energy elastic scattering (<= 0.4 GeV). Follows K2 code described in PhD thesis of Nuria Catalan-Lasheras.
-  # *ionEnergyLoss(double beta, double z, double a)* Routine to calculate ionization energy loss based on Bethe-Bloch equation, see PDG Handbook. 
+  # *momentumKick(double t, double p, double& dpx, double& dpy)*:  This routine applies a random, uniformly distributed 2D momentum kick. See Monte Carlo Methods in PDG, or the K2 code description in the PhD thesis of Nuria Catalan-Lasheras.
+  # *mcsJackson(double stepsize, double z, double a, double rho, long& idum, double beta, double pfac, double& x, double& y, double& px, double& py)*:  Applies a multiple coulomb scattering kick following JD Jackson, Chapter 13, () edition.
+  # *ruthScattJackson(double stepsize, double z, double a, double rho, long& idum, double beta, int trackit, double pfac, double& thetax, double& thetay)*:  Applies large angle Rutherford scattering kicks following JD Jackson, Chapter 13 () edition.
+  # *elastic_t(double p, double a, long& idum)* Routine to generate a random momentum transfer for low energy elastic scattering (<= 0.4 GeV):  Follows K2 code described in PhD thesis of Nuria Catalan-Lasheras.
+  # *ionEnergyLoss(double beta, double z, double a)*:  Routine to calculate ionization energy loss based on Bethe-Bloch equation, see PDG Handbook. 
