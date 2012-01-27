@@ -15,4 +15,8 @@ This class constructs a collimator and calls the materials scattering routines t
      * c: Upper side vertical extent for rectangular. 
      * d: Lower side vertical extent for rectangular.
      * angle: Tilt angle of the collimator defined in degrees.
+  # collimateBunch(Bunch* bunch, Bunch* lostbunch)
+     * bunch: The Bunch to be collimated.
+     * lostbunch: The Bunch to be populated with particles absorbed in the collimator. 
+  
   
