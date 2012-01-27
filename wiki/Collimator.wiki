@@ -1,7 +1,7 @@
 #summary Description of the Collimator class
 
 = Summary =
-This class constructs a collimator and calls the materials scattering routines to propagate the particles through the collimator. The stepsize of the particle in the collimator is based on the mean free path of the particle in the chosen material with a random factor. The scattering methods used are in the MaterialsInteraction class. More information on the implementation of this class can be found in the CollimatorMainPage. 
+This class constructs a collimator and calls the materials scattering routines to propagate the particles through the collimator. The stepsize of the particle in the collimator is based on the mean free path of the particle in the chosen material with a random factor. The scattering methods used are in the MaterialsInteractions class. More information on the implementation of this class can be found in the CollimatorMainPage. 
 
 
 = Python Accessible Methods = 
