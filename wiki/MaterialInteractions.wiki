@@ -1,4 +1,4 @@
-#Collection of materials scattering methods
+#summary Collection of materials scattering methods
 
 = Summary =
 
