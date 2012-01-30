@@ -2,7 +2,9 @@
 
 = Summary =
 
-This page describes how to track particles through foils. The Foil class allows the creation of rectangular carbon foils of user defined thickness and size. An arbitrary number of foils can be added to any lattice. Two different particle scattering methods are available in the Foil class. Particles are neither created nor absorbed in the foils. Python convenience scripts are available for adding foils to the lattice. From the standpoint of the lattice, foils are considered as zero length elements. 
+This page describes how to track particles through foils. The Foil class allows the creation of rectangular carbon foils of user defined thickness and size. An arbitrary number of foils can be added to any lattice. Particles are neither created nor absorbed in the foils. Python convenience scripts are available for adding foils to the lattice. From the standpoint of the lattice, foils are considered as zero length elements. 
+
+Two different particle scattering methods are available in the Foil class. The default method is the full scattering method (index 0), and the alternative choice is a simple scattering method (index 1). 
 
 = Associated Classes =
 
@@ -17,7 +19,7 @@ This page describes how to track particles through foils. The Foil class allows 
 
 
 = Python Accessible Methods and Variables =
-  # *TeapotFoilNode(double xmin, double xmax, double ymin, double ymax, double thick, string name)*. Creates a teapot style foil. Has a track method. Variables:
+  # *TeapotFoilNode(double xmin, double xmax, double ymin, double ymax, double thick, string name)*. Creates a teapot implementation of foil. Has a track method and a setScatterChoice method. Variables:
      * xmin: Horizontal minimum of foil. 
      * xmax: Horizontal maximum of foil.
      * ymin: Vertical minimum of foil.
