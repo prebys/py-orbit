@@ -2,11 +2,4 @@
 
 = Introduction =
 
-This is the class for modeling proton passage through rectangular carbon stripping foils of user-defined thickness. The class does not inject particles, nor does it lose particles. An arbitrary number of foils can be added to any lattice. 
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+This is the class for modeling proton passage through rectangular carbon stripping foils of user-defined thickness. The class does not inject particles, nor does it lose particles. Two scattering methods are available to the particles. The first is a collimator style scattering model which includes MCS, energy loss, and nuclear scattering. The second is a simplified scattering model which only includes MCS. 
