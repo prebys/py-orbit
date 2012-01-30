@@ -34,7 +34,7 @@ Two different particle scattering methods are available in the Foil class. The d
 
 = Example Scripts = 
 
-The following example demonstrates how a carbon 400 ug/cm^2 teapot style foil is created and then added to an existing lattice, 18.5 meters downstream of the lattice start point. The scattering method is chosen and an existing bunch is transported through the foil. 
+The following example demonstrates how a carbon 400 ug/cm^2 teapot style foil is created and then added to an existing lattice, 18.5 meters downstream of the lattice start point. The simplified scattering model is chosen and an existing bunch is transported through the foil. 
 
 {{{
 
