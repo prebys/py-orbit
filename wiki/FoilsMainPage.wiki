@@ -2,9 +2,9 @@
 
 = Summary =
 
-This page describes how to track particles through foils. The Foil class allows the creation of rectangular carbon foils of user defined thickness and size. An arbitrary number of foils can be added to any lattice. Particles are neither created nor absorbed in the foils. Python convenience scripts are available for adding foils to the lattice. From the standpoint of the lattice, foils are considered as zero length elements. 
+This page describes how to track particles through foils. The Foil class allows the creation of rectangular carbon foils of user defined thickness and size. An arbitrary number of foils can be added to any lattice. Python convenience scripts are available for adding foils to the lattice. From the standpoint of the lattice, foils are considered as zero length elements. 
 
-Two different particle scattering methods are available in the Foil class. The default method is the full scattering method (index 0), and the alternative choice is a simple scattering method (index 1). 
+Two different particle scattering methods are available in the Foil class. The default method is the full scattering method (index 0) which allows particle loss, and the alternative choice is a simple scattering method (index 1) which does not allow particle loss. More information on these routines can be found in the Foil class. 
 
 = Associated Classes =
 
@@ -52,7 +52,33 @@ addTeapotFoilNode(teapot_latt,18.5,foil)
 paramsDict = {}
 paramsDict["bunch"]= b
 
-scatterchoice = 0 //Use full scattering model. 
+scatterchoice = 1 //Use simple scattering model. 
+foil.setScatterChoice(scatterchoice)
+foil.track(paramsDict)
+
+}}}
+
+The same example as above except this time use the full scattering model and allow particle loss. 
+
+{{{
+
+xmin = -0.05
+xmax = 0.05
+ymin = -0.05
+ymax = 0.05
+thick = 400
+
+foil = TeapotFoilNode(xmin, xmax, ymin, ymax, thick, "Foil 1")
+
+addTeapotFoilNode(teapot_latt,18.5,foil) 
+
+lostbunch = Bunch()
+lostbunch.addPartAttr("LostParticleAttributes") 
+paramsDict = {}
+paramsDict["bunch"]= b
+paramsDict["lostbunch"]=lostbunch
+
+scatterchoice = 0
 foil.setScatterChoice(scatterchoice)
 foil.track(paramsDict)
 
