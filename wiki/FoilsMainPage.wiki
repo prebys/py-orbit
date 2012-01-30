@@ -83,3 +83,5 @@ foil.setScatterChoice(scatterchoice)
 foil.track(paramsDict)
 
 }}}
+
+Complete script examples can be found in $ORBIT_ROOT/py-orbit/examples/Foils
