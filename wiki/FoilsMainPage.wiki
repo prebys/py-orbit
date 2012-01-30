@@ -17,3 +17,15 @@ This page describes how to track particles through foils. The Foil class allows 
      * lattice: The Teapot lattice the collimator should be added to.
      * position: The start position of the collimator in the lattice.
      * foil_node: A previously defined teapot style foil.
+
+
+= Associated Classes =
+
+|| *Name* || *Description* || *Address* ||
+|| [Foil] || The class which defines the foil || $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
+|| MaterialInteractions || Class containing a collection of particle scattering methods || $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
+||cross_sections || Contains the elastic and inelastic cross sections for each material (barns), and material properties (MKS) || $ORBIT_ROOT/src/orbi/MaterialInteractions/||
+||num_recipes || Numerical recipes used in scattering models || $ORBIT_ROOT/src/orbi/MaterialInteractions/ ||
+|| wrap_foil|| The python wrapper class for Foil ||  $ORBIT_ROOT/src/orbi/MaterialInteractions/ ||
+|| TeapotFoilNode || The python module that allows a user to  define foil || $ORBIT_ROOT/py/orbit/foil/ ||
+|| foilLatticeModifications || The python module that allows a user to  add a defined foil to the lattice in a drift region || $ORBIT_ROOT/py/orbit/foil/ ||
