@@ -11,7 +11,7 @@ This is the class for modeling proton passage through rectangular carbon strippi
      * ymin: Vertical minimum of foil.
      * ymax: Vertical maximum of foil.
      * thick: Thickness of foil (ug/cm^2) 
-  # *traverseFoilFullScatter(Bunch bunch, Bunch lostbunch)*. Routine to scatter particles using the full scattering model (Collimator style). Scattering methods are located in the MaterialInteractions class.  
+  # *traverseFoilFullScatter(Bunch bunch, Bunch lostbunch)*. Routine to scatter particles using the full scattering model ([Collimator] style). Scattering methods are located in the MaterialInteractions class.  
      * bunch: The Bunch object to traverse the foil.
      * lostbunch: A Bunch object for populating with lost particles.
   # *traverseFoilSimpleScatter(Bunch bunch)*. Routine to scatter particles using a simple multiple coulomb scattering implementation. 
