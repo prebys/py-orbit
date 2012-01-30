@@ -2,4 +2,4 @@
 
 = Introduction =
 
-This is the class for modeling proton passage through rectangular carbon stripping foils of user-defined thickness. The class does not inject particles, nor does it lose particles. Two scattering methods are available to the particles. The first is a collimator style scattering model which includes MCS, energy loss, and nuclear scattering. The second is a simplified scattering model which only includes MCS. 
+This is the class for modeling proton passage through rectangular carbon stripping foils of user-defined thickness. The class does not create particles. Two scattering methods are available to the particles, *traverseFoilFullScatter* and *traverseFoilSimpleScatter*. The first is a collimator style scattering model which includes multiple coulomb scattering, energy loss, and nuclear scattering. This is essentially an implementation of the Collimator scattering class. It allows for particle loss and therefore requires a Bunch for handling the lost particles. The second is a simplified scattering model which only includes multiple coulomb scattering, and does not include a mechanism particle loss. 
