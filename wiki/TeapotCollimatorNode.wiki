@@ -1,8 +1,8 @@
-#summary One-sentence summary of this page.
+#summary Teapot implementation of the collimator class.
 
 = Summary =
 
-Methods for creating a Teapot style collimator
+This is the Teapot implementation of a collimator node.  Must be used in order to create a collimator that can be located within a Teapot lattice. Has a convenience routine for tracking the particles through the collimator. 
 
 = Python Accessible Methods =
 
