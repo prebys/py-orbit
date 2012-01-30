@@ -73,7 +73,8 @@ foil.traverseFoilFullScatter(b, lostbunch)
 
 }}}
 
-with, {{{
+with, 
+{{{
 
 foil.traverseFoilSimpleScatter(b)
 
