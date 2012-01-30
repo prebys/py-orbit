@@ -1,0 +1,12 @@
+#summary Summary of the Foil class
+
+= Introduction =
+
+This is the class for modeling proton passage through rectangular carbon stripping foils of user-defined thickness. The class does not inject particles, nor does it lose particles. An arbitrary number of foils can be added to any lattice. 
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
