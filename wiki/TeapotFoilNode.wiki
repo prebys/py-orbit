@@ -1,8 +1,8 @@
-#summary Teapot style foil element.
+#summary Teapot implementation of the foil module.
 
-= Introduction =
+= Summary =
 
-Add your content here.
+This is the Teapot implementation of the foil class. This must be used in order to add a foil as an element in a Teapot lattice. A convenience routine is defined for switching between particle scattering algorithms. 
 
 
 = Details =
