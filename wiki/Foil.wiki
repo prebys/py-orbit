@@ -65,7 +65,7 @@ print "Stop."
 
 }}}
 
-For the simple scattering model, one could replace the line,
+For the simple scattering model, one could exclude the creation of the lost bunch and replace the line,
 
 {{{
 
@@ -80,7 +80,6 @@ foil.traverseFoilSimpleScatter(b)
 
 }}}
 
-and exclude the creation of the lost bunch. 
 
 
     
