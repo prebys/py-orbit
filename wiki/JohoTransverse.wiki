@@ -6,5 +6,5 @@ Method for creating Joho style distributions in the transverse plane.  This clas
 
 = Python Accessible Methods and Variables = 
   # *JohoTransverse(order, alpha, beta, emitlim, centerpos, centermom, tailfraction, tailfactor)*. Creates and instance of a transverse Joho distribution element. 
-      
+     * order: The shape parameter for the Joho distribution. Options are:  0 for hollow shell in phase space;  0.5 for flat profile in real space; 1 for uniform in phase space; 1.5 for elliptical in phase space; 2 for parabolic in phase space; 3 for truncated Gaussian in phase space; infinite for gaussian in phase space
         
