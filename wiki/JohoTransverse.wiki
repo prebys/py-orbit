@@ -2,4 +2,9 @@
 
 = Summary =
 
-Method for creating Joho style distributions in the transverse plane.  This class has a method which returns a single transverse coordinate pair (position and momentum) each time it's called.  
+Method for creating Joho style distributions in the transverse plane.  This class has a method which returns a single transverse coordinate pair (position and momentum) each time it's called.  These distributions are based on the ACCSIM code Joho distribution models. 
+
+= Python Accessible Methods and Variables = 
+  # *JohoTransverse(order, alpha, beta, emitlim, centerpos, centermom, tailfraction, tailfactor)*. Creates and instance of a transverse Joho distribution element. 
+      
+        
