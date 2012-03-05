@@ -15,5 +15,30 @@ Method for creating Joho style distributions in the transverse plane.  This clas
      * tailfraction: Fraction of particles to be located in an extended tail (Range is 0 to 1. 0 is none, 1 is all).
      * tailfactor: The ratio of the tail emittance to core emittance. For instance the value 1 means the core and the tail have the same emittance. 
 
+= Example Scripts = 
 
-        
+In the following example a Joho distributions are created for both the X and Y plane. The shape parameter is chosen to create a Gaussian distribution. 10% of the beam is located in an beam tail with emittance 50% larger than the core emittance. 
+
+{{{
+
+import math
+import sys
+from injection import JohoTransverse
+
+order = 3.
+alphax = 0.063
+betax = 10.209
+alphay = 0.063
+betay = 10.776
+emitlim = 0.00152 * 2*(order + 1) * 1e-6
+xcenterpos = 0.0468
+xcentermom = 0.001
+ycenterpos = 0.0492
+ycentermom = -0.00006
+tailfrac = 0.1
+taillim = 1.5
+
+xFunc = JohoTransverse(order, alphax, betax, emitlim, xcenterpos, xcentermom, tailfrac, taillim)
+yFunc = JohoTransverse(order, alphay, betay, emitlim, ycenterpos, ycentermom, tailfrac, taillim)      
+
+}}}  
