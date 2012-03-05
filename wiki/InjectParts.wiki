@@ -17,7 +17,7 @@ This class injects particles into a pre-defined Bunch according to user-specifie
     
 = Example Scripts = 
 
-In the following example a standalone injection node with Joho style distributions is created and used to inject 10,000 macro particles. The script can be found in examples/Injection/ORBIT_Benchmarks/JohoXYL.  Other examples can be found in examples/Injection/ORBIT_Benchmarks/
+In the following example a standalone injection node with Joho style distributions is created and used to inject 10,000 macro particles. The script can be found in examples/Injection/ORBIT_Benchmarks/JohoXYL.  Other examples can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/
 
 {{{
 
@@ -94,5 +94,3 @@ print "Stop."
 quit()
 
 }}}
-
-
