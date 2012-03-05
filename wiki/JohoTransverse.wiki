@@ -14,6 +14,7 @@ Method for creating Joho style distributions in the transverse plane.  This clas
      * centermom: The mean momentum coordinate of the distribution
      * tailfraction: Fraction of particles to be located in an extended tail (Range is 0 to 1. 0 is none, 1 is all).
      * tailfactor: The ratio of the tail emittance to core emittance. For instance the value 1 means the core and the tail have the same emittance. 
+  # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
 
 = Example Scripts = 
 
