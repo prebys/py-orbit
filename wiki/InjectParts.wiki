@@ -13,7 +13,7 @@ This class injects particles into a pre-defined Bunch according to user-specifie
      * xDistFunc: Horizontal distribution function. One example is JohoTransverse.
      * yDistFunc: Vertical distribution function: One example is JohoTransverse.
      * lDistFunc: Longitudinal distribution function.  Examples are JohoLongitudinal and UniformLongDist. 
-  # *addParticles()*. Routine that gets the particle coordinates from the distributions, checks to make sure that they are within the injection region, and adds them to either the main bunch or the lost bunch. 
+  # *addParticles()*. Method that gets the particle coordinates from the distributions, checks to make sure that they are within the injection region, and adds them to either the main bunch or the lost bunch. 
     
 = Example Scripts = 
 
