@@ -17,5 +17,24 @@ Method for creating Joho style distributions in the longitudinal plane.  This cl
    # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
 
 = Examples = 
+ 
+In the following example a longitudinal Joho distribution is created. The shape parameter is chosen to create a Gaussian distribution. A complete example including injection using this distribution can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYL.
 
-In this example 
+{{{
+
+import math
+import sys
+
+from injection import JohoLongitudinal
+  
+zlim = 120. * 248./360.
+dElim = 0.001
+nlongbunches = 100
+deltazbunch = 0.688
+deltaznotch = 0
+ltailfrac = 0
+ltailfac = 0
+
+lFunc = JohoLongitudinal(order, zlim, dElim, nlongbunches, deltazbunch, deltaznotch, ltailfrac, ltailfac)
+
+}}}
