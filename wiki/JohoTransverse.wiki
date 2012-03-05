@@ -6,14 +6,14 @@ Method for creating Joho style distributions in the transverse plane.  This clas
 
 = Python Accessible Methods and Variables = 
   # *JohoTransverse(order, alpha, beta, emitlim, centerpos, centermom, tailfraction, tailfactor)*. Creates and instance of a transverse Joho distribution element. 
-     *order: The shape parameter for the Joho distribution. Options are:  0 for hollow shell in phase space;  0.5 for flat profile in real space; 1 for uniform in phase space; 1.5 for elliptical in phase space; 2 for parabolic in phase space; 3 for truncated Gaussian in phase space; infinite for gaussian in phase space.
-     *alpha: Twiss alpha of the injected particle
-     *beta: Twiss beta of the injected particle
-     *emitlim: Twiss emittance limit for the injected particle 
-     *centerpos: The mean position coordinate of the distribution
-     *centermom: The mean momentum coordinate of the distribution
-     *tailfraction: Fraction of particles to be located in an extended tail (Range is 0 to 1. 0 is none, 1 is all).
-     *tailfactor: The ratio of the tail emittance to core emittance. For instance the value 1 means the core and the tail have the same emittance. 
+     * order: The shape parameter for the Joho distribution. Options are:  0 for hollow shell in phase space;  0.5 for flat profile in real space; 1 for uniform in phase space; 1.5 for elliptical in phase space; 2 for parabolic in phase space; 3 for truncated Gaussian in phase space; infinite for gaussian in phase space.
+     * alpha: Twiss alpha of the injected particle
+     * beta: Twiss beta of the injected particle
+     * emitlim: Twiss emittance limit for the injected particle 
+     * centerpos: The mean position coordinate of the distribution
+     * centermom: The mean momentum coordinate of the distribution
+     * tailfraction: Fraction of particles to be located in an extended tail (Range is 0 to 1. 0 is none, 1 is all).
+     * tailfactor: The ratio of the tail emittance to core emittance. For instance the value 1 means the core and the tail have the same emittance. 
 
 
         
