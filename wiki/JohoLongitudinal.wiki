@@ -43,7 +43,7 @@ This example, 40 longitudinal bunches with 0.1 degree extent and 5 degrees apart
 
 {{{ 
 
-mport math
+import math
 import sys
 
 from injection import JohoLongitudinal
