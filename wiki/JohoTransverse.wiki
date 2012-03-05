@@ -1,0 +1,5 @@
+#summary One-sentence summary of this page.
+
+= Summary =
+
+Method for creating Joho style distributions in the transverse plane.  This class has a method which returns a single transverse coordinate pair (position and momentum) each time it's called.  
