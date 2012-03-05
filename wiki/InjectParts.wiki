@@ -8,7 +8,7 @@ This class injects particles into a pre-defined Bunch according to user-specifie
   # *InjectParts(nparts, bunch, lostbunch, injectregion, xDistFunc, yDistFunc, lDistFunc)*. Creates an instance of an injection element.
      * nparts: Number of macro particles to be injected during each pass through the element.
      * bunch: The bunch to be injected into.
-     * lostbunch: The lost particle bunch which will accommodate injected particles outside of the injection region.
+     * lostbunch: The lost particle bunch which will be populated by injected particles outside of the injection region.
      * injectregion: A list of ransverse limits of the injection region (xmin: Horizontal minimum; xmax: Horizontal maximum; ymin: Vertical minimum; ymax: Vertical maximum).
      * xDistFunc: Horizontal distribution function. One example is JohoTransverse.
      * yDistFunc: Vertical distribution function: One example is JohoTransverse.
