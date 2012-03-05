@@ -1,0 +1,13 @@
+#summary Python class which performs particle injection into a bunch
+
+= Introduction =
+
+This class injects particles into a pre-defined Bunch according to user-specified distribution functions. The user must specify the allowed transverse physical region for injection.  Particles outside of this region will be added to a lost particle Bunch. A library of distribution functions is available. 
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
