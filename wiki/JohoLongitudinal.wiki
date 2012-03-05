@@ -58,4 +58,6 @@ deltaznotch = 0.
 ltailfrac = 0
 ltailfac = 0
 
+lFunc = JohoLongitudinal(order, zlim, dElim, nlongbunches, deltazbunch, deltaznotch, ltailfrac, ltailfac)
+
 }}}
