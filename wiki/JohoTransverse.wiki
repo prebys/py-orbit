@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Class and methods for creating transverse Joho style particle coordinates
 
 = Summary =
 
