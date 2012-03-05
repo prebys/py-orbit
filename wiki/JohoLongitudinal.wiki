@@ -2,12 +2,4 @@
 
 = Summary =
 
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Method for creating Joho style distributions in the longitudinal plane.  This class has a method which returns a single longitudinal coordinate pair (z and dE) each time it's called.  These distributions are based on the ACCSIM code Joho distribution models. 
