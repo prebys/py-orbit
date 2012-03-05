@@ -17,7 +17,7 @@ Method for creating Joho style distributions in the transverse plane.  This clas
 
 = Example Scripts = 
 
-In the following example a Joho distributions are created for both the X and Y plane. The shape parameter is chosen to create a Gaussian distribution. 10% of the beam is located in an beam tail with emittance 50% larger than the core emittance. A complete example including injection using this distribution can be found in $ORBIT_PATH/examples/Injection/ORBIT_Benchmarks/JohoXYL .  
+In the following example a Joho distributions are created for both the X and Y plane. The shape parameter is chosen to create a Gaussian distribution. 10% of the beam is located in an beam tail with emittance 50% larger than the core emittance. A complete example including injection using this distribution can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYL .  
 
 {{{
 
