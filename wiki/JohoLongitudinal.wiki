@@ -5,7 +5,7 @@
 Method for creating Joho style distributions in the longitudinal plane.  This class has a method which returns a single longitudinal coordinate pair (z and dE) each time it's called.  These distributions are based on the ACCSIM code Joho distribution models. 
 
 = Python Accessible Methods and Variables = 
-  # *JohoLongudinal(order, zlim, dElim, nlongbunches, deltazbunch, deltaznotch, tailfraction, tailfactor)*. Creates and instance of a longitudinal Joho distribution element. 
+  # *JohoLongitudinal(order, zlim, dElim, nlongbunches, deltazbunch, deltaznotch, tailfraction, tailfactor)*. Creates and instance of a longitudinal Joho distribution element. 
      * order: The shape parameter for the Joho distribution. Options are:  0 for hollow shell in phase space;  0.5 for flat profile in real space; 1 for uniform in phase space; 1.5 for elliptical in phase space; 2 for parabolic in phase space; 3 for truncated Gaussian in phase space; infinite for gaussian in phase space.
      * zlim:  Longitudinal coordinate limit for the distribution generator
      * dElim: dE coordinate limit for the distribution generator
@@ -14,6 +14,7 @@ Method for creating Joho style distributions in the longitudinal plane.  This cl
      * deltaznotch: width of an empty notch at the center of the bunch (0 = no notch)
      * tailfraction: fraction of beam to be located in an extended tail.  Range is 0 to 1, where 0 represents no beam in the tail and 1 represents all beam in the tail.
      * tailfactor: fraction of tail emittance to core emittance. 
+   # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
 
 = Examples = 
 
