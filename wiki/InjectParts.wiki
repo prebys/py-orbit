@@ -4,7 +4,7 @@
 
 This class injects particles into a pre-defined Bunch according to user-specified distribution functions. The user must specify the allowed transverse physical region for injection.  Particles outside of this region will be added to a lost particle Bunch. A library of distribution functions is available. 
 
-= Python Accessible Classes, Methods and Variables = 
+= Python Accessible Methods and Variables = 
   # *InjectParts(nparts, bunch, lostbunch, injectregion, xDistFunc, yDistFunc, lDistFunc)*. Creates an instance of an injection element.
      * nparts: Number of macro particles to be during each pass through the node.
      * bunch: The bunch to be injected into.
