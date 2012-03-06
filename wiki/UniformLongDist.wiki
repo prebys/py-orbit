@@ -12,7 +12,7 @@ This class generates longitudinal particle coordinate pairs that are uniformly d
      * eoffset: Mean energy offset (set to zero for none)
      * deltaEfrac:  The fractional energy 1/2 spread of the beam, i.e., the maximum dE is: dE = eoffset + sp.getEnergy()(+- deltaEfrac)
 
-# *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
+  # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
 = Examples = 
 
 In the following example a uniform longitudinal distribution with +/-1 MeV energy spread is created for a 1 GeV beam. The complete example can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYUniformL/injectuniformlong.py
