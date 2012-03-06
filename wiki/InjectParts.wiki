@@ -1,4 +1,4 @@
-#summary Python class which performs particle injection into a bunch
+#summary Python class which performs particle injection into a bunch.
 
 = Summary =
 
