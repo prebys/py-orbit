@@ -1,4 +1,4 @@
-#summary Class for creating transverse Joho style particle coordinates
+#summary Class for creating transverse Joho style particle coordinates.
 
 = Summary =
 
