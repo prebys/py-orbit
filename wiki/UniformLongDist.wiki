@@ -15,7 +15,7 @@ This class generates longitudinal particle coordinate pairs that are uniformly d
 
 = Examples = 
 
-In the following example a uniform longitudinal distribution with 1 MeV full energy spread is created for a 1 GeV beam. The complete example can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYUniformL/injectuniformlong.py
+In the following example a uniform longitudinal distribution with +/-1 MeV energy spread is created for a 1 GeV beam. The complete example can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYUniformL/injectuniformlong.py
 
 {{{
 
