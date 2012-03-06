@@ -2,11 +2,6 @@
 
 = Summary =
 
-This class creates SNS style longitudinal particle coordinates. The distribution is uniform in z and Gaussian in energy, with user option for adding centroid energy jitter and sinusoidal energy variation. 
+This class creates SNS style longitudinal particle coordinates. The distribution is uniform in z and Gaussian in energy, with user option for adding centroid energy jitter and sinusoidal energy variation. The class has a method which returns a single longitudinal coordinate pair (z and dE) each time it's called.  
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Python Accessible Methods and Variables = 
