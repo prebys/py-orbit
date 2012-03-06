@@ -1,4 +1,4 @@
-#summary Summary of the Foil class
+#summary Summary of the Foil class.
 
 = Summary =
 
