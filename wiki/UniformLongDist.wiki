@@ -1,3 +1,5 @@
-#summary Class to generate uniformly distributed longitudinal particle coordinates.
+#summary Class for creating uniformly distributed longitudinal particle coordinates.
 
 = Summary =
+
+This class generates longitudinal particle coordinate pairs that are uniformly distributed in z and dE. 
