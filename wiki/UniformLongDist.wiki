@@ -2,4 +2,12 @@
 
 = Summary =
 
-This class generates longitudinal particle coordinate pairs that are uniformly distributed in z and dE. 
+This class generates longitudinal particle coordinate pairs that are uniformly distributed in z and dE. The class has a method which returns a single longitudinal coordinate pair (z and dE) each time it's called.  
+
+= Python Accessible Methods and Variables = 
+  # *UniformLongDist(zmin, zmax, sp, eoffset, deltaEfrac). Creates the class.
+     * zmin: Minimum z of the distribution.
+     * zmax: Maximum z of the distribution.
+     * sp: SyncParticle object (representing the synchronous particle of the distribution).
+     * eoffset: Mean energy offset (set to zero for none)
+     * deltaEfrac:  deltaEFracInj is the fractional energy 1/2 spread of the beam, i.e., dE = eoffset + E_sync *(+- deltaEfrac)
