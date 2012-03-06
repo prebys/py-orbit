@@ -10,4 +10,4 @@ This class generates longitudinal particle coordinate pairs that are uniformly d
      * zmax: Maximum z of the distribution.
      * sp: SyncParticle object (representing the synchronous particle of the distribution).
      * eoffset: Mean energy offset (set to zero for none)
-     * deltaEfrac:  The fractional energy 1/2 spread of the beam, i.e., the maximum dE is: dE = eoffset + E_sync*(+- deltaEfrac)
+     * deltaEfrac:  The fractional energy 1/2 spread of the beam, i.e., the maximum dE is: dE = eoffset + E_sync/*(+- deltaEfrac)
