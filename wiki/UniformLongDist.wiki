@@ -1,0 +1,3 @@
+#summary Class to generate uniformly distributed longitudinal particle coordinates.
+
+= Summary =
