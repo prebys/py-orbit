@@ -1,9 +1,11 @@
-#summary One-sentence summary of this page.
+#summary Teapot implementation of the InjectParts class
 
+= Summary =
 
-= Details =
+This is the Teapot implementation of the InjectParts class. This must be used in order to add an injection node (InjectParts class) as element in a Teapot lattice. 
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Python Accessible Methods =
+
+  # *track(_Dict_ paramsDict)*. A method for injecting particles. Variables:  
+     * paramsDict: A dictionary which should contains two items: 1) the main bunch to be injected into, and 2) the bunch to be populated with particle that were outside of the valid injection region.
+ 
