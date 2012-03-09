@@ -10,14 +10,14 @@ This class creates longitudinal particle coordinates that are uniform in z and G
      * emean: Mean energy of the distribution.
      * esigma: Sigma spread of the energy distribution
      * etrunc: Flag for truncating the distribution.  0 is no truncation, 1 is truncation as specified by user parameters emit and emax.
-     * emin: If etrunc is not 0, then this is the minimum of the energy distribution.
-     * emax: If etrunc is not 0, then this is the maximum of the energy distribution. 
+     * emin: If etrunc is not 0, then this is the minimum of the energy distribution [GeV].
+     * emax: If etrunc is not 0, then this is the maximum of the energy distribution [GeV]. 
   # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution.
 
 
 = Examples = 
 
-In the following example a longitudinal distribution generator is created for a distribution that is uniform in z and Gaussian in energy.  The energy distribution is truncated. The complete example can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYGaussEUniformL/injectgulong.py
+In the following example a longitudinal distribution generator is created for a distribution that is uniform in z and Gaussian in energy.  The energy distribution is truncated at 1.003 GeV on the high end and 0.997 GeV on the low end. The complete example can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYGaussEUniformL/injectgulong.py
 
 {{{
 
