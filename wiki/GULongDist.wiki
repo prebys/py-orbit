@@ -1,0 +1,2 @@
+#summary Generates longitudinal coordinates that are Gaussian in energy and uniform in z.
+
