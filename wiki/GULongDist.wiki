@@ -17,7 +17,7 @@ This class creates longitudinal particle coordinates that are uniform in z and G
 
 = Examples = 
 
-In the following example a longitudinal distribution generator is created for a distribution that is uniform in z and Gaussian in energy. The complete example can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYGaussEUniformL/injectgulong.py
+In the following example a longitudinal distribution generator is created for a distribution that is uniform in z and Gaussian in energy.  The energy distribution is truncated. The complete example can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYGaussEUniformL/injectgulong.py
 
 {{{
 
@@ -39,5 +39,3 @@ sp = b.getSyncParticle()
 lFunc = GULongDist(zmin, zmax, sp, emean, esigma, etrunc, emin, emax)
 
 }}}
-
-
