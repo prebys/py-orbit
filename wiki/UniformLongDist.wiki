@@ -11,7 +11,6 @@ This class generates longitudinal particle coordinate pairs that are uniformly d
      * sp: SyncParticle object (representing the synchronous particle of the distribution).
      * eoffset: Mean energy offset (set to zero for none)
      * deltaEfrac:  The fractional energy 1/2 spread of the beam, i.e., the maximum dE is: dE = eoffset + sp.getEnergy()(+- deltaEfrac)
-
   # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
 = Examples = 
 
