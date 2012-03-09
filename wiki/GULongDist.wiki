@@ -1,2 +1,13 @@
 #summary Generates longitudinal coordinates that are Gaussian in energy and uniform in z.
 
+This class creates longitudinal particle coordinates that are uniform in z and Gaussian in energy.  
+
+= Python Accessible Methods and Variables = 
+  # *GULongDis(zmin, zmax, sp, emean, esigma, etrunc, emin, emax)*. Creates the class.
+     * zmin: Minimum z of the distribution.
+     * zmax: Maximum z of the distribution.
+     * emean: Mean energy of the distribution.
+     * esigma: Sigma spread of the energy distribution
+     * etrunc: Flag for truncating the distribution.  0 is no truncation, 1 is truncation as specified by user parameters emit and emax.
+     * emin: If etrunc is not 0, then this is the minimum of the energy distribution.
+     * emax: If etrunc is not 0, then this is the maximum of the energy distribution. 
