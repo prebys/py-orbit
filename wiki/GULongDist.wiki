@@ -11,3 +11,4 @@ This class creates longitudinal particle coordinates that are uniform in z and G
      * etrunc: Flag for truncating the distribution.  0 is no truncation, 1 is truncation as specified by user parameters emit and emax.
      * emin: If etrunc is not 0, then this is the minimum of the energy distribution.
      * emax: If etrunc is not 0, then this is the maximum of the energy distribution. 
+  # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution.
