@@ -1,0 +1,19 @@
+#summary Summary of the methods associated with injecting particles.
+
+This page describes how to inject particles into a lattice according to user specified particle distributions.  A small library of particle distributions is available. The user must specify an appropriate tranverse injection region, which will often be the boundary of a foil. The injection methods do not provide foil scattering, which should be handed separately by use of the Foil class. The particles which land in the good region are added to a Bunch, and the particles that land outside of the good region are added to a lost particles Bunch. 
+
+= Associated Classes =
+
+|| *Name* || *Description* || *Address* ||
+|| InjectParts || The class which injects the particles || $ORBIT_ROOT/py/orbit/injection/ ||
+|| JohoTransverse || Class containing joho style transverse distributions || $ORBIT_ROOT/py/orbit/injection// ||
+|| JohoLongtudinal || Class containing joho style longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
+|| UniformLongDist || Class containing uniform longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
+|| GULongDist || Class containing longitudinal distributions that are Gaussian in dE and uniform in z|| $ORBIT_ROOT/py/orbit/injection// ||
+|| SNSESpreadDist || Class containing SNS style longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
+|| TeapotInjectionNode || The python module that allows a user to define Teapot InjectParts implementation || $ORBIT_ROOT/py/orbit/injection// ||
+|| injectionLatticeModifications || The python module that allows a user to add a defined TeapotInjectionNode to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/injection// ||
+
+
+= Python Accessible Methods and Variables =
+  # *TeapotFoilNode(double xmin, double xmax, double ymin, double ymax, double thick, string name)*. Creates a teapot implementation of foil. Has a track method and a setScatterChoice method. Variables:
