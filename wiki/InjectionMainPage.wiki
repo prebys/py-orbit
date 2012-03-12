@@ -7,7 +7,7 @@ This page describes how to inject particles into a lattice according to user spe
 || *Name* || *Description* || *Address* ||
 || InjectParts || The class which injects the particles || $ORBIT_ROOT/py/orbit/injection/ ||
 || JohoTransverse || Class containing joho style transverse distributions || $ORBIT_ROOT/py/orbit/injection// ||
-|| JohoLongtudinal || Class containing joho style longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
+|| JohoLongitudinal || Class containing joho style longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
 || UniformLongDist || Class containing uniform longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
 || GULongDist || Class containing longitudinal distributions that are Gaussian in dE and uniform in z|| $ORBIT_ROOT/py/orbit/injection// ||
 || SNSESpreadDist || Class containing SNS style longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
