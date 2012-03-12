@@ -1,0 +1,4 @@
+#summary Summary of the methods used to inject particles into a lattice.
+
+= Summary =
+
