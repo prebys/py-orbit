@@ -6,6 +6,8 @@ This is the Teapot implementation of the InjectParts class. This must be used in
 
 = Python Accessible Methods =
 
-  # *track(_Dict_ paramsDict)*. A method for injecting particles. Variables:  
+  # *TeapotInjectionNode(nparts, bunch, lostbunch, foilparams, xDistFunc, yDistFunc, lDistFun). Creates the node.
+
+     * track(_Dict_ paramsDict)*. A method for injecting particles. Variables:  
      * paramsDict: A dictionary which should contains two items: 1) the main bunch to be injected into, and 2) the bunch to be populated with particle that were outside of the valid injection region.
  
