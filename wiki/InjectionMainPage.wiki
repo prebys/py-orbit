@@ -17,7 +17,7 @@ This page describes how to inject particles into a lattice according to user spe
 
 = Examples =
 
-The following example shows how to inject particles into a predefined Teapot lattice.  The script can be found in $ORBIT_ROOT/examples/Injection/lattice_with_injection_node.py
+The following example shows how to inject particles into a predefined Teapot lattice.  The script injects 10000 macro particles per pass through the lattice. The script can be found in $ORBIT_ROOT/examples/Injection/lattice_with_injection_node.py
 
 {{{
 
