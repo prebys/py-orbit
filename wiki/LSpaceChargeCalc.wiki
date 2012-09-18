@@ -1,0 +1,29 @@
+#summary Description of the longitudinal space charge class
+
+= Summary =
+This class constructs a longitudinal space charge node.
+
+= Python Accessible Methods and Variables = 
+  # *Collimator(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle)*. An instance of a collimator. Creates a collimator. Variables:
+     * length: Length of the collimator in meters
+     * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
+     * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
+     * shape: Shape type index: 1=circle, 2=ellipse, 3=one sided flat, 4=two sided flat, 5=rectangular (outside is collimator), 6=rectangular (inside is collimator). 
+     * a: Radius for circular collimator, x-axis for elliptical, horizontal right side extent for flat and rectangular.
+     * b: Y-axis for elliptical, left side horizontal extent for two-sided flat or rectangular. 
+     * c: Upper side vertical extent for rectangular. 
+     * d: Lower side vertical extent for rectangular.
+     * angle: Tilt angle of the collimator defined in degrees.
+  # *collimateBunch(Bunch bunch, Bunch lostbunch)*. The method to perform the collimation of the bunch. 
+     * bunch: The Bunch to be collimated.
+     * lostbunch: The Bunch to be populated with particles absorbed in the collimator. 
+    
+= Example Scripts = 
+
+The following example demonstrates a bunch being propagated through  This example can also be found in: $ORBIT_PATH/examples/Collimation as collimatebunch.py .
+
+{{{
+
+
+
+}}}
