@@ -2,7 +2,7 @@
 
 = Summary =
 
-This is the Teapot implementation of the longitudinal space charge class. This must be used in order to add a longitudinal space charge node (LSpaceChargeCalc class) as element in a Teapot lattice. 
+This is the Teapot implementation of the longitudinal space charge class. This must be used in order to add a longitudinal space charge node ([LSpaceChargeCalc] class) as element in a Teapot lattice. 
 
 = Python Accessible Methods =
 
