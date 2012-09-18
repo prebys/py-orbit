@@ -25,6 +25,7 @@ The following example demonstrates a bunch being propagated through  This exampl
 
 {{{
 
+
 import math
 import sys
 
@@ -83,7 +84,7 @@ useSpaceCharge = 1
 nBins= 128     #number of longitudinal slices in the 1D space charge solver
 position = 0.0
 
-# SNS Longitudinal Impedance tables. EKicker impedance from private communication
+#SNS Longitudinal Impedance tables. EKicker impedance from private communication
 # with J.G. Wang. Seems to be for 7 of the 14 kickers (not sure why).  
 # Impedance in Ohms/n. Kicker and RF impedances are inductive with real part positive and imaginary is negative by Chao definition. 
 
@@ -165,25 +166,21 @@ for i in range(0,32):
 	#zimag = 10.0*(zk.imag/1.75)
 	Z.append(complex(zreal, zimag))
 
-sc1Dnode = SC1D_AccNode(b_a,length,nMacrosMin,useSpaceCharge,nBins)
-sc1Dnode.assignImpedance(Z);
-
-
-addLongitudinalSpaceChargeNode(lattice, position, sc1Dnode)
-
+longscnode = LSpaceChargeCalc(b_a,length,nMacrosMin,useSpaceCharge,nBins)
+longscnode.assignImpedance(Z);
+ 
 print "===========Lattice modified ======================================="
 print "New Lattice=",lattice.getName()," length [m] =",lattice.getLength()," nodes=",len(lattice.getNodes())
 
 paramsDict = {}
 paramsDict["bunch"]= b
 b.dumpBunch("bunch_init.dat")
-print "here about to track"
-sc1Dnode.trackBunch(b)
-print "tracking done"
-#for i in range (0:10):
-#	lattice.trackBunch(b, paramsDict)
+longscnode.trackBunch(b)
 b.dumpBunch("bunch_final.dat")
 bunch_pyorbit_to_orbit(lattice.getLength(), b, "pybunch_final.dat")
 print "Stop."
+
+
+
 
 }}}
