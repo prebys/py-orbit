@@ -15,7 +15,7 @@ This page describes how to use the longitudinal space charge package and associa
 
 
 = Python Accessible Methods and Variables =
-  # *SC1D_AccNode(nt b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
+  # *[SC1D_AccNode](nt b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
      * b_a: Approximate ratio of beam pipe radius to beam radius.
      * length: Length of the lattice
      * nMacrosMin: Minimum number of macroparticles needed to do the computation 
