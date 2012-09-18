@@ -14,6 +14,6 @@ This is the Teapot implementation of the InjectParts class. This must be used in
      * xDistFunc: Horizontal distribution function. One example is JohoTransverse.
      * yDistFunc: Vertical distribution function: One example is JohoTransverse.
      * lDistFunc: Longitudinal distribution function.  Examples are JohoLongitudinal and UniformLongDist. 
-  #  *track(_Dict_ paramsDict)*. A method for injecting particles. Variables:  
+  #  *track(Dict paramsDict)*. A method for injecting particles. Variables:  
      * paramsDict: A dictionary which should contains two items: 1) the main bunch to be injected into, and 2) the bunch to be populated with particle that were outside of the valid injection region.
  
