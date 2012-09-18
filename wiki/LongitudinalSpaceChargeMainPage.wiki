@@ -4,7 +4,7 @@ summary Description of how to create and use Foils.
 
 = Summary =
 
-This page describes how to use the longitudinal space charge package and associated classes.  The longitudinal space charge class is based on the longitudinal space charge and impedance analytic model in A. Chao's text.  The module allows the user to import external impedances in units of Ohm/n (n=mode number), and to turn the space charge on or off.  
+This page describes how to use the longitudinal space charge package and associated classes.  The longitudinal space charge class is based on the longitudinal space charge and impedance analytic model and sign conventions in A. Chao's text.  The module allows the user to import external impedances in units of Ohm/n (n=mode number), and to turn the space charge portion on or off.  
 
 = Associated Classes =
 
