@@ -1,22 +1,23 @@
 #summary Description of the longitudinal space charge class
 
 = Summary =
-This class constructs a longitudinal space charge node.
+This class constructs a longitudinal space charge node. The routine follows the definitions and model in textbook by A. Chao (space charge is capacitive).  Space charge is combined with user-specified external impedances.  One kick is applied each time the bunch passes through the node. 
 
 = Python Accessible Methods and Variables = 
-  # *Collimator(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle)*. An instance of a collimator. Creates a collimator. Variables:
-     * length: Length of the collimator in meters
-     * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
-     * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
-     * shape: Shape type index: 1=circle, 2=ellipse, 3=one sided flat, 4=two sided flat, 5=rectangular (outside is collimator), 6=rectangular (inside is collimator). 
-     * a: Radius for circular collimator, x-axis for elliptical, horizontal right side extent for flat and rectangular.
-     * b: Y-axis for elliptical, left side horizontal extent for two-sided flat or rectangular. 
-     * c: Upper side vertical extent for rectangular. 
-     * d: Lower side vertical extent for rectangular.
-     * angle: Tilt angle of the collimator defined in degrees.
-  # *collimateBunch(Bunch bunch, Bunch lostbunch)*. The method to perform the collimation of the bunch. 
-     * bunch: The Bunch to be collimated.
-     * lostbunch: The Bunch to be populated with particles absorbed in the collimator. 
+  # *LSpaceChargeCalc(int b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins). Creates a longitudinal space charge node. Variables:
+     * b_a: Approximate ratio of beam pipe radius to beam radius.
+     * length: Length of the lattice
+     * nMacrosMin: Minimum number of macroparticles needed to do the computation 
+     * useSpaceCharge: Flag for turning the space charge piece on (1) or off (0). 
+     * nBins: Number of longitudinal slicing bins for space charge kick calculation. 
+  # *assignImpedance(pyObject py_complex_arr)*. Assigns an impedance array. 
+     * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
+  # *assignImpedanceValue(int n, double real, double imag).  Assigns a specific element of the impedance array. For inductive impedances, convention is that real part is positive and imaginary part negative. 
+     * n: Index number of impedance element (mode number).
+     * real: Real part of impedance
+     * imaginary: Imaginary part of impedance.
+  # * trackBunch(Bunch bunch). Tracks a bunch through the longitudinal space charge node.  Applies the kick to the particles.
+      * Bunch: The bunch under consideration. 
     
 = Example Scripts = 
 
