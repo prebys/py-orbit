@@ -13,7 +13,7 @@ This page describes how to create a kicker with a user specified kick and custom
 || TeapotYKickerNode || The python module that allows a user to define Teapot vertical kicker node || $ORBIT_ROOT/py/orbit/kickernodes/ ||
 || KickerLatticeModifications || The python module that allows a user to add a defined TeapotX(Y)KickerNode to a teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/kickernodes/ ||
 || flatTopWaveform || The python module for creating a flat top kicker waveform || $ORBIT_ROOT/py/orbit/kickernodes/ ||
-| rootTWaveform || The python module for creating a square root of time kicker waveform || $ORBIT_ROOT/py/orbit/kickernodes/ ||
+|| rootTWaveform || The python module for creating a square root of time kicker waveform || $ORBIT_ROOT/py/orbit/kickernodes/ ||
 
 = Python Accessible Methods and Variables =
   # *[SC1D_AccNode](nt b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
