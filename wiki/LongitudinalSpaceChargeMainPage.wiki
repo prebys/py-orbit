@@ -9,7 +9,7 @@ This page describes how to use the longitudinal space charge package and associa
 = Associated Classes =
 
 || *Name* || *Description* || *Address* ||
-|| [LSpaceChargeCalcl] || The class which does the longitudinal space charge and impedance calculationl || $ORBIT_ROOT/src/orbit/spacecharge/ ||
+|| [LSpaceChargeCalc] || The class which does the longitudinal space charge and impedance calculationl || $ORBIT_ROOT/src/orbit/spacecharge/ ||
 || sc1DNode || The python module that allows a user to define Teapot longitudinal space charge node || $ORBIT_ROOT/py/orbit/space_charge/ ||
 || scLatticeModifications || The python module that allows a user to add a defined SC1D_AccNode to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/space_charge/ ||
 
