@@ -4,7 +4,7 @@
 This class constructs a longitudinal space charge node. The routine follows the definitions and model in textbook by A. Chao (space charge is capacitive).  Space charge is combined with user-specified external impedances.  One kick is applied each time the bunch passes through the node. 
 
 = Python Accessible Methods and Variables = 
-  # *LSpaceChargeCalc(int b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins). Creates a longitudinal space charge node. Variables:
+  # *LSpaceChargeCalc(int b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
      * b_a: Approximate ratio of beam pipe radius to beam radius.
      * length: Length of the lattice
      * nMacrosMin: Minimum number of macroparticles needed to do the computation 
@@ -12,11 +12,11 @@ This class constructs a longitudinal space charge node. The routine follows the 
      * nBins: Number of longitudinal slicing bins for space charge kick calculation. 
   # *assignImpedance(pyObject py_complex_arr)*. Assigns an impedance array. 
      * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
-  # *assignImpedanceValue(int n, double real, double imag).  Assigns a specific element of the impedance array. For inductive impedances, convention is that real part is positive and imaginary part negative. 
+  # *assignImpedanceValue(int n, double real, double imag)*.  Assigns a specific element of the impedance array. For inductive impedances, convention is that real part is positive and imaginary part negative. 
      * n: Index number of impedance element (mode number).
      * real: Real part of impedance
      * imaginary: Imaginary part of impedance.
-  # * trackBunch(Bunch bunch). Tracks a bunch through the longitudinal space charge node.  Applies the kick to the particles.
+  # *trackBunch(Bunch bunch)*. Tracks a bunch through the longitudinal space charge node.  Applies the kick to the particles.
       * Bunch: The bunch under consideration. 
     
 = Example Scripts = 
