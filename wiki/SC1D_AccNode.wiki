@@ -1,0 +1,11 @@
+#summary Longitudinal space charge node implementation for Teapot lattices
+
+= Summary =
+
+This is the Teapot implementation of the longitudinal space charge class. This must be used in order to add a longitudinal space charge node (LSpaceChargeCalc class) as element in a Teapot lattice. 
+
+= Python Accessible Methods =
+
+  # *SC1D_AccNode(
+  #  *track(_Dict_ paramsDict)*. A method for doing the longitudinal space charge kick. Implemented by the lattice trackBunch method. Variables:  
+     * paramsDict: A dictionary which should contains at least one item: 1) the main bunch.
