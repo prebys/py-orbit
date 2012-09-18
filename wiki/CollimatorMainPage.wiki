@@ -15,9 +15,9 @@ A collimator must be placed in a drift section whose length is equal to or great
 || *Name* || *Description* || *Address* ||
 || [Collimator] || The class which defines the collimator || $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
 || MaterialInteractions || Class containing a collection of particle scattering methods || $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
-||cross_sections || Contains the elastic and inelastic cross sections for each material (barns), and material properties (MKS) || $ORBIT_ROOT/src/orbi/MaterialInteractions/||
-||num_recipes || Numerical recipes used in scattering models || $ORBIT_ROOT/src/orbi/MaterialInteractions/ ||
-|| wrap_collimator || The python wrapper class for Collimator ||  $ORBIT_ROOT/src/orbi/MaterialInteractions/ ||
+||cross_sections || Contains the elastic and inelastic cross sections for each material (barns), and material properties (MKS) || $ORBIT_ROOT/src/orbit/MaterialInteractions/||
+||num_recipes || Numerical recipes used in scattering models || $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
+|| wrap_collimator || The python wrapper class for Collimator ||  $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
 || TeapotCollimatorNode || The python module that allows a user to  define collimator || $ORBIT_ROOT/py/orbit/collimation/ ||
 || collimatorLatticeModifications || The python module that allows a user to  add a defined collimator to the lattice in a drift region || $ORBIT_ROOT/py/orbit/collimation/ ||
 
