@@ -21,11 +21,12 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || RFLatticeModifications || Python module that allows a user to add an RF cavity node to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 
 
-= Examples - All found in  = $ORBIT_ROOT/examples/RF_Tests =
+= Examples - All found in $ORBIT_ROOT/examples/RF_Tests =
 
 || *Name* || *Description* ||
 || barrier_rf_cavity_test.py || Simple test of barrier cavity with parameters constant in time.||
-|| simple_rf_cavity_test.py || Simple test of harmonic cavity with parameters constant in time.||
+|| simple_rf_cavity_test.py || Simple test of harmonic focusing cavity with parameters constant in time.||
+|| brhodep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on B*Rho. ||
 
 
 
