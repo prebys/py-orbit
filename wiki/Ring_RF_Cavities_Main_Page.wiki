@@ -17,9 +17,23 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || BRhoDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B*Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
 || SyncPhaseDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with synchronous particle phase determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
 || TimeDep_Barrier_RFNode || Python class to call time-dependent barrier cavity model from python script. Time dependence is determined by user-provided parameters. || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
-|| SyncPhaseDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with synchronous particle phase determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
-|| TimeDep_Barrier_RFNode || Python class to call time-dependent barrier cavity model from python script. Time dependence is determined by user-provided parameters. || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
+|| scLatticeModifications || Python module that allows a user to add a defined  to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/space_charge/ ||
 
+
+= Python Accessible Methods and Variables =
+  # *[SC1D_AccNode](nt b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
+     * b_a: Approximate ratio of beam pipe radius to beam radius.
+     * length: Length of the lattice
+     * nMacrosMin: Minimum number of macroparticles needed to do the computation 
+     * useSpaceCharge: Flag for turning the space charge piece on (1) or off (0). 
+     * nBins: Number of longitudinal slicing bins for space charge kick calculation. 
+  # *assignImpedance(pyObject py_complex_arr)*. Convenience method for assigning an impedance array. 
+     * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
+  # *track(Dict paramsDict)*. A method for doing the longitudinal space charge kick. Implemented by the lattice trackBunch method. Variables:  
+  # *addLongitudinalSpaceChargeNode(lattice, position, sc1D_node)*. Routine to add a defined SC1D_AccNode to a drift region of a teapot lattice. Variables:
+     * lattice: The teapot lattice.
+     * position: Position of the SC1D_AccNode element in meters.
+     * sc1D_node: A predefined SC1D_AccNode 
 
 
 
