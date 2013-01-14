@@ -10,7 +10,7 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || *Name* || *Description* || *Address* ||
 || [Barrier_Cav] || C++ class containing barrier cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
 || [Frequency_Cav] || C++ class containing linac-type cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
-|| [Harmonic_Cav] || C++ class containing harmonic cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/
+|| [Harmonic_Cav] || C++ class containing harmonic cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
 
 
 Add your content here.  Format your content with:
