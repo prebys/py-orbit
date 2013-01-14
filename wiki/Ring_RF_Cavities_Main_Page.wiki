@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Description of RF Cavity Models for Synchrotrons and Storage Rings.
 
 = Introduction =
 
