@@ -9,8 +9,8 @@ This page describes the user-accessible python and underlying C++ classes for RF
 
 || *Name* || *Description* || *Address* ||
 || [Barrier_Cav] || C++ class containing barrier cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
-|| [Frequency_Cav] || C++ class containing linac-type cavity model - not directly accessible from python script || $ORBIT_ROOT/py/orbit/RFCavities/ ||
-|| scLatticeModifications || The python module that allows a user to add a defined SC1D_AccNode to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/space_charge/ ||
+|| [Frequency_Cav] || C++ class containing linac-type cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
+|| [Harmonic_Cav] || C++ class containing harmonic cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ || $ORBIT_ROOT/py/orbit/space_charge/ ||
 
 
 Add your content here.  Format your content with:
