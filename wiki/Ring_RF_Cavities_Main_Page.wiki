@@ -15,6 +15,7 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || Frequency_RFNode || Python class to call linac-type cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
 || Harmonic_RFNode || Python class to call harmonic cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
 || BRhoDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided B*Rho as function of time. || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
+|| SyncPhaseDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided synchronous particle phase as function of time. || $ORBIT_ROOT/py/orbit/rf_cavities/RFNode.py ||
 
 
 
