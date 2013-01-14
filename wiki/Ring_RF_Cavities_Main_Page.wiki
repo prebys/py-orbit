@@ -27,8 +27,8 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || barrier_rf_cavity_test.py || Simple test of barrier cavity with parameters constant in time.||
 || simple_rf_cavity_test.py || Simple test of harmonic focusing cavity with parameters constant in time.||
 || brhodep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on B*Rho. ||
-|| syncphasedep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on B*Rho. ||
-|| timedep_barrier_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on B*Rho. ||
+|| syncphasedep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on synchronous particle phase. ||
+|| timedep_barrier_rf_cavity_test.py || Test of barrier focusing cavity with time-dependent parameters. ||
 
 
 
