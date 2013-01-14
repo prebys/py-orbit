@@ -33,12 +33,11 @@ This page describes the user-accessible python and underlying C++ classes for RF
 
 
 = Python Accessible Methods and Variables =
-  # *[SC1D_AccNode](nt b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
-     * b_a: Approximate ratio of beam pipe radius to beam radius.
-     * length: Length of the lattice
-     * nMacrosMin: Minimum number of macroparticles needed to do the computation 
-     * useSpaceCharge: Flag for turning the space charge piece on (1) or off (0). 
-     * nBins: Number of longitudinal slicing bins for space charge kick calculation. 
+  # *RFLatticeModifications.addRFNode(lattice, position, rf_node)*. Places an RF node into a lattice at a specified position. Variables:
+     * lattice: instantiation of an AccLattice.
+     * position: postition from the beginning of the lattice {m}. Must fall inside a drift element.
+     * rf_node: Instantiation of one of the RFNode classes listed above and described below. 
+     
   # *assignImpedance(pyObject py_complex_arr)*. Convenience method for assigning an impedance array. 
      * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
   # *track(Dict paramsDict)*. A method for doing the longitudinal space charge kick. Implemented by the lattice trackBunch method. Variables:  
