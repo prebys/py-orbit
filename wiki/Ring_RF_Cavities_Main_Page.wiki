@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Add your content here.
+This page describes the user-accessible python and underlying C++ classes for RF cavities in rings. The models include harmonic accelerating and focusing cavities and also barrier focusing cavities. 
 
 
 = Details =
