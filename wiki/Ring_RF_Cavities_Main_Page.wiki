@@ -1,11 +1,17 @@
 #summary Description of RF Cavity Models for Synchrotrons and Storage Rings.
 
-= Introduction =
+= Summary =
 
 This page describes the user-accessible python and underlying C++ classes for RF cavities in rings. The models include harmonic accelerating and focusing cavities and also barrier focusing cavities. 
 
 
-= Details =
+= Associated Classes =
+
+|| *Name* || *Description* || *Address* ||
+|| [LSpaceChargeCalc] || The class which does the longitudinal space charge and impedance calculationl || $ORBIT_ROOT/src/orbit/spacecharge/ ||
+|| sc1DNode || The python module that allows a user to define Teapot longitudinal space charge node || $ORBIT_ROOT/py/orbit/space_charge/ ||
+|| scLatticeModifications || The python module that allows a user to add a defined SC1D_AccNode to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/space_charge/ ||
+
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
