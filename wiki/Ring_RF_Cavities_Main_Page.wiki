@@ -17,7 +17,7 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || RFNode.Harmonic_RFNode || Python class to call harmonic cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.BRhoDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B*Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.SyncPhaseDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B*Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
-|| RFNode.TimeDep_Barrier_RFNode || Python class to call time-dependent barrier cavity model from python script. Time dependence is determined by user-provided parameters. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| !RFNode.TimeDep_Barrier_RFNode || Python class to call time-dependent barrier cavity model from python script. Time dependence is determined by user-provided parameters. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFLatticeModifications.addRFNode || Python module that allows a user to add an RF cavity node to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 
 
