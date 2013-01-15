@@ -3,7 +3,7 @@
 
 = Summary =
 
-This page describes the user-accessible python and underlying C++ classes for RF cavities in rings. The models include harmonic accelerating and focusing cavities and also barrier focusing cavities. 
+This page describes the user-accessible python and underlying C++ classes for RF cavities in rings. The models include harmonic accelerating and focusing cavities and also barrier focusing cavities.
 
 
 = Associated Classes =
@@ -31,9 +31,8 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || timedep_barrier_rf_cavity_test.py || Test of barrier focusing cavity with time-dependent parameters. ||
 
 
-
 = Python Accessible Methods and Variables =
-  # *RFNode.Barrier_RFNode(!ZtoPhi, RFVoltage, RFPhasep, RFPhasem, dRFPhasep, dRFPhasem, length, name)*. Creates an instantiation of a barrier cavity. 
+  # *RFNode.Barrier_RFNode(!ZtoPhi, RFVoltage, RFPhasep, RFPhasem, dRFPhasep, dRFPhasem, length, name)*. Creates an instantiation of a barrier cavity.
      * !ZtoPhi: unit conversion factor from longitudinal bunch coordinate in {m} to longitudinal phase {radians}, referenced to the fundamental frequency.
      * RFVoltage: Cavity voltage {GeV}.
      * RFPhasep: Center phase of positive barrier {degrees}.
@@ -42,10 +41,18 @@ This page describes the user-accessible python and underlying C++ classes for RF
      * dRFPhasem: Phase width of negative barrier {degrees}.
      * length: Node length {0.0 m}.
      * name: Node name {string}.
-  # *RFNode.Frequency_RFNode(RFFreq, RFE0TL, RFPhase, length, name)*. Creates an instantiation of a linac-type cavity. 
+  # *RFNode.Frequency_RFNode(RFFreq, RFE0TL, RFPhase, length, name)*. Creates an instantiation of a linac-type cavity.
      * RFFreq: Cavity frequency {Hz}.
      * RFRFE0TL: Effective cavity accelerating voltage {GeV} - E0 x T x L.
      * RFPhase: Synchronous particle phase {degrees} - dEK = q x E0TL x cos(RFPhase).
+     * length: Node length {0.0 m}.
+     * name: Node name {string}.
+  # *RFNode.Harmonic_RFNode(!ZtoPhi, dESync, RFHNum, RFVoltage, RFPhase, length, name)*. Creates an instantiation of a harmonic cavity.
+     * !ZtoPhi: unit conversion factor from longitudinal bunch coordinate in {m} to longitudinal phase {radians}, referenced to the fundamental frequency.
+     * dESync: Energy gain of synchronous particle {GeV}, from which energies of all bunch particles are referenced.
+     * RFVoltage: Cavity voltage {GeV}.
+     * RFHNum: Cavity harmonic number in units of the fundamental frequency.
+     * RFPhase: Phase of the cavity {degrees} at the zero of the bunch longitudinal coordinate {m}.
      * length: Node length {0.0 m}.
      * name: Node name {string}.
 
