@@ -16,7 +16,7 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || RFNode.Frequency_RFNode || Python class to call linac-type cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.Harmonic_RFNode || Python class to call harmonic cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.BRhoDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B*Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
-|| RFNode.!SyncPhaseDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B*Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| RFNode.!SyncPhaseDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B x Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.!TimeDep_Barrier_RFNode || Python class to call time-dependent barrier cavity model from python script. Time dependence is determined by user-provided parameters. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFLatticeModifications.addRFNode || Python module that allows a user to add an RF cavity node to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 
@@ -26,7 +26,7 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || *Name* || *Description* ||
 || barrier_rf_cavity_test.py || Simple test of barrier cavity with parameters constant in time.||
 || simple_rf_cavity_test.py || Simple test of harmonic focusing cavity with parameters constant in time.||
-|| brhodep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on B*Rho. ||
+|| brhodep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on B x Rho. ||
 || syncphasedep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on synchronous particle phase. ||
 || timedep_barrier_rf_cavity_test.py || Test of barrier focusing cavity with time-dependent parameters. ||
 
