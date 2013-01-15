@@ -33,12 +33,18 @@ This page describes the user-accessible python and underlying C++ classes for RF
 
 
 = Python Accessible Methods and Variables =
+  # *RFNode.Barrier_RFNode(ZtoPhi, RFVoltage, RFPhasep, RFPhasem, dRFPhasep, dRFPhasem)*. Creates a barrier cavity. 
+     * ZtoPhi: unit conversion factor from longitudinal distance {m} to fundamental phase {radians}.
+     * RFVoltage: Cavity voltage {GeV}.
+     * RFPhasep: Center phase of positive barrier {degrees}.
+     * RFPhasem: Center phase of negative barrier {degrees}.
+     * dRFPhasep: Phase width of positive barrier {degrees}.
+     * dRFPhasem: Phase width of negative barrier {degrees}.
+
   # *RFLatticeModifications.addRFNode(lattice, position, rf_node)*. Places an RF node into a lattice at a specified position. Variables:
-     * lattice: instantiation of an AccLattice.
-     * position: position from the beginning of the lattice {m}. Must fall inside a drift element.
+     * lattice: Instantiation of an AccLattice.
+     * position: Position from the beginning of the lattice {m}. Must fall inside a drift element.
      * rf_node: Instantiation of one of the RFNode classes listed above and described below.
-  # *RFNode.Barrier_RFNode(ZtoPhi, RFVoltage, RFPhasep, RFPhasem, dRFPhasep, dRFPhasem)*. Convenience method for assigning an impedance array. 
-     * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
   # *track(Dict paramsDict)*. A method for doing the longitudinal space charge kick. Implemented by the lattice trackBunch method. Variables:  
   # *addLongitudinalSpaceChargeNode(lattice, position, sc1D_node)*. Routine to add a defined SC1D_AccNode to a drift region of a teapot lattice. Variables:
      * lattice: The teapot lattice.
