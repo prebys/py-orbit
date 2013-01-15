@@ -55,6 +55,14 @@ This page describes the user-accessible python and underlying C++ classes for RF
      * RFPhase: Phase of the cavity {degrees} at the zero of the bunch longitudinal coordinate {m}.
      * length: Node length {0.0 m}.
      * name: Node name {string}.
+  # *RFNode.BRhoDep_Harmonic_RFNode(!ZtoPhi, accelDict, bunch, length, name)*. Creates an instantiation of a harmonic cavity.
+     * !ZtoPhi: unit conversion factor from longitudinal bunch coordinate in {m} to longitudinal phase {radians}, referenced to the fundamental frequency.
+     * dESync: Energy gain of synchronous particle {GeV}, from which energies of all bunch particles are referenced.
+     * RFVoltage: Cavity voltage {GeV}.
+     * RFHNum: Cavity harmonic number in units of the fundamental frequency.
+     * RFPhase: Phase of the cavity {degrees} at the zero of the bunch longitudinal coordinate {m}.
+     * length: Node length {0.0 m}.
+     * name: Node name {string}.
 
   # *RFLatticeModifications.addRFNode(lattice, position, rf_node)*. Places an RF node into a lattice at a specified position. Variables:
      * lattice: Instantiation of an AccLattice.
