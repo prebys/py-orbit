@@ -33,13 +33,21 @@ This page describes the user-accessible python and underlying C++ classes for RF
 
 
 = Python Accessible Methods and Variables =
-  # *RFNode.Barrier_RFNode(!ZtoPhi, RFVoltage, RFPhasep, RFPhasem, dRFPhasep, dRFPhasem)*. Creates a barrier cavity. 
+  # *RFNode.Barrier_RFNode(!ZtoPhi, RFVoltage, RFPhasep, RFPhasem, dRFPhasep, dRFPhasem, length, name)*. Creates an instantiation of a barrier cavity. 
      * !ZtoPhi: unit conversion factor from longitudinal bunch coordinate {m} to fundamental phase {radians}.
      * RFVoltage: Cavity voltage {GeV}.
      * RFPhasep: Center phase of positive barrier {degrees}.
      * RFPhasem: Center phase of negative barrier {degrees}.
      * dRFPhasep: Phase width of positive barrier {degrees}.
      * dRFPhasem: Phase width of negative barrier {degrees}.
+     * length: Node length {0.0 m}.
+     * name: Node name {string}.
+  # *RFNode.Frequency_RFNode(RFFreq, RFE0TL, RFPhase, length, name)*. Creates an instantiation of a barrier cavity. 
+     * RFFreq: Cavity frequency {hz}.
+     * RFRFE0TL: Effective cavity accelerating voltage {GeV} - E0 * T * L.
+     * RFPhase: Synchronous particle phase {degrees} - dEK = q *E0TL * cos(RFPhase).
+     * length: Node length {0.0 m}.
+     * name: Node name {string}.
 
   # *RFLatticeModifications.addRFNode(lattice, position, rf_node)*. Places an RF node into a lattice at a specified position. Variables:
      * lattice: Instantiation of an AccLattice.
