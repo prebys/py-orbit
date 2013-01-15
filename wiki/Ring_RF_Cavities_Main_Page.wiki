@@ -12,12 +12,12 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || [Barrier_Cav] || C++ class containing barrier cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
 || [Frequency_Cav] || C++ class containing linac-type cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
 || [Harmonic_Cav] || C++ class containing harmonic cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
-|| RFNode.Barrier_RFNode || Python class to call barrier cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
-|| RFNode.Frequency_RFNode || Python class to call linac-type cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
-|| RFNode.Harmonic_RFNode || Python class to call harmonic cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
-|| RFNode.BRhoDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B*Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
-|| RFNode.!SyncPhaseDep_Harmonic_RFNode || Python class to call time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B x Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
-|| RFNode.!TimeDep_Barrier_RFNode || Python class to call time-dependent barrier cavity model from python script. Time dependence is determined by user-provided parameters. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| RFNode.Barrier_RFNode || Python class to invoke barrier cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| RFNode.Frequency_RFNode || Python class to invoke linac-type cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| RFNode.Harmonic_RFNode || Python class to invoke harmonic cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| RFNode.BRhoDep_Harmonic_RFNode || Python class to invoke time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B x Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| RFNode.!SyncPhaseDep_Harmonic_RFNode || Python class to invoke time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with the synchronous particle phase determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| RFNode.!TimeDep_Barrier_RFNode || Python class to invoke time-dependent barrier cavity model from python script. Time dependence is determined by user-provided parameters. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFLatticeModifications.addRFNode || Python module that allows a user to add an RF cavity node to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 
 
@@ -34,7 +34,7 @@ This page describes the user-accessible python and underlying C++ classes for RF
 
 = Python Accessible Methods and Variables =
   # *RFNode.Barrier_RFNode(!ZtoPhi, RFVoltage, RFPhasep, RFPhasem, dRFPhasep, dRFPhasem, length, name)*. Creates an instantiation of a barrier cavity. 
-     * !ZtoPhi: unit conversion factor from longitudinal bunch coordinate {m} to fundamental phase {radians}.
+     * !ZtoPhi: unit conversion factor from longitudinal bunch coordinate in {m} to longitudinal phase {radians}, referenced to the fundamental frequency.
      * RFVoltage: Cavity voltage {GeV}.
      * RFPhasep: Center phase of positive barrier {degrees}.
      * RFPhasem: Center phase of negative barrier {degrees}.
@@ -43,7 +43,7 @@ This page describes the user-accessible python and underlying C++ classes for RF
      * length: Node length {0.0 m}.
      * name: Node name {string}.
   # *RFNode.Frequency_RFNode(RFFreq, RFE0TL, RFPhase, length, name)*. Creates an instantiation of a linac-type cavity. 
-     * RFFreq: Cavity frequency {hz}.
+     * RFFreq: Cavity frequency {Hz}.
      * RFRFE0TL: Effective cavity accelerating voltage {GeV} - E0 x T x L.
      * RFPhase: Synchronous particle phase {degrees} - dEK = q x E0TL x cos(RFPhase).
      * length: Node length {0.0 m}.
