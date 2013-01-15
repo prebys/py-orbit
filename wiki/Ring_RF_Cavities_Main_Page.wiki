@@ -44,8 +44,8 @@ This page describes the user-accessible python and underlying C++ classes for RF
      * name: Node name {string}.
   # *RFNode.Frequency_RFNode(RFFreq, RFE0TL, RFPhase, length, name)*. Creates an instantiation of a linac-type cavity. 
      * RFFreq: Cavity frequency {hz}.
-     * RFRFE0TL: Effective cavity accelerating voltage {GeV} - E0 * T * L.
-     * RFPhase: Synchronous particle phase {degrees} - dEK = q *E0TL * cos(RFPhase).
+     * RFRFE0TL: Effective cavity accelerating voltage {GeV} - E0 x T x L.
+     * RFPhase: Synchronous particle phase {degrees} - dEK = q x E0TL x cos(RFPhase).
      * length: Node length {0.0 m}.
      * name: Node name {string}.
 
