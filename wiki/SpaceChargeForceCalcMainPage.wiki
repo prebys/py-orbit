@@ -4,14 +4,14 @@ summary Description of how to use the 2.5D space charge direct force class
 
 = Summary =
 
-This page describes how to use the transverse, 2.5D, direct force space charge package and associated classes.  The class is translated from the ORBIT 2.5D direct force space charge class.  It uses an FFT method to compute the force. This module requires the fftw3 package.
+This page describes how to use the transverse, 2.5D, direct force space charge package and associated classes.  The class is translated from the ORBIT 2.5D direct force space charge class.  It uses an FFT convolution method to compute the force. This module requires the fftw3 package.
 
 = Associated Classes =
 
 || *Name* || *Description* || *Address* ||
 || [SpaceChargeForceCalc2p5d] || The class which computes and applies the force kick || $ORBIT_ROOT/src/orbit/spacecharge/ ||
-|| directforceAccNodes || The python module that allows a user to define a Teapot direct force 2p5d space charge node  (DirectForce2p5D_AccNode) || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d ||
-|| directforceLatticeModifications || The python module that allows a user to add a defined DirectForce2p5D_AccNode as child node to a element in a lattice || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d ||
+|| DirectForce2p5D_AccNode || The python module that allows a user to define a Teapot direct force 2p5d space charge node  || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d/directforceAccNodes.py ||
+|| setDirectForce2p5DAccNodes || The python module that allows a user to add a defined DirectForce2p5D_AccNode as child node to an element in a lattice || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d/directforceLaticeModifications ||
 || setSC_General_AccNodes || Adds a defined space charge node to every element in the lattice || $ORBIT_ROOT/py/orbit/space_charge/scLatticeModifications.py ||
 
 
