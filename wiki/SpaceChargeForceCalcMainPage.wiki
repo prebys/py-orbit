@@ -1,0 +1,44 @@
+#summary Summary page for 2.5D space charge force calculation
+
+summary Description of how to use the 2.5D space charge direct force class
+
+= Summary =
+
+This page describes how to use the transverse, 2.5D, direct force space charge package and associated classes.  The class is translated from the ORBIT 2.5D direct force space charge class.  It uses an FFT method to compute the force. This module requires the fftw3 package.
+
+= Associated Classes =
+
+|| *Name* || *Description* || *Address* ||
+|| [SpaceChargeForceCalc2p5d] || The class which computes and applies the force kick || $ORBIT_ROOT/src/orbit/spacecharge/ ||
+|| directforceAccNodes || The python module that allows a user to define a Teapot direct force 2p5d space charge node  (DirectForce2p5D_AccNode) || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d ||
+|| directforceLatticeModifications || The python module that allows a user to add a defined DirectForce2p5D_AccNode as child node to a element in a lattice || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d ||
+|| setSC_General_AccNodes || Adds a defined space charge node to every element in the lattice || $ORBIT_ROOT/py/orbit/space_charge/scLatticeModifications.py ||
+
+
+= Python Accessible Methods and Variables =
+  # *[SC1D_AccNode](nt b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
+     * b_a: Approximate ratio of beam pipe radius to beam radius.
+     * length: Length of the lattice
+     * nMacrosMin: Minimum number of macroparticles needed to do the computation 
+     * useSpaceCharge: Flag for turning the space charge piece on (1) or off (0). 
+     * nBins: Number of longitudinal slicing bins for space charge kick calculation. 
+  # *assignImpedance(pyObject py_complex_arr)*. Convenience method for assigning an impedance array. 
+     * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
+  # *track(Dict paramsDict)*. A method for doing the longitudinal space charge kick. Implemented by the lattice trackBunch method. Variables:  
+  # *addLongitudinalSpaceChargeNode(lattice, position, sc1D_node)*. Routine to add a defined SC1D_AccNode to a drift region of a teapot lattice. Variables:
+     * lattice: The teapot lattice.
+     * position: Position of the SC1D_AccNode element in meters.
+     * sc1D_node: A predefined SC1D_AccNode 
+
+
+= Example Scripts = 
+
+The following example demonstrates adding a longitudinal space charge node to a lattice.  Example can be found in ORBIT_ROOT/py-orbit/examples/Space_Charge/sc1d/longscbunchlattice.py
+
+{{{
+
+
+
+
+
+}}}
