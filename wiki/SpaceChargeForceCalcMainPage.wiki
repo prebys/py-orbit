@@ -16,19 +16,14 @@ This page describes how to use the transverse, 2.5D, direct force space charge p
 
 
 = Python Accessible Methods and Variables =
-  # *[SC1D_AccNode](nt b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
-     * b_a: Approximate ratio of beam pipe radius to beam radius.
-     * length: Length of the lattice
-     * nMacrosMin: Minimum number of macroparticles needed to do the computation 
-     * useSpaceCharge: Flag for turning the space charge piece on (1) or off (0). 
-     * nBins: Number of longitudinal slicing bins for space charge kick calculation. 
-  # *assignImpedance(pyObject py_complex_arr)*. Convenience method for assigning an impedance array. 
-     * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
-  # *track(Dict paramsDict)*. A method for doing the longitudinal space charge kick. Implemented by the lattice trackBunch method. Variables:  
-  # *addLongitudinalSpaceChargeNode(lattice, position, sc1D_node)*. Routine to add a defined SC1D_AccNode to a drift region of a teapot lattice. Variables:
+  # *DirectForce2p5D_AccNode(SC_Base_AccNode)*. Creates a 2.5D direct force space charge node. Variables:
+     *SC_Base_AccNode: The space charge calculator node
+  # *track(Dict paramsDict)*. A method for doing the 2.5D direct force space charge kick. Implemented by the lattice trackBunch method. 
+     *paramsDict: A Dict containing the bunch.
+  # *setDirectForce2p5DAccNodes(lattice, sc_path_length_min, space_charge_calculator):*. Routine to add a defined DirectForce2p5D_AccNode as a child node to an element in the lattice . Variables:
      * lattice: The teapot lattice.
-     * position: Position of the SC1D_AccNode element in meters.
-     * sc1D_node: A predefined SC1D_AccNode 
+     * sc_path_length_min: Minimum path length in node in order to do a kick.
+     * space_charge_calculator: A predefined space charge calculator (such as ?) 
 
 
 = Example Scripts = 
