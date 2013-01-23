@@ -1,0 +1,18 @@
+#summary Description of the longitudinal space charge class
+
+= Summary =
+This class computes and applies a direct force kick on the particles.  The method is to grid the particles on a rectangular grid with user defined resolution, and then FFT the greens function and particle density grid, convolute the results, and then reverse FFT to compute the force grid.  The force grid is then interpolated to give the force on each particle. 
+
+= Python Accessible Methods and Variables = 
+  # *SpaceChargeForceCalc2p5d(int xSize, int ySize, int zSize)*. Creates a direct force space charge calculator. Variables:
+     * xSize: Number of horizontal grid bins
+     * ySize: Number of vertical grid bins
+     * zSize: Number of longitudinal grid bins (usually one for this space charge implementation).
+  # *trackBunch(Bunch bunch, double length)*. Computes and applies the direct force kick to the particles in the bunch.  Applies the kick to the particles.
+      * Bunch: The bunch under consideration. 
+      * length: The length of the lattice
+  # *getRhoGrid(). Returns the density grid of macro particles.
+  # *getForceGridX(). Returns computed horizontal force grid.
+  # *getForceGridY(). Returns the computed vertical force grid.
+  # *getLongGrid(). Returns the longitudinal grid. 
+    
