@@ -9,7 +9,7 @@ This page describes how to use the transverse, 2.5D, direct force space charge p
 = Associated Classes =
 
 || *Name* || *Description* || *Address* ||
-|| [SpaceChargeForceCalc2p5d] || The class which computes and applies the force kick || $ORBIT_ROOT/src/orbit/spacecharge/ ||
+|| [SpaceChargeForceCalc2p5d] || The class which computes and applies the direct force kick (the space charge calculator) || $ORBIT_ROOT/src/orbit/spacecharge/ ||
 || setDirectForce2p5DAccNodes || The python module that allows a user to add a defined space charge calculator as child nodes to elements in a lattice || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d/directforceLaticeModifications ||
 
 = Python Accessible Methods and Variables =
