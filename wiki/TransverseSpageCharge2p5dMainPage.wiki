@@ -1,10 +1,10 @@
-#summary Summary page for 2.5D space charge force calculation
+#summary Summary page for 2.5D space charge routines
 
-summary Description of how to use the 2.5D space charge direct force class
+summary Description of how to use the 2.5D space charge classes
 
 = Summary =
 
-This page describes how to use the transverse, 2.5D, direct force space charge package and associated classes.  The class is translated from the ORBIT 2.5D direct force space charge class.  It uses an FFT convolution method to compute the force. This module requires the fftw3 package.
+This page describes how to use the transverse, 2.5D, space charge packages.  The classes are translated from the ORBIT 2.5D space charge classes. These classes use an FFT convolution method to compute the force. 
 
 = Associated Classes =
 
