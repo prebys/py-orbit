@@ -10,17 +10,13 @@ This page describes how to use the transverse, 2.5D, direct force space charge p
 
 || *Name* || *Description* || *Address* ||
 || [SpaceChargeForceCalc2p5d] || The class which computes and applies the force kick || $ORBIT_ROOT/src/orbit/spacecharge/ ||
-|| DirectForce2p5D_AccNode || The python module that allows a user to define a Teapot direct force 2p5d space charge node  || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d/directforceAccNodes.py ||
-|| setDirectForce2p5DAccNodes || The python module that allows a user to add a defined DirectForce2p5D_AccNode as child node to an element in a lattice || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d/directforceLaticeModifications ||
-|| setSC_General_AccNodes || Adds a defined space charge node to every element in the lattice || $ORBIT_ROOT/py/orbit/space_charge/scLatticeModifications.py ||
-
+|| setDirectForce2p5DAccNodes || The python module that allows a user to add a defined DirectForce2p5D_AccNode as child nodes to elements in a lattice || $ORBIT_ROOT/py/orbit/space_charge/directforce2p5d/directforceLaticeModifications ||
 
 = Python Accessible Methods and Variables =
   # *setDirectForce2p5DAccNodes(lattice, sc_path_length_min, space_charge_calculator):*. Routine to add a defined DirectForce2p5D_AccNode as a child node to an element in the lattice . Variables:
      * lattice: The teapot lattice.
      * sc_path_length_min: Minimum path length in node in order to do a kick.
      * space_charge_calculator: A predefined space charge calculator (such as an instance of the SpaceChargeForceCalc2p5d class) 
-
 
 = Example Scripts = 
 
