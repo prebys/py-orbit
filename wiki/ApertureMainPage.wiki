@@ -14,6 +14,7 @@ The module requires input of two bunches from the Bunch class: one bunch for the
 || EllipseApertureNode || Convenience class for quickly creating an elliptical TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/ TeapotApertureNode.py||
 || RectangleApertureNode || Convenience class for quickly creating a rectangular TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/TeapotApertureNode.py ||
 || addTeapotApertureNode || The python routine that allows a user to add a defined aperture to the lattice in a drift region || $ORBIT_ROOT/py/orbit/aperture/ApertureLatticeModifications.py||
+|| addCircleApertureSet || The python routine that allows a user to add a set of circular apertures to the lattice over a range of distance (one per node) || $ORBIT_ROOT/py/orbit/aperture/ApertureRangeModifications.py||
 
 = Python Accessible Classes, Methods, and Variables =
   # *TeapotApertureNode(int shape, double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
