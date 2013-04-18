@@ -1,0 +1,46 @@
+#summary Summary of how to create and use an aperture.
+= Summary =
+
+The aperture class provides a method for losing particles on a zero length, 100% absorbing aperture.  Three types of aperture shapes are available: 1) Circle, ellipse, and rectangle.  The user can apply horizontal and vertical offsets to the aperture. The apertures can be added singly to any drift region in a lattice, or in sets within a positional range in the lattice.  If the set is used, one aperture will be added per drift node in the accelerator. 
+
+The module requires input of two bunches from the Bunch class: one bunch for the alive particles, and one bunch to be populated with particles lost in the aperture. 
+
+= Associated Classes =
+
+|| *Name* || *Description* || *Address* ||
+|| [Apertures] || The class which defines the aperture || $ORBIT_ROOT/src/orbit/Aperture/ ||
+|| MaterialInteractions || Class containing a collection of particle scattering methods || $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
+||cross_sections || Contains the elastic and inelastic cross sections for each material (barns), and material properties (MKS) || $ORBIT_ROOT/src/orbit/MaterialInteractions/||
+||num_recipes || Numerical recipes used in scattering models || $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
+|| wrap_collimator || The python wrapper class for Collimator ||  $ORBIT_ROOT/src/orbit/MaterialInteractions/ ||
+|| TeapotCollimatorNode || The python module that allows a user to  define collimator || $ORBIT_ROOT/py/orbit/collimation/ ||
+|| collimatorLatticeModifications || The python module that allows a user to  add a defined collimator to the lattice in a drift region || $ORBIT_ROOT/py/orbit/collimation/ ||
+
+= Python Accessible Methods and Variables =
+  # *TeapotCollimatorNode(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle, string name)*. An instance of a collimator. Creates a teapot style collimator and contains methods to track through this collimator. Variables:
+     * length: Length of the collimator in meters
+     * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
+     * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
+     * shape: Shape type index: 1=circle, 2=ellipse, 3=one sided flat, 4=two sided flat, 5=rectangular (outside is collimator), 6=rectangular (inside is collimator). 
+     * a: Radius for circular collimator, x-axis for elliptical, horizontal right side extent for flat and rectangular.
+     * b: Y-axis for elliptical, left side horizontal extent for two-sided flat or rectangular. 
+     * c: Upper side vertical extent for rectangular. 
+     * d: Lower side vertical extent for rectangular.
+     * angle: Tilt angle of the collimator defined in degrees.
+     * name: The name of the collimator.  
+  # *addTeapotCollimatorNode(TEAPOT_Lattice lattice, double position, TeapotCollimatorNode collimator_node)*. A method to add the collimator to a Teapot lattice. Variables: 
+     * lattice: The Teapot lattice the collimator should be added to.
+     * position: The start position of the collimator in the lattice.
+     * collimator_node: A previously defined collimator
+
+= Example Scripts = 
+
+The following example demonstrates a bunch being propagated through a circular iron collimator of length 0.5 meters and aperture 10 cm whose front face is located 18.5 meters from the start of an existing teapot lattice. It is assumed that the main bunch, "b", is already defined, but that the lost bunch needs creation.  At the end, the main bunch and lost bunch particle parameters are printed. 
+{{{
+
+
+
+
+}}}
+
+Complete run examples can be found in $ORBIT_ROOT/examples/Apertures .
