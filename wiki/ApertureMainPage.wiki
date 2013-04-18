@@ -15,22 +15,19 @@ The module requires input of two bunches from the Bunch class: one bunch for the
 || RectangleApertureNode || Convenience class for quickly creating a rectangular TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/ ||
 || ApertureLatticeModifications || The python module that allows a user to add a defined aperture to the lattice in a drift region || $ORBIT_ROOT/py/orbit/aperture/ ||
 
-= Python Accessible Methods and Variables =
-  # *TeapotCollimatorNode(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle, string name)*. An instance of a collimator. Creates a teapot style collimator and contains methods to track through this collimator. Variables:
-     * length: Length of the collimator in meters
-     * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
+= Python Accessible Classes, Methods, and Variables =
+  # *TeapotApertureNode(int shape, double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
+     * shape: Shape type index. 1=circle, 2=ellipse, 3=rectangle
      * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
-     * shape: Shape type index: 1=circle, 2=ellipse, 3=one sided flat, 4=two sided flat, 5=rectangular (outside is collimator), 6=rectangular (inside is collimator). 
-     * a: Radius for circular collimator, x-axis for elliptical, horizontal right side extent for flat and rectangular.
-     * b: Y-axis for elliptical, left side horizontal extent for two-sided flat or rectangular. 
-     * c: Upper side vertical extent for rectangular. 
-     * d: Lower side vertical extent for rectangular.
-     * angle: Tilt angle of the collimator defined in degrees.
-     * name: The name of the collimator.  
-  # *addTeapotCollimatorNode(TEAPOT_Lattice lattice, double position, TeapotCollimatorNode collimator_node)*. A method to add the collimator to a Teapot lattice. Variables: 
-     * lattice: The Teapot lattice the collimator should be added to.
-     * position: The start position of the collimator in the lattice.
-     * collimator_node: A previously defined collimator
+     * a: Radius for circular collimator, x-axis half length for ellipse and rectangle
+     * b: Y-axis half length for elliptical and rectangle. Doesn't apply for circle.  
+     * c: Horizontal offset.
+     * d: Vertical offset
+     * name: The name of the aperture.  
+  # *addTeapotApertureNode(TEAPOT_Lattice lattice, double position, TeapotApertureNode aperture)*. A method to add the aperture to a Teapot lattice. Variables: 
+     * lattice: The Teapot lattice the aperture should be added to.
+     * position: The start position of the aperture in the lattice.
+     * aperture: A previously defined aperture
 
 = Example Scripts = 
 
