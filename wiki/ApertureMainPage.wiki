@@ -17,13 +17,30 @@ The module requires input of two bunches from the Bunch class: one bunch for the
 
 = Python Accessible Classes, Methods, and Variables =
   # *TeapotApertureNode(int shape, double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
-     * shape: Shape type index. 1=circle, 2=ellipse, 3=rectangle.  Default 1.
-     * a: Radius for circular collimator, x-axis half length for ellipse and rectangle. Default 0.
-     * b: Y-axis half length for elliptical and rectangle. Doesn't apply for circle.  Default 0.
-     * c: Horizontal offset. Default 0.
-     * d: Vertical offset. Default 0.
+     * shape: Shape type index. 1=circle, 2=ellipse, 3=rectangle. 
+     * a: Radius for circular collimator, x-axis half length for ellipse and rectangle. 
+     * b: Y-axis half length for elliptical and rectangle. Doesn't apply for circle. 
+     * c: Horizontal offset. Default 0. Argument is optional.
+     * d: Vertical offset. Default 0. Argument is optional.
      * name: The name of the aperture.  
-  # *addTeapotApertureNode(TEAPOT_Lattice lattice, double position, TeapotApertureNode aperture)*. A method to add the aperture to a Teapot lattice. Variables: 
+  # *CircleApertureNode(double a, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
+     * a: Radius.
+     * c: Horizontal offset.  Default 0. Argument is optional.
+     * d: Vertical offset. Default 0. Argument is optional.
+     * name: The name of the aperture.  
+# *EllipseApertureNode(double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
+     * a: X-axis half length.
+     * b: Y-axis half length.
+     * c: Horizontal offset.  Default 0. Argument is optional.
+     * d: Vertical offset. Default 0. Argument is optional.
+     * name: The name of the aperture.  
+# *RectangleApertureNode(double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
+     * a: X-axis half length.
+     * b: Y-axis half length.
+     * c: Horizontal offset.  Default 0. Argument is optional.
+     * d: Vertical offset. Default 0. Argument is optional.
+     * name: The name of the aperture.  
+ # *addTeapotApertureNode(TEAPOT_Lattice lattice, double position, TeapotApertureNode aperture)*. A method to add the aperture to a Teapot lattice. Variables: 
      * lattice: The Teapot lattice the aperture should be added to.
      * position: The start position of the aperture in the lattice.
      * aperture: A previously defined aperture
