@@ -40,7 +40,7 @@ The module requires input of two bunches from the Bunch class: one bunch for the
      * c: Horizontal offset.  Default 0. Argument is optional.
      * d: Vertical offset. Default 0. Argument is optional.
      * name: The name of the aperture.  
-   # *addTeapotApertureNode(TEAPOT_Lattice lattice, double position, TeapotApertureNode aperture)*. A method to add the aperture to a Teapot lattice. Variables: 
+  # *addTeapotApertureNode(TEAPOT_Lattice lattice, double position, TeapotApertureNode aperture)*. A method to add the aperture to a Teapot lattice. Variables: 
      * lattice: The Teapot lattice the aperture should be added to.
      * position: The start position of the aperture in the lattice.
      * aperture: A previously defined aperture
