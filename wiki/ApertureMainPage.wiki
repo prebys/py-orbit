@@ -8,7 +8,7 @@ The module requires input of two bunches from the Bunch class: one bunch for the
 = Associated Classes =
 
 || *Name* || *Description* || *Address* ||
-|| Apertures || The class which defines the aperture || $ORBIT_ROOT/src/orbit/Aperture/ ||
+|| [Aperture] || The class which defines the aperture || $ORBIT_ROOT/src/orbit/Aperture/ ||
 || !TeapotApertureNode || The python class that allows a user to define an !TeaPot style aperture  || $ORBIT_ROOT/py/orbit/aperture/!TeapotApertureNode.py ||
 || !CircleApertureNode || Convenience class for quickly creating a  circular !TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/!TeapotApertureNode.py ||
 || !EllipseApertureNode || Convenience class for quickly creating an elliptical !TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/!TeapotApertureNode.py||
