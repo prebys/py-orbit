@@ -1,7 +1,7 @@
-#summary One-sentence summary of this page.
+#summary The main Aperture class that absorbs particles if they are outside the user defined aperture.
 
 = Introduction =
-dfddf
+
 Add your content here.
 
 
