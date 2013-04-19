@@ -62,7 +62,7 @@ The module requires input of two bunches from the Bunch class: one bunch for the
      * e: End position.
      * c: Horizontal offset.  Default 0. Argument is optional.
      * d: Vertical offset. Default 0. Argument is optional.
- #  *addRectangleApertureSet(double a, double b, TEAPOT_Lattice lattice, double s, double e, double c, double d)*. Adds a set of rectangular apertures in the range from variable s to e. Variables:
+  # *addRectangleApertureSet(double a, double b, TEAPOT_Lattice lattice, double s, double e, double c, double d)*. Adds a set of rectangular apertures in the range from variable s to e. Variables:
      * a: X-axis half length
      * b: Y-axis half length
      * lattice: The Teapot lattice the aperture should be added to.
