@@ -9,35 +9,35 @@ The module requires input of two bunches from the Bunch class: one bunch for the
 
 || *Name* || *Description* || *Address* ||
 || Apertures || The class which defines the aperture || $ORBIT_ROOT/src/orbit/Aperture/ ||
-|| !TeapotApertureNode || The python class that allows a user to define an TeaPot style aperture  || $ORBIT_ROOT/py/orbit/aperture/TeapotApertureNode.py ||
-|| !CircleApertureNode || Convenience class for quickly creating a  circular TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/TeapotApertureNode.py ||
-|| !EllipseApertureNode || Convenience class for quickly creating an elliptical TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/ TeapotApertureNode.py||
-|| !RectangleApertureNode || Convenience class for quickly creating a rectangular TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/TeapotApertureNode.py ||
+|| !TeapotApertureNode || The python class that allows a user to define an !TeaPot style aperture  || $ORBIT_ROOT/py/orbit/aperture/TeapotApertureNode.py ||
+|| !CircleApertureNode || Convenience class for quickly creating a  circular !TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/TeapotApertureNode.py ||
+|| !EllipseApertureNode || Convenience class for quickly creating an elliptical !TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/ TeapotApertureNode.py||
+|| !RectangleApertureNode || Convenience class for quickly creating a rectangular !TeaPot aperture || $ORBIT_ROOT/py/orbit/aperture/TeapotApertureNode.py ||
 || addTeapotApertureNode || The python routine that allows a user to add a defined aperture to the lattice in a drift region || $ORBIT_ROOT/py/orbit/aperture/ApertureLatticeModifications.py||
 || addCircleApertureSet || Python routine that allows a user to add a set of circular apertures to the lattice over a range of distance (one per node) || $ORBIT_ROOT/py/orbit/aperture/ApertureRangeModifications.py||
 || addEllipseApertureSet || Python routine that allows a user to add a set of ellipticalapertures to the lattice over a range of distance (one per node) || $ORBIT_ROOT/py/orbit/aperture/ApertureRangeModifications.py||
 || addRectangleApertureSet || Python routine that allows a user to add a set of rectangular apertures to the lattice over a range of distance (one per node) || $ORBIT_ROOT/py/orbit/aperture/ApertureRangeModifications.py||
 
 = Python Accessible Classes, Methods, and Variables =
-  # *TeapotApertureNode(int shape, double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
+  # *!TeapotApertureNode(int shape, double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
      * shape: Shape type index. 1=circle, 2=ellipse, 3=rectangle. 
      * a: Radius for circular collimator, x-axis half length for ellipse and rectangle. 
      * b: Y-axis half length for elliptical and rectangle. Doesn't apply for circle. 
      * c: Horizontal offset. Default 0. Argument is optional.
      * d: Vertical offset. Default 0. Argument is optional.
      * name: The name of the aperture.  
-  # *CircleApertureNode(double a, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
+  # *!CircleApertureNode(double a, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
      * a: Radius.
      * c: Horizontal offset.  Default 0. Argument is optional.
      * d: Vertical offset. Default 0. Argument is optional.
      * name: The name of the aperture.  
-  # *EllipseApertureNode(double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
+  # *!EllipseApertureNode(double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
      * a: X-axis half length.
      * b: Y-axis half length.
      * c: Horizontal offset.  Default 0. Argument is optional.
      * d: Vertical offset. Default 0. Argument is optional.
      * name: The name of the aperture.  
-  # *RectangleApertureNode(double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
+  # *!RectangleApertureNode(double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
      * a: X-axis half length.
      * b: Y-axis half length.
      * c: Horizontal offset.  Default 0. Argument is optional.
