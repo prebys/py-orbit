@@ -22,6 +22,7 @@
 #include "wrap_hminus_stripping.hh"
 #include "wrap_continuum_ss.hh"
 #include "wrap_tdm_continuum.hh"
+#include "wrap_snsstrippingmagnet.hh"
 
 static PyMethodDef laserStrippingMethods[] = { {NULL,NULL} };
 
@@ -54,6 +55,7 @@ extern "C" {
 		wrap_hminus_stripping::initHminusStripping(module);
 		wrap_continuum_ss::initContinuumSS(module);
 		wrap_tdm_continuum::initTDMcontinuum(module);
+                wrap_snsstrippingmagnet::initSNSstrippingMagnet(module);
 		
   }
 	

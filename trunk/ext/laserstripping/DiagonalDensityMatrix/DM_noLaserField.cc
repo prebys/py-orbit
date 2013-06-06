@@ -32,9 +32,10 @@ inline int convert3to1level(int n,int n1, int m){
 	return 1+m*n+n1+(n*n*n-n)/3-m*abs(m-1)/2;
 }
 
-DM_noLaserField::DM_noLaserField(Stark* Starkef)
+DM_noLaserField::DM_noLaserField(Stark* Starkef, int method)
 {
 	setName("unnamed");
+        index = method;
 
 	StarkEffect=Starkef;
 	
@@ -91,12 +92,28 @@ void DM_noLaserField::CalcPopulations(int i, Bunch* bunch)	{
 	PopAttr->attArr(i)[0] = 1;
 	for (int j=1; j<levels + 1;j++)		
 	PopAttr->attArr(i)[0] -= PopAttr->attArr(i)[j];
+        
 }
 
 
 
 
 void DM_noLaserField::setupEffects(Bunch* bunch){	
+        
+
+        prob = new double[bunch->getSize()];
+        bunch->setCharge(+1);
+        for (int i=0; i<bunch->getSize();i++)	{
+                bunch->deleteParticleFast(i);
+                prob[i] = (double)rand()/(double)RAND_MAX;
+//		std::cout<<prob[i]<<"\n";
+        }
+                
+        
+        if(bunch->hasParticleAttributes("Populations")!=0)
+            if(bunch->getParticleAttributes("Populations")->getAttSize() != levels+1)
+                bunch->removeAllParticleAttributes();
+        
 	
 	if(bunch->hasParticleAttributes("Populations")==0)	{
 		std::map<std::string,double> part_attr_dict;
@@ -116,7 +133,12 @@ void DM_noLaserField::setupEffects(Bunch* bunch){
 		
 
 
+void DM_noLaserField::finalizeEffects(Bunch* bunch){
+		
+        delete	[]	prob;
+        
 
+}
 
 
 void DM_noLaserField::applyEffectsForEach(Bunch* bunch, int i, 
@@ -124,9 +146,43 @@ void DM_noLaserField::applyEffectsForEach(Bunch* bunch, int i,
 																  double t, double t_step, 
 																  OrbitUtils::BaseFieldSource* fieldSource,
 																	RungeKuttaTracker* tracker)		{
-	
-x0 = y_in_vct[0];y0 = y_in_vct[1];z0 = y_in_vct[2];
-px0 = y_in_vct[3];py0 = y_in_vct[4];pz0 = y_in_vct[5];
+
+   if(bunch->flag(i) == 0)	{
+            
+            double** partCoordArr = bunch->coordArr();
+            
+            y_in_vct[0] = partCoordArr[i][0];
+            y_in_vct[1] = partCoordArr[i][2];
+            y_in_vct[2] = partCoordArr[i][4];
+            y_in_vct[3] = partCoordArr[i][1];
+            y_in_vct[4] = partCoordArr[i][3];
+            y_in_vct[5] = partCoordArr[i][5];            
+         
+        double mass = bunch->getMass();		        
+        double vpt = mass*mass + y_in_vct[3]*y_in_vct[3] + y_in_vct[4]*y_in_vct[4] + y_in_vct[5]*y_in_vct[5];
+        
+            vpt = 299792458*t_step/sqrt(vpt);
+            y_out_vct[0] = y_in_vct[0] + vpt*y_in_vct[3];
+            y_out_vct[1] = y_in_vct[1] + vpt*y_in_vct[4];
+            y_out_vct[2] = y_in_vct[2] + vpt*y_in_vct[5];
+            y_out_vct[3] = y_in_vct[3];
+            y_out_vct[4] = y_in_vct[4];
+            y_out_vct[5] = y_in_vct[5];
+                
+          partCoordArr[i][0] = y_out_vct[0];
+          partCoordArr[i][2] = y_out_vct[1];
+          partCoordArr[i][4] = y_out_vct[2];
+          partCoordArr[i][1] = y_out_vct[3];
+          partCoordArr[i][3] = y_out_vct[4];
+          partCoordArr[i][5] = y_out_vct[5];  
+          
+       }
+    
+
+	x0 = y_in_vct[0];y0 = y_in_vct[1];z0 = y_in_vct[2];
+	px0 = y_in_vct[3];py0 = y_in_vct[4];pz0 = y_in_vct[5];
+	x = y_out_vct[0];y = y_out_vct[1];z = y_out_vct[2];
+	px = y_out_vct[3];py = y_out_vct[4];pz = y_out_vct[5];
 
 
 
@@ -140,11 +196,11 @@ px0 = y_in_vct[3];py0 = y_in_vct[4];pz0 = y_in_vct[5];
 			GetParticleFrameParameters(i,t,t_step,bunch);	
 
 			//	This function provides step solution for density matrix using rk4	method
-			AmplSolver4step(i,bunch);	
+			AmplSolver4step(t_step, i,bunch);	
 		
 			CalcPopulations(i, bunch);
 
-	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\t"<<PopAttr->attArr(i)[0]<<"\n";
+	//cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\t"<<PopAttr->attArr(i)[0]<<"\t" <<PopAttr->attArr(i)[12] + PopAttr->attArr(i)[13]+PopAttr->attArr(i)[7] + PopAttr->attArr(i)[8] + PopAttr->attArr(i)[1]<<"\n";
 }
 
 void DM_noLaserField::GetParticleFrameFields(int i,double t,double t_step,  Bunch* bunch,  BaseFieldSource* fieldSource)	{
@@ -181,10 +237,13 @@ void	DM_noLaserField::GetParticleFrameParameters(int i, double t,double t_step, 
 
 
 
-void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
+void DM_noLaserField::AmplSolver4step(double t_step, int i, Bunch* bunch)	{
 
 	double dt,sum;
-
+        
+        
+        if(bunch->flag(i) == 0)           {
+        
 	StarkEffect->SetE(Ez_stat);	
 	
 	for(int n=2; n<levels+1;n++) {
@@ -196,6 +255,7 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 		}
 	}
 	
+        
 	for(int j=1; j<5; j++){
 		for(int m=1; m<levels+1;m++)	{
 			if (StarkEffect->field_thresh[m]>Ez_stat)	{	
@@ -224,7 +284,21 @@ void DM_noLaserField::AmplSolver4step(int i, Bunch* bunch)	{
 			pop(i,m) = 0;
 		}
 		
-	}	
+	}
+
+
+	
+        }
+        
+
+			
+		
+
+	if((index == 1)&&(pop(i,0) >= prob[i]))
+		bunch->recoverParticle(i);
+
+        
+        
 }
 
 
