@@ -42,8 +42,9 @@ extern "C" {
 	  PyObject*	pyStarkEffect=NULL;
 		
 	  int nVars = PyTuple_Size(args);
+          int method = 0;
 	  
-	  if(!PyArg_ParseTuple(	args,"O:",&pyStarkEffect))
+	  if(!PyArg_ParseTuple(	args,"Oi:",&pyStarkEffect, &method))
 		{
 			error("DM_noLaserField(StarkEffect) - param.  needed");
 		}	
@@ -51,7 +52,7 @@ extern "C" {
 	  else	{
 			
 			Stark* Starkef = (Stark*) ((pyORBIT_Object*) pyStarkEffect)->cpp_obj;
-			self->cpp_obj =  new  DM_noLaserField(Starkef);
+			self->cpp_obj =  new  DM_noLaserField(Starkef, method);
 			((DM_noLaserField*) self->cpp_obj)->setPyWrapper((PyObject*) self);
 		}
 		

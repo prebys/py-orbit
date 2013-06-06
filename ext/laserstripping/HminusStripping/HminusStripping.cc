@@ -88,15 +88,21 @@ HminusStripping::~HminusStripping()
 void HminusStripping::setupEffects(Bunch* bunch){	
 	
 
-	if (index == 1)	{
+                
 		prob = new double[bunch->getSize()];
-		
+                bunch->setCharge(-1);
+
 		for (int i=0; i<bunch->getSize();i++)	{
+                        bunch->recoverParticle(i);
 			prob[i] = (double)rand()/(double)RAND_MAX;
-//		std::cout<<prob[i]<<"\n";
+		//std::cout<<prob[i]<<"\n";
 		}
-	}
+
 		
+
+                if(bunch->hasParticleAttributes("Populations")!=0)
+                    if(bunch->getParticleAttributes("Populations")->getAttSize() != 1)
+                        bunch->removeAllParticleAttributes();
 
 
 		if(bunch->hasParticleAttributes("Populations")==0)	{
@@ -108,7 +114,7 @@ void HminusStripping::setupEffects(Bunch* bunch){
 			bunch->getParticleAttributes("Populations")->attValue(i,0) = 0.;
 		}
 	
-	
+
 	PopAttr = bunch->getParticleAttributes("Populations");
 	
 
@@ -119,11 +125,8 @@ void HminusStripping::setupEffects(Bunch* bunch){
 	
 void HminusStripping::finalizeEffects(Bunch* bunch){
 	
-	
-	if(index==1)	{
-		delete	[]	prob;
-	bunch->removeAllParticleAttributes();
-	}
+	delete	[]	prob;
+        
 
 }
 
@@ -135,10 +138,40 @@ void HminusStripping::finalizeEffects(Bunch* bunch){
 
 void HminusStripping::applyEffectsForEach(Bunch* bunch, int i, 
 	                            double* y_in_vct, double* y_out_vct, 
-														  double t, double t_step, 
-														  BaseFieldSource* fieldSource,
+														  double t, double t_step, 														  BaseFieldSource* fieldSource,
 															RungeKuttaTracker* tracker)			{
-
+        
+        if(bunch->flag(i) == 0)	{
+            
+            double** partCoordArr = bunch->coordArr();
+            
+            y_in_vct[0] = partCoordArr[i][0];
+            y_in_vct[1] = partCoordArr[i][2];
+            y_in_vct[2] = partCoordArr[i][4];
+            y_in_vct[3] = partCoordArr[i][1];
+            y_in_vct[4] = partCoordArr[i][3];
+            y_in_vct[5] = partCoordArr[i][5];            
+         
+        double mass = bunch->getMass();		        
+        double vpt = mass*mass + y_in_vct[3]*y_in_vct[3] + y_in_vct[4]*y_in_vct[4] + y_in_vct[5]*y_in_vct[5];
+        
+            vpt = 299792458*t_step/sqrt(vpt);
+            y_out_vct[0] = y_in_vct[0] + vpt*y_in_vct[3];
+            y_out_vct[1] = y_in_vct[1] + vpt*y_in_vct[4];
+            y_out_vct[2] = y_in_vct[2] + vpt*y_in_vct[5];
+            y_out_vct[3] = y_in_vct[3];
+            y_out_vct[4] = y_in_vct[4];
+            y_out_vct[5] = y_in_vct[5];
+                
+          partCoordArr[i][0] = y_out_vct[0];
+          partCoordArr[i][2] = y_out_vct[1];
+          partCoordArr[i][4] = y_out_vct[2];
+          partCoordArr[i][1] = y_out_vct[3];
+          partCoordArr[i][3] = y_out_vct[4];
+          partCoordArr[i][5] = y_out_vct[5];  
+          
+       }
+    
 
 	x0 = y_in_vct[0];y0 = y_in_vct[1];z0 = y_in_vct[2];
 	px0 = y_in_vct[3];py0 = y_in_vct[4];pz0 = y_in_vct[5];
@@ -156,9 +189,9 @@ void HminusStripping::applyEffectsForEach(Bunch* bunch, int i,
 			GetParticleFrameParameters(i,t,t_step,bunch);	
 
 			//	This function provides step solution for density matrix using rk4	method
-			AmplSolver4step(t_step, i,bunch);	
-			
-				
+			AmplSolver4step(t_step, i,bunch);
+                        
+	
 
 
 //	cout<<scientific<<setprecision(20)<<bunch->x(0)<<"\t"<<bunch->y(0)<<"\t"<<bunch->z(0)<<"\n";
@@ -264,11 +297,10 @@ void HminusStripping::AmplSolver4step(double t_step, int i, Bunch* bunch)	{
 	
 
 
-	double dt, flag = bunch->flag(i);
+	double dt;
 		
-	
 
-		if(flag == 1)	{
+		if(bunch->flag(i) == 1)	{
 		for(int j=1; j<5; j++)	{	
 			
 			if (j==4)	dt=part_t_step;	else dt=part_t_step/2.;	
@@ -281,20 +313,7 @@ void HminusStripping::AmplSolver4step(double t_step, int i, Bunch* bunch)	{
 		}
 
 		
-		
-		
-		if((index == 1)&&(flag == 0))	{
-			
-	        double mass = bunch->getMass();
-	        double vp = t_step*299792458/sqrt(px*px+py*py+pz*pz+mass*mass);
-	        
-	        bunch->x(i) += px*vp;
-	        bunch->y(i) += py*vp;
-	        bunch->z(i) += pz*vp;			
-			
-		}
-			
-		
+	
 
 		if((index == 1)&&(pop(i,0) >= prob[i]))
 			bunch->deleteParticleFast(i);

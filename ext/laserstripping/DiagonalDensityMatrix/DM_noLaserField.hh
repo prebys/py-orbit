@@ -17,7 +17,7 @@ namespace LaserStripping{
 		public:
 		
 			/** Constructor */
-			DM_noLaserField(Stark* StarkEffect);
+			DM_noLaserField(Stark* StarkEffect, int method);
 
 			
 			/** Destructor. */
@@ -25,6 +25,9 @@ namespace LaserStripping{
 			
 		/** It initializes effects. */
 		void setupEffects(Bunch* bunch);
+                
+		/** It finalizes effects. */
+		void finalizeEffects(Bunch* bunch);
 		
 
 		/** It applies the external effects to a particle with certain index. */
@@ -43,8 +46,10 @@ namespace LaserStripping{
 			double** k_RungeKutt;
 			double** gamma_ij;
 			bool** cond;
+                        double* prob;
 			
 			int levels;
+                        int index;
 			
 			ParticleAttributes* PopAttr;
 			
@@ -79,7 +84,7 @@ namespace LaserStripping{
 			
 			
 			/**Solver for Amplitudes**/
-			void AmplSolver4step(int i,Bunch* bunch);
+			void AmplSolver4step(double t_step, int i,Bunch* bunch);
 			
 			/**Calculates populations**/
 			void CalcPopulations(int i,Bunch* bunch);
