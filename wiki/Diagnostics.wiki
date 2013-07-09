@@ -15,9 +15,10 @@ The diagnostics package includes routines for finding the statistical Twiss para
 || TeapotStatLatsNodeSetMember || The same as TeaPotStatLatsNode but for use in a set || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
 || TeapotMomentsNode || The Teapot implementation of the moments class || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
 || TeapotMomentsNodeSetMember || The same as TeapotMomentsNode but for use in a  set || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
+|| addTeapotDiagnosticsNode || Adds a diagnostics node to a Teapot lattice || $ORBIT_ROOT/py/orbit/diagnostics/diagnosticsLatticeModifications.py||
+|| addTeapotStatLatsNodeSet || Adds a set of StatLats nodes inside a Teapot lattice || $ORBIT_ROOT/py/orbit/diagnostics/diagnosticsLatticeModifications.py||
+|| addTeapotMomentsNodeSet || Adds a set of Moments nodes inside a Teapot lattice || $ORBIT_ROOT/py/orbit/diagnostics/diagnosticsLatticeModifications.py||
 
-|| TeapotMomentsNode || The Teapot implementation of the moments class || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
-|| TeapotMomentsNodeSetMember || The same as TeapotMomentsNode but for use in a  set || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
 
 = Python Accessible Methods and Variables =
   # *TeapotCollimatorNode(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle, string name)*. An instance of a collimator. Creates a teapot style collimator and contains methods to track through this collimator. Variables:
