@@ -38,7 +38,18 @@ The diagnostics package includes routines for finding the statistical Twiss para
      * order: The highest order of the moments.
   # * getBunchMoment(int i, int j)*.  Returns the XY moment of the beam. Values will be nonzero only after computeBunchMoments has been run. 
      * i: Moment order in X.
-     * j: Moment order in Y.    
+     * j: Moment order in Y.
+    
+= Methods and Variables from BunchTuneAnalysis =
+ # *assignTwiss(double bx, double ax, double dx, double dpx, double by, double ay)*.  Explicitly assigns Twiss values at the location of the tune node.  The tune calculator requires Twiss input.  Note that pyORBIT and MAD definitions for dispersion differ by a factor of relativistic beta squared. Variables:
+     * bx: Twiss X beta.
+     * ax: Twiss X alpha.
+     * dx: Twiss X dispersion.
+     * dpx: Twiss X dispersion derivative.
+     * by: Twiss Y beta.
+     * ay: Twiss Y alpha.
+
+
 
 = Methods and Variables from StatLats, Moments, StatLatsSetMember, and MomentsSetMember classes =
   # *writeStatLats(String filename)*.  From StatLats class. Writes the statistical lattice parameters to the file. Columns are: (1) position, (2) time, (3) emitx, (4) emity, (5) betax, (6) betay, (7) alphax, (8) alphay. Variables:
@@ -47,7 +58,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
     * filename: String variable representing a filename to be written to. 
     * order: Highest order moment.
 
-= Methods and Variables from BunchTuneAnalysis =
+
 
 
 
