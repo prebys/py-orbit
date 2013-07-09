@@ -26,17 +26,17 @@ The diagnostics package includes routines for finding the statistical Twiss para
   # * getCorrelation(int ic, int jc)*. Returns the centered correlation <(x-<x>)*(y-<y>)> = <x*y> - <x>*<y>. Variables:
      * ic: Index of the beam phase space coordinate
      * jc: Index of the beam phase space coordinate
-  # *getAverage(int ic). Returns the average value for coordinate with index ic.
-  # *getGlobalCount(). Returns the total number of analysed macroparticles.
-  # *getGlobalMacrosize(). Returns the total macrosize.
-  # *getEmittance(int ic). Returns the emittance for index 0,1,2 - x,y,z planes.
-  # *getAlpha(int ic). Returns Twiss alpha for index 0,1,2 - x,y,z planes.
-  # *getBeta(int ic).  Returns Twiss beta for index 0,1,2 - x,y,z planes.
-  # *getGamma(int ic). Returns Twiss gamma for index 0,1,2 - x,y,z planes.
-  # *computeBunchMoments(Bunch* bunch, int order). Computes the XY moments of the bunch up to a prescribed order.  Does the computation but doesn't return any values. Variables:
+  # *getAverage(int ic)*. Returns the average value for coordinate with index ic.
+  # *getGlobalCount()*. Returns the total number of analysed macroparticles.
+  # *getGlobalMacrosize()*. Returns the total macrosize.
+  # *getEmittance(int ic)*. Returns the emittance for index 0,1,2 - x,y,z planes.
+  # *getAlpha(int ic)*. Returns Twiss alpha for index 0,1,2 - x,y,z planes.
+  # *getBeta(int ic)*.  Returns Twiss beta for index 0,1,2 - x,y,z planes.
+  # *getGamma(int ic)*. Returns Twiss gamma for index 0,1,2 - x,y,z planes.
+  # *computeBunchMoments(Bunch* bunch, int order)*. Computes the XY moments of the bunch up to a prescribed order.  Does the computation but doesn't return any values. Variables:
      * bunch: A Bunch.
      * order: The highest order of the moments.
-  # * getBunchMoment(int i, int j).  Returns the XY moment of the beam. Values will be nonzero only after computeBunchMoments has been run. 
+  # * getBunchMoment(int i, int j)*.  Returns the XY moment of the beam. Values will be nonzero only after computeBunchMoments has been run. 
      * i: Moment order in X.
      * j: Moment order in Y.  
 = Example Scripts = 
