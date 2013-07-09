@@ -33,7 +33,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
   # *getAlpha(int ic)*. Returns Twiss alpha for index 0,1,2 - x,y,z planes.
   # *getBeta(int ic)*.  Returns Twiss beta for index 0,1,2 - x,y,z planes.
   # *getGamma(int ic)*. Returns Twiss gamma for index 0,1,2 - x,y,z planes.
-  # *computeBunchMoments(Bunch* bunch, int order)*. Computes the XY moments of the bunch up to a prescribed order.  Does the computation but doesn't return any values. Variables:
+  # *computeBunchMoments(Bunch bunch, int order)*. Computes the XY moments of the bunch up to a prescribed order.  Does the computation but doesn't return any values. Variables:
      * bunch: A Bunch.
      * order: The highest order of the moments.
   # * getBunchMoment(int i, int j)*.  Returns the XY moment of the beam. Values will be nonzero only after computeBunchMoments has been run. 
