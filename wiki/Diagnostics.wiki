@@ -21,22 +21,24 @@ The diagnostics package includes routines for finding the statistical Twiss para
 
 
 = Python Accessible Methods and Variables =
-  # *TeapotCollimatorNode(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle, string name)*. An instance of a collimator. Creates a teapot style collimator and contains methods to track through this collimator. Variables:
-     * length: Length of the collimator in meters
-     * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
-     * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
-     * shape: Shape type index: 1=circle, 2=ellipse, 3=one sided flat, 4=two sided flat, 5=rectangular (outside is collimator), 6=rectangular (inside is collimator). 
-     * a: Radius for circular collimator, x-axis for elliptical, horizontal right side extent for flat and rectangular.
-     * b: Y-axis for elliptical, left side horizontal extent for two-sided flat or rectangular. 
-     * c: Upper side vertical extent for rectangular. 
-     * d: Lower side vertical extent for rectangular.
-     * angle: Tilt angle of the collimator defined in degrees.
-     * name: The name of the collimator.  
-  # *addTeapotCollimatorNode(TEAPOT_Lattice lattice, double position, TeapotCollimatorNode collimator_node)*. A method to add the collimator to a Teapot lattice. Variables: 
-     * lattice: The Teapot lattice the collimator should be added to.
-     * position: The start position of the collimator in the lattice.
-     * collimator_node: A previously defined collimator
-
+    # *analyzeBunch(Bunch* bunch)*. Analyzes a bunch.  Must be run before routines that get Twiss parameters directly (e.g. not moments or statlats classes). Variables:
+     * bunch: A Bunch.
+  # * getCorrelation(int ic, int jc)*. Returns the centered correlation <(x-<x>)*(y-<y>)> = <x*y> - <x>*<y>. Variables:
+     * ic: Index of the beam phase space coordinate
+     * jc: Index of the beam phase space coordinate
+  # *getAverage(int ic). Returns the average value for coordinate with index ic.
+  # *getGlobalCount(). Returns the total number of analysed macroparticles.
+  # *getGlobalMacrosize(). Returns the total macrosize.
+  # *getEmittance(int ic). Returns the emittance for index 0,1,2 - x,y,z planes.
+  # *getAlpha(int ic). Returns Twiss alpha for index 0,1,2 - x,y,z planes.
+  # *getBeta(int ic).  Returns Twiss beta for index 0,1,2 - x,y,z planes.
+  # *getGamma(int ic). Returns Twiss gamma for index 0,1,2 - x,y,z planes.
+  # *computeBunchMoments(Bunch* bunch, int order). Computes the XY moments of the bunch up to a prescribed order.  Does the computation but doesn't return any values. Variables:
+     * bunch: A Bunch.
+     * order: The highest order of the moments.
+  # * getBunchMoment(int i, int j).  Returns the XY moment of the beam. Values will be nonzero only after computeBunchMoments has been run. 
+     * i: Moment order in X.
+     * j: Moment order in Y.  
 = Example Scripts = 
 
 The following example demonstrates a bunch being propagated through a circular iron collimator of length 0.5 meters and aperture 10 cm whose front face is located 18.5 meters from the start of an existing teapot lattice. It is assumed that the main bunch, "b", is already defined, but that the lost bunch needs creation.  At the end, the main bunch and lost bunch particle parameters are printed. 
