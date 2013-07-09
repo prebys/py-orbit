@@ -23,7 +23,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
 = Python Accessible Methods and Variables =
     # *analyzeBunch(Bunch bunch)*. Analyzes a bunch.  Must be run before routines that get Twiss parameters directly (e.g. not moments or statlats classes). Variables:
      * bunch: A Bunch.
-  # * getCorrelation(int ic, int jc)*. Returns the centered correlation {<(x-<x>)*(y-<y>)> = <x*y> - <x>*<y>}. Variables:
+  # * getCorrelation(int ic, int jc)*. Returns the centered correlation {{latex(<(x-<x>)*(y-<y>)> = <x*y> - <x>*<y>)}}. Variables:
      * ic: Index of the beam phase space coordinate
      * jc: Index of the beam phase space coordinate
   # *getAverage(int ic)*. Returns the average value for coordinate with index ic.
