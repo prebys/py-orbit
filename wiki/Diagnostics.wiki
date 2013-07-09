@@ -1,0 +1,98 @@
+#summary Summary particle diagnostics package.
+= Summary =
+The diagnostics package includes routines for finding the statistical Twiss parameters of a bunch, the moments, and the tunes and actions. 
+
+= Associated Classes =
+
+|| *Name* || *Description* || *Address* ||
+|| BunchTwissAnalysis || The c++ class which calculates the statistical twiss parameters and moments || $ORBIT_ROOT/src/orbit/BunchDiagnostics/ ||
+|| BunchTuneAnalysis || The c++ class  which calculates particle tunes and actions || $ORBIT_ROOT/src/orbit/BunchDiagnostics/ ||
+|| StatLats || The python class which calculates and prints the statistical twiss parameters. || $ORBIT_ROOT/py/orbit/diagnostics/diagnostics.py||
+|| StatLatsSetMember || The same as StatLats but for use in a  set || $ORBIT_ROOT/py/orbit/diagnostics/diagnostics.py||
+|| Moments || The python class which calculates and prints the beam moments. || $ORBIT_ROOT/py/orbit/diagnostics/diagnostics.py||
+|| MomentsSetMember || The same as Moments but for use in a set || $ORBIT_ROOT/py/orbit/diagnostics/diagnostics.py||
+|| TeapotStatLatsNode || The teapot implementation of the StatLats class || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
+|| TeapotStatLatsNodeSetMember || The same as TeaPotStatLatsNode but for use in a set || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
+|| TeapotMomentsNode || The Teapot implementation of the moments class || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
+|| TeapotMomentsNodeSetMember || The same as TeapotMomentsNode but for use in a  set || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
+
+|| TeapotMomentsNode || The Teapot implementation of the moments class || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
+|| TeapotMomentsNodeSetMember || The same as TeapotMomentsNode but for use in a  set || $ORBIT_ROOT/py/orbit/diagnostics/TeapotDiagnosticsNode.py||
+
+= Python Accessible Methods and Variables =
+  # *TeapotCollimatorNode(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle, string name)*. An instance of a collimator. Creates a teapot style collimator and contains methods to track through this collimator. Variables:
+     * length: Length of the collimator in meters
+     * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
+     * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
+     * shape: Shape type index: 1=circle, 2=ellipse, 3=one sided flat, 4=two sided flat, 5=rectangular (outside is collimator), 6=rectangular (inside is collimator). 
+     * a: Radius for circular collimator, x-axis for elliptical, horizontal right side extent for flat and rectangular.
+     * b: Y-axis for elliptical, left side horizontal extent for two-sided flat or rectangular. 
+     * c: Upper side vertical extent for rectangular. 
+     * d: Lower side vertical extent for rectangular.
+     * angle: Tilt angle of the collimator defined in degrees.
+     * name: The name of the collimator.  
+  # *addTeapotCollimatorNode(TEAPOT_Lattice lattice, double position, TeapotCollimatorNode collimator_node)*. A method to add the collimator to a Teapot lattice. Variables: 
+     * lattice: The Teapot lattice the collimator should be added to.
+     * position: The start position of the collimator in the lattice.
+     * collimator_node: A previously defined collimator
+
+= Example Scripts = 
+
+The following example demonstrates a bunch being propagated through a circular iron collimator of length 0.5 meters and aperture 10 cm whose front face is located 18.5 meters from the start of an existing teapot lattice. It is assumed that the main bunch, "b", is already defined, but that the lost bunch needs creation.  At the end, the main bunch and lost bunch particle parameters are printed. 
+{{{
+
+
+length = 0.5
+ma = 3
+density_fac = 1.0
+shape = 1
+a = 0.01
+b = 0
+c = 0
+d = 0
+angle = 0
+
+collimator = TeapotCollimatorNode(length, ma, density_fac, shape, a, b, c, d, angle, "Collimator 1")
+
+addTeapotColimatorNode(teapot_latt, 18.5, collimator) 
+
+#------------------------------
+#Lost bunch initialization
+#------------------------------
+
+lostbunch = Bunch()
+lostbunch.addPartAttr("LostParticleAttributes")
+paramsDict = {}
+paramsDict["lostbunch"]=lostbunch
+paramsDict["bunch"]= b
+
+#=====track bunch through Collimator Node============
+collimator.track(paramsDict)
+
+# dump ORBIT_MPI bunch to compare results
+bunch.dumpBunch()
+lostbunch.dumpBunch()
+print "Stop."
+
+
+}}}
+
+In the following piece of code a short 1.5 cm, one-sided flat copper collimator with aperture 5 cm is defined. The collimator is tilted at a 45 degree angle.
+
+{{{
+
+length = 0.015
+ma = 4
+density_fac = 1.0
+shape = 3
+a = 0.05
+b = 0
+c = 0
+d = 0
+angle = 45
+
+collimator = TeapotCollimatorNode(length, ma, density_fac, shape, a, b, c, d, angle, "Collimator Scraper")
+
+}}}
+
+Complete run examples can be found in $ORBIT_ROOT/examples/Collimation/ORBIT_Benchmarks/ .
