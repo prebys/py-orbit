@@ -43,7 +43,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
 = Methods and Variables from StatLats, Moments, StatLatsSetMember, and MomentsSetMember classes =
   # *writeStatLats(String filename)*.  From StatLats class. Writes the statistical lattice parameters to the file. Columns are: (1) position, (2) time, (3) emitx, (4) emity, (5) betax, (6) betay, (7) alphax, (8) alphay. Variables:
     * filename: String variable representing a filename to be written to. 
-  # *writeMoments(String filename)*.  Writes the XY moments of the beam up to a user specified order.  Columns are: (1) position, (2) time, (3 and beyond) Bunch moment ({{{1 x_ave, y_ave, <x^2>, <xy?, <y^2>, etc...}}}).  Variables:
+  # *writeMoments(String filename)*.  Writes the XY moments of the beam up to a user specified order.  Columns are: (1) position, (2) time, (3 and beyond) Bunch moment ({{{1, x_ave, y_ave, <x^2>, <xy?, <y^2>, etc...}}}).  Variables:
     * filename: String variable representing a filename to be written to. 
     * order: Highest order moment.
 
