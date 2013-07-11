@@ -59,6 +59,8 @@ The diagnostics package includes routines for finding the statistical Twiss para
      * position: The position in the lattice
      * bunch: A Bunch.
      * lattlength: The length of the lattice.  Not a required argument. Zero unless user specified.
+  # *TeapotStatLatsNode(String filename)*.  From TeapotDiagnoticsNode.py. The constructor for a Teapot style StatLats class which can be added to a Teapot lattice.
+     * filename: String variable representing a filename to be written to. 
   # *addTeapotStatLatsNodeSet(lattice, filename)*.  This routine is inside the class diagnosticsLatticeModifications.py.  It adds a set of StatLats nodes as child elements throughout the lattice. 
     * lattice: A Teapot lattice
     * filename: A string filename.  
@@ -69,17 +71,18 @@ The diagnostics package includes routines for finding the statistical Twiss para
      * position: The position in the lattice
      * bunch: A Bunch.
      * lattlength: The length of the lattice.  Not a required argument. Zero unless user specified.
+  # *TeapotMomentsNode(String filename, int order)*.  From TeapotDiagnoticsNode.py. The constructor for a Teapot style Moments class which can be added to a Teapot lattice.
+   * filename: A string filename.  
+    * order: Highest order moment.
   # *addTeapotMomentsNodeSet(lattice, filename, order)*.  This routine is inside the class diagnosticsLatticeModifications.py.  It adds a set of Moments nodes as child elements throughout the lattice. 
     * lattice: A Teapot lattice.
     * filename: A string filename.  
     * order: Highest order moment.
-  # *addTeapotDiagnosticsNode(lattice, position, diagnostics_node)*.  This routine is inside the class diagnosticsLatticeModifications.py.  It adds a  singleTeapot style diagnostics node (for instance a StatLats or Moments node) to a Teapot Lattice at a user specified position. 
+  # *TeapotTuneAnalysisNode().  A class in TeapotDiagnostics.py.  It is a Teapot style tune calculator node which can be placed inside a Teapot lattice. The node calculates the particle tune and actions for a bunch.  The information will be present as additional particle attributes in the dump bunch files.  The horizontal and vertical  tunes will be columns 9 and 10, respectively, and the actions will be 11 and 12.
+  # *addTeapotDiagnosticsNode(lattice, position, diagnostics_node)*.  This routine is inside the class diagnosticsLatticeModifications.py.  It adds a singleTeapot style diagnostics node (for instance a TeaPotStatLatsNode, TeapotMomentsNode, or TeapotTuneAnalysisNode) to a Teapot Lattice at a user specified position. 
     * lattice: A Teapot lattice
     * position: The position location in the lattice (meters).  Must be a drift region.
     * diagnostics_nod: The diagnostics node.
-
-
-
 
 = Example Scripts = 
 
