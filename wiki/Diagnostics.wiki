@@ -76,7 +76,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
     * lattice: A Teapot lattice.
     * filename: A string filename.  
     * order: Highest order moment.
-# *addTeapotDiagnosticsNode(lattice, position, diagnostics_node)*.  This routine is inside the class diagnosticsLatticeModifications.py.  It adds a  singleTeapot style diagnostics node (for instance a StatLats or Moments node) to a Teapot Lattice at a user specified position. 
+  # *addTeapotDiagnosticsNode(lattice, position, diagnostics_node)*.  This routine is inside the class diagnosticsLatticeModifications.py.  It adds a  singleTeapot style diagnostics node (for instance a StatLats or Moments node) to a Teapot Lattice at a user specified position. 
     * lattice: A Teapot lattice
     * position: The position location in the lattice (meters).  Must be a drift region.
     * diagnostics_nod: The diagnostics node.
