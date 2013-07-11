@@ -78,7 +78,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
     * lattice: A Teapot lattice.
     * filename: A string filename.  
     * order: Highest order moment.
-  # *TeapotTuneAnalysisNode().  A class in TeapotDiagnostics.py.  It is a Teapot style tune calculator node which can be placed inside a Teapot lattice. The node calculates the particle tune and actions for a bunch.  The information will be present as additional particle attributes in the dump bunch files.  The horizontal and vertical  tunes will be columns 9 and 10, respectively, and the actions will be 11 and 12.
+  # *TeapotTuneAnalysisNode()*.  A class in TeapotDiagnostics.py.  It is a Teapot style tune calculator node which can be placed inside a Teapot lattice. The node calculates the particle tune and actions for a bunch.  The information will be present as additional particle attributes in the dump bunch files.  The horizontal and vertical  tunes will be columns 9 and 10, respectively, and the actions will be 11 and 12.
   # *addTeapotDiagnosticsNode(lattice, position, diagnostics_node)*.  This routine is inside the class diagnosticsLatticeModifications.py.  It adds a singleTeapot style diagnostics node (for instance a TeaPotStatLatsNode, TeapotMomentsNode, or TeapotTuneAnalysisNode) to a Teapot Lattice at a user specified position. 
     * lattice: A Teapot lattice
     * position: The position location in the lattice (meters).  Must be a drift region.
