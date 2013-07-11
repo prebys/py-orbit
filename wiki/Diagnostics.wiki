@@ -40,7 +40,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
      * i: Moment order in X.
      * j: Moment order in Y.
     
-= Methods and Variables from BunchTuneAnalysis =
+= Python Accessible Methods and Variables from BunchTuneAnalysis =
  # *assignTwiss(double bx, double ax, double dx, double dpx, double by, double ay)*.  Explicitly assigns Twiss values at the location of the tune node.  The tune calculator requires Twiss input.  Note that pyORBIT and MAD definitions for dispersion differ by a factor of relativistic beta squared. Variables:
      * bx: Twiss X beta.
      * ax: Twiss X alpha.
@@ -50,9 +50,6 @@ The diagnostics package includes routines for finding the statistical Twiss para
      * ay: Twiss Y alpha.
  # *analyzeBunch(Bunch bunch)*.  Does the bunch tune and actions analysis, assuming the Twiss values have been assigned.  Needs to be repeated at least two times in order to arrive at a legitimate tune. This method is most conveniently accessed by adding a TeapotTuneAnalysisNode to a lattice.  The tune information is a particle attribute that gets added to the bunch, will be written out with the particle phase space coordinates when dumpBunch(Bunch bunch) is executed. Variables:
      * bunch: A Bunch. 
-    
-
-
 
 = Methods and Variables from related diagnostics Python classes =
 
