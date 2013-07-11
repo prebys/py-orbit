@@ -54,7 +54,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
 
 
 
-= Methods and Variables from related Python classes =
+= Methods and Variables from related diagnostics Python classes =
 
   # *StatLats(String filename)*.  From diagnostics.py. The constructor for a StatLats class.
      * filename: String variable representing a filename to be written to. 
