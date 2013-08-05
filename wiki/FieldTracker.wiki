@@ -1,5 +1,5 @@
 #summary Summary of how to create and use an aperture.
-= Summary =
+= Summary - UNDER CONSTRUCTION =
 
 The FieldTracker class provides a method for tracking particles through a 3Diminsional Magnetic field.
 
@@ -8,9 +8,10 @@ The module requires input of one bunche from the Bunch class, and a data file co
 = Associated Classes =
 
 || *Name* || *Description* || *Address* ||
-|| [Aperture] || The class which defines the aperture || $ORBIT_ROOT/src/orbit/Aperture/ ||
+|| [FieldTracker] || The class which defines the FieldTracker || $ORBIT_ROOT/src/orbit/FieldTracker/ ||
 
 
+<wiki:comment>
 = Python Accessible Classes, Methods, and Variables =
   # *!TeapotApertureNode(int shape, double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
      * shape: Shape type index. 1=circle, 2=ellipse, 3=rectangle. 
@@ -19,7 +20,7 @@ The module requires input of one bunche from the Bunch class, and a data file co
      * c: Horizontal offset. Default 0. Argument is optional.
      * d: Vertical offset. Default 0. Argument is optional.
      * name: The name of the aperture.  
-
+</wiki:comment>
 = Example Scripts = 
 
 The following example demonstrates the creation of a fieldtracker object that tracks 1000 particles through the field.
