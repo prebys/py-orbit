@@ -1,26 +1,40 @@
 #summary Summary of how to create and use an aperture.
-= Summary - UNDER CONSTRUCTION =
+= Summary - (UNDER CONSTRUCTION) =
 
 The FieldTracker class provides a method for tracking particles through a 3Diminsional Magnetic field.
 
 The module requires input of one bunche from the Bunch class, and a data file containing the magnetic field data.
 
 = Associated Classes =
-
 || *Name* || *Description* || *Address* ||
 || [FieldTracker] || The class which defines the FieldTracker || $ORBIT_ROOT/src/orbit/FieldTracker/ ||
+|| trackBunch || Method that tracks a bunch through the 3D Field || $ORBIT_ROOT/src/orbit/FieldTracker/ ||
+|| setPathVariable|| Method that sets whether or not to output particle paths || $ORBIT_ROOT/src/orbit/FieldTracker/ ||
 
 
-<wiki:comment>
+
+
 = Python Accessible Classes, Methods, and Variables =
-  # *!TeapotApertureNode(int shape, double a, double b, double c, double d, name = "aperture")*.  Creates a teapot style aperture. Variables:
-     * shape: Shape type index. 1=circle, 2=ellipse, 3=rectangle. 
-     * a: Radius for circular collimator, x-axis half length for ellipse and rectangle. 
-     * b: Y-axis half length for elliptical and rectangle. Doesn't apply for circle. 
-     * c: Horizontal offset. Default 0. Argument is optional.
-     * d: Vertical offset. Default 0. Argument is optional.
-     * name: The name of the aperture.  
-</wiki:comment>
+  # *FieldTracker( double bx, double by, double ax, double ay, double ex, double epx, double l, double zi, double zf, double ds, int niters, double resid, double xrefi, double &yrefi, double &eulerai, double &eulerbi, double &eulergi, Bunch* b)
+
+*bx: The horizontal beta value at the beginning of the Node [m]
+*by: The vertical beta value at the beginning of the Node [m]
+*ax: The horizontal alpha value at the beginning of the Node
+*ay: The horizontal alpha  value at the beginning of the Node
+*ex: The horizontal dispersion [m]
+*epx: The horizontal dispersion prime
+*l: The length of the node
+*zi: Initial tracking position [m]
+*zf : Final tracking position [m]
+*ds: Integration step size
+*niters : Number predictor-corrector iterations
+*resid : Predictor-corrector residual
+*xrefi: Initial reference particle x [mm]
+*yrefi: Initial reference particle y [mm]
+*eulerai: Initial reference Euler angle alpha [mr]
+*eulerbi: Initial reference Euler angle beta [mr]
+*eulergi: Initial reference Euler angle gamma [mr]
+
 = Example Scripts = 
 
 The following example demonstrates the creation of a fieldtracker object that tracks 1000 particles through the field.
