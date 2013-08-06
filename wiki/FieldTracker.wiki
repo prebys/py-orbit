@@ -34,6 +34,13 @@ The module requires input of one bunche from the Bunch class, and a data file co
   * eulerai: Initial reference Euler angle alpha [mr]  
   * eulerbi: Initial reference Euler angle beta [mr]
   * eulergi: Initial reference Euler angle gamma [mr]
+  #* trackbunch(bunch b)
+  * Takes a bunch as arguments
+  * Computes the path of each particle in the bunch through the magnet parsed in the constructor.
+  # * setPathVariable(int i)*
+  * 0 means that the reference variable path and the particle's path won't be written
+  * 1 means that they will
+  * Any other int will result in them not being written.
 
 = Example Scripts = 
 
