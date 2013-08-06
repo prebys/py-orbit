@@ -17,23 +17,23 @@ The module requires input of one bunche from the Bunch class, and a data file co
 = Python Accessible Classes, Methods, and Variables =
   # *FieldTracker( double bx, double by, double ax, double ay, double ex, double epx, double l, double zi, double zf, double ds, int niters, double resid, double xrefi, double &yrefi, double &eulerai, double &eulerbi, double &eulergi, Bunch* b)
 
-*bx: The horizontal beta value at the beginning of the Node [m]
-*by: The vertical beta value at the beginning of the Node [m]
-*ax: The horizontal alpha value at the beginning of the Node
-*ay: The horizontal alpha  value at the beginning of the Node
-*ex: The horizontal dispersion [m]
-*epx: The horizontal dispersion prime
-*l: The length of the node
-*zi: Initial tracking position [m]
-*zf : Final tracking position [m]
-*ds: Integration step size
-*niters : Number predictor-corrector iterations
-*resid : Predictor-corrector residual
-*xrefi: Initial reference particle x [mm]
-*yrefi: Initial reference particle y [mm]
-*eulerai: Initial reference Euler angle alpha [mr]
-*eulerbi: Initial reference Euler angle beta [mr]
-*eulergi: Initial reference Euler angle gamma [mr]
+  * bx: The horizontal beta value at the beginning of the Node [m]
+  * by: The vertical beta value at the beginning of the Node [m]
+  * ax: The horizontal alpha value at the beginning of the Node
+  * ay: The horizontal alpha  value at the beginning of the Node
+  * ex: The horizontal dispersion [m]
+  * epx: The horizontal dispersion prime
+  * l: The length of the node   
+  * zi: Initial tracking position [m]
+  * zf : Final tracking position [m]
+  * ds: Integration step size
+  * niters : Number predictor-corrector iterations
+  * resid : Predictor-corrector residual
+  * xrefi: Initial reference particle x [mm]
+  * yrefi: Initial reference particle y [mm]
+  * eulerai: Initial reference Euler angle alpha [mr]  
+  * eulerbi: Initial reference Euler angle beta [mr]
+  * eulergi: Initial reference Euler angle gamma [mr]
 
 = Example Scripts = 
 
