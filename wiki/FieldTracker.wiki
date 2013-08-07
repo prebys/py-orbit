@@ -1,5 +1,5 @@
 #summary Summary of how to create and use an aperture.
-= Summary - (UNDER CONSTRUCTION) =
+= Summary =
 
 The FieldTracker class provides a method for tracking particles through a 3Diminsional Magnetic field.
 
@@ -152,6 +152,7 @@ print "\nStop."
 }}}
 
 Magnet data needs to be in the format:
+where the numbers in the header are the number of steps for x y z respectively.
 
 {{{
           81          49         501           1
