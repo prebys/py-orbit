@@ -16,7 +16,6 @@ The module requires input of one bunche from the Bunch class, and a data file co
 
 = Python Accessible Classes, Methods, and Variables =
   # *FieldTracker( double bx, double by, double ax, double ay, double ex, double epx, double l, double zi, double zf, double ds, int niters, double resid, double xrefi, double &yrefi, double &eulerai, double &eulerbi, double &eulergi, Bunch* b)
-
   * bx: The horizontal beta value at the beginning of the Node [m]
   * by: The vertical beta value at the beginning of the Node [m]
   * ax: The horizontal alpha value at the beginning of the Node
@@ -34,10 +33,10 @@ The module requires input of one bunche from the Bunch class, and a data file co
   * eulerai: Initial reference Euler angle alpha [mr]  
   * eulerbi: Initial reference Euler angle beta [mr]
   * eulergi: Initial reference Euler angle gamma [mr]
-  #* trackbunch(bunch b)
+ 2. *trackbunch(bunch b)*
   * Takes a bunch as arguments
   * Computes the path of each particle in the bunch through the magnet parsed in the constructor.
-  # * setPathVariable(int i)*
+ 3. *setPathVariable(int i)*
   * 0 means that the reference variable path and the particle's path won't be written
   * 1 means that they will
   * Any other int will result in them not being written.
@@ -46,6 +45,7 @@ The module requires input of one bunche from the Bunch class, and a data file co
 
 The following example demonstrates the creation of a fieldtracker object that tracks 1000 particles through the field.
 {{{
+
 
 import math
 import sys
@@ -133,21 +133,42 @@ zsymmetry = 1
 printPaths = 1;
 
 
-mytracker = FieldTracker( 10, 10.190, 10.758, 0.047, 0.056, -0.001, -0.012,
+mytracker = FieldTracker( 10.190, 10.758, 0.047, 0.056, -0.001, -0.012,
           LINT,  
           ZSTART, ZINT, 0.0001, 2, 1.e-06,
-          XREFI, YREFI, EULERA, EULERB, EULERG,0,b)
+          XREFI, YREFI, EULERA, EULERB, EULERG,b, "testfile.data")
 
-mytracker.getBunchPath(1);
+mytracker.setPathVariable(1)
 
 mytracker.trackBunch(b)
 
+
 b.dumpBunch("final.dat")
 
-print "Stop."
+print "\nStop."
 
 
 
+}}}
+
+Magnet data needs to be in the format:
+
+{{{
+          81          49         501           1
+ 1 X [LENGU]
+ 2 Y [LENGU]
+ 3 Z [LENGU]
+ 4 BX [FLUXU]
+ 5 BY [FLUXU]
+ 6 BZ [FLUXU]
+ 0
+
+  -20.0000000000      -12.0000000000       0.00000000000      -2568.68847765       3864.63554868     -0.787303611117E-14
+  -20.0000000000      -12.0000000000      0.500000000000      -2569.43021915       3845.69501660       99.6926201905    
+  -20.0000000000      -12.0000000000       1.00000000000      -2567.27237295       3845.45271766       193.186896669    
+  -20.0000000000      -12.0000000000       1.50000000000      -2561.62125278       3878.31227810       286.614456428    
+  -20.0000000000      -12.0000000000       2.00000000000      -2562.72591297       3915.12790543       378.670204422    
+ 
 }}}
 
 Complete run examples can be found in $ORBIT_ROOT/examples/FieldTracker .
