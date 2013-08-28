@@ -1,7 +1,7 @@
 #summary Description of the longitudinal space charge class
 
 = Summary =
-This class computes and applies a direct force kick on the particles.  The method is to grid the particles on a rectangular grid with user defined resolution, and then FFT the greens function and particle density grid, convolute the results, and then reverse FFT to compute the force grid.  The force grid is then interpolated to give the force on each particle. 
+This class computes and applies a direct force kick on the particles.  The method is to grid the particles on a rectangular grid with user defined resolution, and then FFT the greens function and particle density grid, convolute the results, and then reverse FFT to compute the force grid.  The force grid is then interpolated to give the force on each particle. Note that lattice element lengths should be on the order of 1 meter or less in order to ensure good accuracy in the calculations.  This length may be longer for very high energy beams. 
 
 = Python Accessible Methods and Variables = 
   # *SpaceChargeForceCalc2p5d(int xSize, int ySize, int zSize)*. Creates a direct force space charge calculator. Variables:
