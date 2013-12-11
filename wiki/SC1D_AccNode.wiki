@@ -26,7 +26,7 @@ This is the Teapot implementation of the longitudinal space charge class. This m
     * useSpaceCharge: Flag for turning the space charge piece on (1) or off (0).
     * nBins: Number of longitudinal slicing bins for space charge kick calculation.
     * impeDict: A dictionary that should contain at least three items: 1) A list of frequencies, 2) A list of betas, and 3) A double-indexed list of impedances that correspond to each beta/frequency pair (the first index is the index of the associated beta value and the second index is the index of the associated frequency value).
-  # *assignImpedance(pyObject py_complex_arr)*. Convenience method for assigning an impedance array. 
+  # *assignImpedance(pyObject py_complex_arr)*. Convenient method for assigning an impedance array. 
      * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
   #  *track(Dict paramsDict)*. A method for doing the longitudinal space charge kick. Implemented by the lattice trackBunch method. Variables:  
      * paramsDict: A dictionary which should contains at least one item: 1) the main bunch.
