@@ -6,7 +6,7 @@ This is the Teapot implementation of the longitudinal space charge class. This m
 
 = Python Accessible Methods =
 
-  # *SC1D_AccNode(int b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node. Variables:
+  # *SC1D_AccNode(int b_a, double length, int nMacrosMin, int useSpaceCharge, int nBins)*. Creates a longitudinal space charge node dependent on mode number for a fixed frequency. Variables:
      * b_a: Approximate ratio of beam pipe radius to beam radius.
      * length: Length of the lattice.
      * nMacrosMin: Minimum number of macroparticles needed to do the computation. 
@@ -14,18 +14,18 @@ This is the Teapot implementation of the longitudinal space charge class. This m
      * nBins: Number of longitudinal slicing bins for space charge kick calculation. 
   # *FreqDep_SC1D_AccNode(int b_a, double phaseLength, int nMacrosMin, int useSpaceCharge, int nBins, Dict impeDict)*. Creates a longitudinal space charge node that is dependent on frequency.
     * b_a: Approximate ratio of beam pipe radius to beam radius.
-    * phaseLength: Length of lattice.  Also used to calculate the bunch frequency.
+    * phaseLength: Length corresponding to fundamental frequency.
     * nMacrosMin: Minimum number of macroparticles needed to do the computation.  
     * useSpaceCharge: Flag for turning the space charge piece on (1) or off (0).
     * nBins: Number of longitudinal slicing bins for space charge kick calculation.
     * impeDict: A dictionary that should contain at least two items: 1) A list of frequencies, 2) A list of impedances corresponding to the frequencies in the first list.
-  # *BetFreqDep_SC1D_AccNode(int b_a, double phaseLength, int nMacrosMin, int useSpaceCharge, int nBins, Dict impeDict)*. Creates a longitudinal space charge node that is dependent on frequency and beta.
+  # *BetFreqDep_SC1D_AccNode(int b_a, double phaseLength, int nMacrosMin, int useSpaceCharge, int nBins, Dict impeDict)*. Creates a longitudinal space charge node that is dependent on frequency and  the relativistic parameter beta.
     * b_a: Approximate ratio of beam pipe radius to beam radius.
-    * phaseLength: Length of lattice.  Also used to calculate the bunch frequency.
+    * phaseLength: Length corresponding to fundamental frequency.
     * nMacrosMin: Minimum number of macroparticles needed to do the computation.
     * useSpaceCharge: Flag for turning the space charge piece on (1) or off (0).
     * nBins: Number of longitudinal slicing bins for space charge kick calculation.
-    * impeDict: A dictionary that should contain at least three items: 1) A list of frequencies, 2) A list of betas, and 3) A double-indexed list of impedances that correspond to each frequency/beta pair. 
+    * impeDict: A dictionary that should contain at least three items: 1) A list of frequencies, 2) A list of betas, and 3) A double-indexed list of impedances that correspond to each beta/frequency pair (the first index is the index of the associated beta value and the second index is the index of the associated frequency value).
   # *assignImpedance(pyObject py_complex_arr)*. Convenience method for assigning an impedance array. 
      * py_complex_arr: A python array of complex numbers which are the impedances in units of Ohms/n (n is mode number). For inductive impedances, convention is that real part is positive and imaginary part negative. 
   #  *track(Dict paramsDict)*. A method for doing the longitudinal space charge kick. Implemented by the lattice trackBunch method. Variables:  
