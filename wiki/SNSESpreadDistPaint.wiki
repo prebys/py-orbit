@@ -98,7 +98,7 @@ T = 9.45424317281e-07 #peroid of the synchronous particle
 #its full value over 50 tunrs. Then it remains constant. Zmin does the same
 # only it is constantly 2*zlim less than zmax.
 zmax = [[0,zlim/2],[T*50,zlim],[T*51,zlim]]
-zmin = [[0,-(3/4)*zlim], [T*50,-zlim], [T*51,-zlim]]
+zmin = [[0,-(3/2)*zlim], [T*50,-zlim], [T*51,-zlim]]
 
 tailfraction = 0
 emean = sp.kinEnergy()
