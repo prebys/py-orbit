@@ -25,12 +25,6 @@ The following example is a simulation of the SNS ring with the SNSESpreadDistPai
 $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYSNSESpreadL/injectSNSESpread.py
 
 {{{
-##############################################################
-# This script reads the input MAD file with lattice information,
-# creates the TEAPOT lattice, and modifies this lattice by inserting
-# injection nodes
-##########################################################/Users/Shared/py-orbit/examples/pyORBIT.xcodeproj####
-
 import math
 import sys
 
