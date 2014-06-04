@@ -1,3 +1,5 @@
+#summary A variation of the [SNSESpreadDist] class that allows for time dependent zmin and zmax values
+
 = Summary =
 
 This class is identical to the [SNSESpreadDist] class with added functionality of time dependent zmin and zmax variables. Zmin and zmax must both be lists of no less than two pairs and functions (in the mathematical sense) of time. When getCoordinates() is called, the time of the synchronous particle is used and the given functions are interpolated for values. 
@@ -22,7 +24,6 @@ This class is identical to the [SNSESpreadDist] class with added functionality o
 
 =Examples=
 The following example is a simulation of the SNS ring with the SNSESpreadDistPaint distribution class implemented.
-$ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYSNSESpreadL/injectSNSESpread.py
 
 {{{
 import math
