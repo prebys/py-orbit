@@ -21,9 +21,16 @@ This class is identical to the [SNSESpreadDist] class with added functionality o
  # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution.
 
 =Examples=
-In the following example a 1 GeV SNS style distribution with centroid energy jitter is created. There is no sinusoidal energy variation in this example. The complete example can be found in $ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYSNSESpreadL/injectSNSESpread.py
+The following example is a simulation of the SNS ring with the SNSESpreadDistPaint distribution class implemented.
+$ORBIT_ROOT/examples/Injection/ORBIT_Benchmarks/JohoXYSNSESpreadL/injectSNSESpread.py
 
 {{{
+##############################################################
+# This script reads the input MAD file with lattice information,
+# creates the TEAPOT lattice, and modifies this lattice by inserting
+# injection nodes
+##########################################################/Users/Shared/py-orbit/examples/pyORBIT.xcodeproj####
+
 import math
 import sys
 
@@ -97,8 +104,8 @@ T = 9.45424317281e-07 #peroid of the synchronous particle
 #This function has zmax start at half the zlimit and linearly slope to
 #its full value over 50 tunrs. Then it remains constant. Zmin does the same
 # only it is constantly 2*zlim less than zmax.
-zmax = [[0,zlim/2],[T*50,zlim],[T*51,zlim]]
-zmin = [[0,-(3/2)*zlim], [T*50,-zlim], [T*51,-zlim]]
+zmaxFunc = [[0,zlim/2],[T*49,zlim],[T*50,zlim]]
+zminFunc = [[0,-(3/2)*zlim], [T*49,-zlim], [T*50,-zlim]]
 
 tailfraction = 0
 emean = sp.kinEnergy()
@@ -127,7 +134,7 @@ esparams = (esnu, esphase, esmax, nulltime)
 
 xFunc = JohoTransverse(order, alphax, betax, emitlim, xcenterpos, xcentermom)
 yFunc = JohoTransverse(order, alphay, betay, emitlim, ycenterpos, ycentermom)
-lFunc =SNSESpreadDistPaint(lattlength, zmin, zmax, tailfraction, sp, emean, esigma, etrunc, emin, emax, ecparams, esparams)
+lFunc =SNSESpreadDistPaint(lattlength, zminFunc, zmaxFunc, tailfraction, sp, emean, esigma, etrunc, emin, emax, ecparams, esparams)
 
 #====Injection and foil aperature============
 
