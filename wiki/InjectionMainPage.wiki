@@ -11,6 +11,7 @@ This page describes how to inject particles into a lattice according to user spe
 || UniformLongDist || Class containing uniform longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
 || [GULongDist] || Class containing longitudinal distributions that are Gaussian in dE and uniform in z|| $ORBIT_ROOT/py/orbit/injection// ||
 || [SNSESpreadDist] || Class containing SNS style longitudinal distributions || $ORBIT_ROOT/py/orbit/injection// ||
+|| [SNSESpreadDistPaint] || A variation of the SNSESpreadDist class that allows for time dependent zmin and zmax values || $ORBIT_ROOT/py/orbit/injection// ||
 || TeapotInjectionNode || The python module that allows a user to define Teapot InjectParts implementation || $ORBIT_ROOT/py/orbit/injection// ||
 || injectionLatticeModifications || The python module that allows a user to add a defined TeapotInjectionNode to the teapot lattice in a drift region || $ORBIT_ROOT/py/orbit/injection// ||
 
