@@ -15,7 +15,7 @@ This class is identical to the [UniformLongDist] class with added functionality 
   # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
 
 = Examples = 
-The following example is a simulation of the SNS ring with the UniformLongDistPaint distribution class implemented.
+The following example is a simulation of the SNS ring with the UniformLongDistPaint distribution class implemented. With each call of 'trackBunch' the synchronous particle time is updated and the particles are injected accordingly.
 
 {{{
 
