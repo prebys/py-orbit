@@ -1,0 +1,173 @@
+#summary A variation of the UniformLongDist class that allows for time dependent zmin and zmax values
+
+= Summary =
+
+This class is identical to the [UniformLongDist] class with added functionality of time dependent zmin and zmax variables. Zmin and zmax must both be lists of no less than two pairs and functions (in the mathematical sense) of time. When getCoordinates() is called, the time of the synchronous particle is used and the given functions are interpolated for values. 
+
+
+= Python Accessible Methods and Variables = 
+  # *UniformLongDist(zminFunc, zmaxFunc, sp, eoffset, deltaEfrac)*. Creates the class.
+     * zminFunc: Function of time (list of pairs) for the minimum z of the distribution.
+     * zmaxFunc: Function of time (list of pairs) for the maximum z of the distribution.
+     * sp: SyncParticle object (representing the synchronous particle of the distribution).
+     * eoffset: Mean energy offset (set to zero for none)
+     * deltaEfrac:  The fractional energy 1/2 spread of the beam, i.e., the maximum dE is: dE = eoffset + sp.getEnergy()(+- deltaEfrac)
+  # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
+
+= Examples = 
+The following example is a simulation of the SNS ring with the UniformLongDistPaint distribution class implemented.
+
+{{{
+
+import math
+import sys
+
+
+from orbit.teapot import teapot
+from orbit.teapot import TEAPOT_Lattice
+from orbit.teapot import DriftTEAPOT
+from orbit.lattice import AccLattice, AccNode, AccActionsContainer
+from bunch import Bunch
+from orbit.utils.orbit_mpi_utils import bunch_orbit_to_pyorbit, bunch_pyorbit_to_orbit
+from orbit.injection import TeapotInjectionNode
+from orbit.injection import addTeapotInjectionNode
+from injection import InjectParts
+from injection import JohoTransverse, JohoLongitudinal, UniformLongDistPaint
+from orbit.foils import TeapotFoilNode, addTeapotFoilNode
+from foil import Foil
+from orbit.collimation import TeapotCollimatorNode, addTeapotCollimatorNode
+from orbit.space_charge.sc2p5d import scAccNodes, scLatticeModifications
+from orbit.rf_cavities import RFNode, RFLatticeModifications
+
+
+print "Start."
+
+#=====Main bunch parameters============
+intensity = 7.8e13
+turns = 1000.0
+macrosperturn = 260 #this is how many particles are injected per turn
+macrosize = intensity/turns/macrosperturn
+
+b = Bunch()
+b.mass(0.93827231)
+b.macroSize(macrosize)
+energy = 1.0 #Gev
+b.getSyncParticle().kinEnergy(energy)
+
+paramsDict = {}
+lostbunch = Bunch()
+paramsDict["lostbunch"]=lostbunch
+paramsDict["bunch"]= b
+lostbunch.addPartAttr("LostParticleAttributes")
+
+#=====Make a Teapot style lattice======
+
+teapot_latt = teapot.TEAPOT_Ring()
+print "Read MAD."
+teapot_latt.readMAD("SNSring_pyOrbitBenchmark.LAT","RING")
+print "Lattice=",teapot_latt.getName()," length [m] =",teapot_latt.getLength()," nodes=",len(teapot_latt.getNodes())
+
+#------------------------------
+#Initial Distribution Functions
+#------------------------------
+
+lattlength = teapot_latt.getLength()
+sp = b.getSyncParticle()
+
+order = 3.
+alphax = 0.063
+betax = 10.209
+alphay = 0.063
+betay = 10.776
+emitlim = 0.152 * 2*(order + 1) * 1e-6
+xcenterpos = 0.0468
+xcentermom = 0.00
+ycenterpos = 0.0492
+ycentermom = 0.00
+
+zlim = 120. * lattlength/360.
+
+T = 9.45424317281e-07 #peroid of the synchronous particle
+
+#This function has zmax start at half the zlimit and linearly slope to
+#its full value over 50 tunrs. Then it remains constant. Zmin does the same
+# only it is constantly 2*zlim less than zmax.
+zmax = [[0,zlim/2],[T*49,zlim],[T*50,zlim]]
+zmin = [[0,-(3/2)*zlim], [T*49,-zlim], [T*50,-zlim]]
+
+
+esnu = 100.
+esphase = 0.
+esmax = 0
+nulltime = 0
+esparams = (esnu, esphase, esmax, nulltime)
+
+xFunc = JohoTransverse(order, alphax, betax, emitlim, xcenterpos, xcentermom)
+yFunc = JohoTransverse(order, alphay, betay, emitlim, ycenterpos, ycentermom)
+lFunc = UniformLongDistPaint(zmin,zmax,sp,0, .001)
+#====Injection and foil aperature============
+
+xmin = xcenterpos - 0.0085
+xmax = xcenterpos + 0.0085
+ymin = ycenterpos - 0.0080
+ymax = ycenterpos + 0.100
+
+#=================Add the injection node and foil node==  ==============
+
+nparts = 10
+injectparams = (xmin, xmax, ymin, ymax)
+injectnode = TeapotInjectionNode(nparts, b, lostbunch, injectparams, xFunc, yFunc, lFunc)
+addTeapotInjectionNode(teapot_latt, 0., injectnode)
+
+thick = 400.0
+foil = TeapotFoilNode(xmin, xmax, ymin, ymax, thick, "Foil 1")
+scatterchoice = 0
+foil.setScatterChoice(scatterchoice)
+addTeapotFoilNode(teapot_latt,0.000001,foil)
+
+#----------------------------------------------
+# Add one black absorber collimator to act like
+# an aperture
+#----------------------------------------------
+colllength = 0.00001
+ma = 9
+density_fac = 1.0
+shape = 1
+radius = 0.110
+
+collimator = TeapotCollimatorNode(colllength, ma, density_fac, shape, radius, 0., 0., 0., 0., "Collimator 1")
+addTeapotCollimatorNode(teapot_latt, 0.5, collimator)
+
+#-----------------------------
+# Add RF Node
+#-----------------------------
+
+teapot_latt.initialize()
+ZtoPhi = 2.0 * math.pi / lattlength;
+dESync = 0.0
+RF1HNum = 1.0
+RF1Voltage = 0.000016
+RF1Phase = 0
+RF2HNum = 2.0
+RF2Voltage = -0.000003
+RF2Phase = 0
+length = 0.0
+
+rf1_node = RFNode.Harmonic_RFNode(ZtoPhi, dESync, RF1HNum, RF1Voltage, RF1Phase, length, "RF1")
+rf2_node = RFNode.Harmonic_RFNode(ZtoPhi, dESync, RF2HNum, RF2Voltage, RF2Phase, length, "RF2")
+position1 = 196.0
+position2 = 196.5
+RFLatticeModifications.addRFNode(teapot_latt, position1, rf1_node)
+RFLatticeModifications.addRFNode(teapot_latt, position2, rf2_node)
+
+#================Do 100 turns===========================================
+
+for i in xrange(100):
+	print "turn ",i+1
+	teapot_latt.trackBunch(b, paramsDict)
+
+bunch_pyorbit_to_orbit(teapot_latt.getLength(), b, "mainbunch.dat")
+bunch_pyorbit_to_orbit(teapot_latt.getLength(), lostbunch, "lostbunch.dat")
+print "Stop."
+
+}}}
