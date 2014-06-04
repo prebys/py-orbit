@@ -6,7 +6,7 @@ This class is identical to the [UniformLongDist] class with added functionality 
 
 
 = Python Accessible Methods and Variables = 
-  # *UniformLongDist(zminFunc, zmaxFunc, sp, eoffset, deltaEfrac)*. Creates the class.
+  # *UniformLongDistPaint(zminFunc, zmaxFunc, sp, eoffset, deltaEfrac)*. Creates the class.
      * zminFunc: Function of time (list of pairs) for the minimum z of the distribution.
      * zmaxFunc: Function of time (list of pairs) for the maximum z of the distribution.
      * sp: SyncParticle object (representing the synchronous particle of the distribution).
