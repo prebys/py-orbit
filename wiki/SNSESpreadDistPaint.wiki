@@ -9,8 +9,8 @@ This class is identical to the [SNSESpreadDist] class with added functionality o
 
  # *SNSESpreadDistPaint(lattlength, zminFunc, zmaxFunc, tailfraction, sp, emean, esigma, etrunc, emin, emax, ecparams, esparams)*. Creates the class.
   * lattlength: Total lattice length.
-  * zminFunc: Minimum z of the distribution.
-  * zmaxFunc: Maximum z of the distribution.
+  * zminFunc: Function of time (list of pairs) for the minimum z of the distribution.
+  * zmaxFunc: Function of time (list of pairs) for the maximum z of the distribution.
   * lattlength: Total lattice length.
   * sp: [SyncParticle] object (representing the synchronous particle of the distribution).
   * emean: Mean energy of the distribution.
