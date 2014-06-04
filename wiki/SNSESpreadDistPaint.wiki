@@ -39,7 +39,7 @@ from orbit.utils.orbit_mpi_utils import bunch_orbit_to_pyorbit, bunch_pyorbit_to
 from orbit.injection import TeapotInjectionNode
 from orbit.injection import addTeapotInjectionNode
 from injection import InjectParts
-from injection import JohoTransverse, JohoLongitudinal, SNSESpreadDist, SNSESpreadDistPaint
+from injection import JohoTransverse, JohoLongitudinal, SNSESpreadDistPaint
 from orbit.foils import TeapotFoilNode, addTeapotFoilNode
 from foil import Foil
 from orbit.collimation import TeapotCollimatorNode, addTeapotCollimatorNode
