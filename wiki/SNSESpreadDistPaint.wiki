@@ -1,4 +1,4 @@
-#summary A variation of the [SNSESpreadDist] class that allows for time dependent zmin and zmax values
+#summary A variation of the SNSESpreadDist class that allows for time dependent zmin and zmax values
 
 = Summary =
 
