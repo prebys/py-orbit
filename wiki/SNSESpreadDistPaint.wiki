@@ -23,7 +23,8 @@ This class is identical to the [SNSESpreadDist] class with added functionality o
  # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution.
 
 =Examples=
-The following example is a simulation of the SNS ring with the SNSESpreadDistPaint distribution class implemented.
+The following example is a simulation of the SNS ring with the SNSESpreadDistPaint distribution class implemented. With each call of 'trackBunch' the synchronous particle time is updated and the particles are injected accordingly.
+
 
 {{{
 import math
