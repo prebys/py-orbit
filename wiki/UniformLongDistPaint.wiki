@@ -91,7 +91,7 @@ T = 9.45424317281e-07 #peroid of the synchronous particle
 
 #This function has zmax start at half the zlimit and linearly slope to
 #its full value over 50 turns. Then it remains constant. Zmin does the same
-# only it is constantly 2*zlim less than zmax.
+# only it is shifted down by 2*zlim.
 zmax = [[0,zlim/2],[T*49,zlim],[T*50,zlim]]
 zmin = [[0,-(3/2)*zlim], [T*49,-zlim], [T*50,-zlim]]
 
