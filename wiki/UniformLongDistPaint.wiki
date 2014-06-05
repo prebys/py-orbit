@@ -19,8 +19,31 @@ The following is a snippet from an example that can be found in  $ORBIT_ROOT/exa
 The example simulates the SNS ring with the UniformLongDistPaint distribution class implemented. Each call of 'trackBunch' in the full example updates the synchronous particle time and injects particles accordingly. 
 {{{
 
+#=====Main bunch parameters============
+intensity = 7.8e13
+turns = 1000.0
+macrosperturn = 260 #this is how many particles are injected per turn
+macrosize = intensity/turns/macrosperturn
+
+b = Bunch()
+b.mass(0.93827231)
+b.macroSize(macrosize)
+energy = 1.0 #Gev
+b.getSyncParticle().kinEnergy(energy)
+
+paramsDict = {}
+lostbunch = Bunch()
+paramsDict["lostbunch"]=lostbunch
+paramsDict["bunch"]= b
+lostbunch.addPartAttr("LostParticleAttributes")
+
+#------------------------------
+#Initial Distribution Functions
+#------------------------------
+
 from injection import UniformLongDistPaint
 
+sp = b.getSyncParticle()
 
 T = 9.45424317281e-07 #peroid of the synchronous particle
 
