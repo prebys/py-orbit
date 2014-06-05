@@ -14,7 +14,7 @@ This class is identical to the [UniformLongDist] class with added functionality 
      * deltaEfrac:  The fractional energy 1/2 spread of the beam, i.e., the maximum dE is: dE = eoffset + sp.getEnergy()(+- deltaEfrac)
   # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
 
-= Examples = 
+= Example = 
 The following is a snippet from an example that can be found in  $ORBIT_ROOT/examples/Injection/
 The example simulates the SNS ring with the UniformLongDistPaint distribution class implemented. Each call of 'trackBunch'  updates the synchronous particle time and injects particles accordingly. 
 {{{
