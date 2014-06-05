@@ -22,7 +22,7 @@ This class is identical to the [SNSESpreadDist] class with added functionality o
   * esparams: Parameters of the energy sinusoidal spreader. List is esparams = (esnu, esphase, esmax, nulltime) , where esnu = frequency of the sinusoidal spreader [Hz]; esphase = constant phase of the spreader, esmax = amplitude of the spreader; nulltime = time for decay of spreader voltage
  # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution.
 
-=Examples=
+=Example=
 The following is a snippet from an example that can be found in  $ORBIT_ROOT/examples/Injection/
 The example simulates the SNS ring with the SNSESpreadDistPaint distribution class implemented. Each call of 'trackBunch' in the full example updates the synchronous particle time and injects particles accordingly. 
 
