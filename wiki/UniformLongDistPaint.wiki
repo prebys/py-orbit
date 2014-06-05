@@ -15,10 +15,8 @@ This class is identical to the [UniformLongDist] class with added functionality 
   # *getCoordinates()*. Routine that generates and returns a single coordinate pair within specified distribution. 
 
 = Examples = 
-The following is a snippet from an example that can be found in 
-$ORBIT_ROOT/examples/Injection/
-
- The example simulates the SNS ring with the UniformLongDistPaint distribution class implemented. Each call of 'trackBunch'  updates the synchronous particle time and injects particles accordingly. 
+The following is a snippet from an example that can be found in  $ORBIT_ROOT/examples/Injection/
+The example simulates the SNS ring with the UniformLongDistPaint distribution class implemented. Each call of 'trackBunch'  updates the synchronous particle time and injects particles accordingly. 
 {{{
 
 from injection import UniformLongDistPaint
@@ -29,11 +27,11 @@ T = 9.45424317281e-07 #peroid of the synchronous particle
 #This function has zmax start at half the zlimit and linearly slope to
 #its full value over 50 turns. Then it remains constant. Zmin does the same
 # only it is shifted down by 2*zlim.
-zmax = [[0,zlim/2],[T*49,zlim],[T*50,zlim]]
-zmin = [[0,-(3/2)*zlim], [T*49,-zlim], [T*50,-zlim]]
+zmaxFunc = [[0,zlim/2],[T*49,zlim],[T*50,zlim]]
+zminFunc = [[0,-(3/2)*zlim], [T*49,-zlim], [T*50,-zlim]]
 
 
-lFunc = UniformLongDistPaint(zmin,zmax,sp,0, .001)
+lFunc = UniformLongDistPaint(zminFunc,zmaxFunc,sp,0, .001)
 
 
 }}}
