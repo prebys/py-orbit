@@ -53,6 +53,14 @@ paramsDict["lostbunch"]=lostbunch
 paramsDict["bunch"]= b
 lostbunch.addPartAttr("LostParticleAttributes")
 
+#=====Make a Teapot style lattice======
+
+teapot_latt = teapot.TEAPOT_Ring()
+print "Read MAD."
+teapot_latt.readMAD("SNSring_pyOrbitBenchmark.LAT","RING")
+print "Lattice=",teapot_latt.getName()," length [m] =",teapot_latt.getLength()," nodes=",len(teapot_latt.getNodes())
+
+
 #------------------------------
 #Initial Distribution Functions
 #------------------------------
