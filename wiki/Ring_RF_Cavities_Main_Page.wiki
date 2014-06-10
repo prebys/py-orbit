@@ -12,9 +12,11 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || [Barrier_Cav] || C++ class containing barrier cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
 || [Frequency_Cav] || C++ class containing linac-type cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
 || [Harmonic_Cav] || C++ class containing harmonic cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
+|| [Dual_Harmonic_Cav] || C++ class containing dual harmonic cavity model - not directly accessible from python script || $ORBIT_ROOT/src/orbit/RFCavities/ ||
 || RFNode.Barrier_RFNode || Python class to invoke barrier cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.Frequency_RFNode || Python class to invoke linac-type cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.Harmonic_RFNode || Python class to invoke harmonic cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
+|| RFNode.Dual_Harmonic_RFNode || Python class to invoke dual harmonic cavity model from python script || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.BRhoDep_Harmonic_RFNode || Python class to invoke time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with B x Rho determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.!SyncPhaseDep_Harmonic_RFNode || Python class to invoke time-dependent harmonic cavity model from python script. Time dependence is determined by user-provided parameters, with the synchronous particle phase determining the energy. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
 || RFNode.!TimeDep_Barrier_RFNode || Python class to invoke time-dependent barrier cavity model from python script. Time dependence is determined by user-provided parameters. || $ORBIT_ROOT/py/orbit/rf_cavities/ ||
@@ -26,6 +28,7 @@ This page describes the user-accessible python and underlying C++ classes for RF
 || *Name* || *Description* ||
 || barrier_rf_cavity_test.py || Simple test of barrier cavity with parameters constant in time.||
 || simple_rf_cavity_test.py || Simple test of harmonic focusing cavity with parameters constant in time.||
+|| dual_rf_cavity_test.py || Simple test of dual harmonic focusing cavity with parameters constant in time.||
 || brhodep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on B x Rho. ||
 || syncphasedep_rf_cavity_test.py || Test of accelerating harmonic cavity with time-dependent parameters. Acceleration depends on synchronous particle phase. ||
 || timedep_barrier_rf_cavity_test.py || Test of barrier focusing cavity with time-dependent parameters. ||
@@ -53,6 +56,16 @@ This page describes the user-accessible python and underlying C++ classes for RF
      * RFVoltage: Cavity voltage {GeV}.
      * RFHNum: Cavity harmonic number in units of the fundamental frequency.
      * RFPhase: Phase of the cavity {degrees} at the zero of the bunch longitudinal coordinate {m}.
+     * length: Node length {0.0 m}.
+     * name: Node name {string}.
+  # *RFNode.Dual_Harmonic_RFNode(!ZtoPhi, RFHNum, RatioRFHNum, RFVoltage, RatioVoltage, RFPhase, RFPhase2, length, name)*. Creates an instantiation of a dual harmonic cavity. See S.Y. Lee: Accelerator Physics. p. 298-305 (1999)  
+     * !ZtoPhi: unit conversion factor from longitudinal bunch coordinate in {m} to longitudinal phase {radians}, referenced to the fundamental frequency.
+     * RFHNum: Cavity harmonic number in units of the fundamental frequency for the primary rf system.
+     * RatioRFHNum: Cavity harmonic ration (harmonic number of the second rf system to harmonic number of the primary rf system). 
+     * RFVoltage: Cavity voltage {GeV} for the primary rf system.
+     * RatioVoltage: Voltage ration (Voltage of the second rf system to voltage of the primary rf system). 
+     * RFPhase: Phase angle {degrees} for the synchronous particle for the primary rf system.
+     * RFPhase2: Phase angle {degress} for the synchronous particle for the second rf system
      * length: Node length {0.0 m}.
      * name: Node name {string}.
   # *RFNode.BRhoDep_Harmonic_RFNode(!ZtoPhi, accelDict, bunch, length, name)*. Creates an instantiation of a harmonic cavity.
