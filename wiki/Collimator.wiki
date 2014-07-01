@@ -5,7 +5,7 @@ This class constructs a collimator and calls the materials scattering routines t
 
 
 = Python Accessible Methods and Variables = 
-  # *Collimator(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle)*. An instance of a collimator. Creates a collimator. Variables:
+  # *Collimator(int length, int ma, double density_fac, int shape, double  a, double b, double c, double d, double angle, double pos=0)*. An instance of a collimator. Creates a collimator. Variables:
      * length: Length of the collimator in meters
      * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
      * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
@@ -15,6 +15,7 @@ This class constructs a collimator and calls the materials scattering routines t
      * c: Upper side vertical extent for rectangular. 
      * d: Lower side vertical extent for rectangular.
      * angle: Tilt angle of the collimator defined in degrees.
+     * pos: The optional argument of the starting z location of the collimator in the lattice.  If specified the lost particle longitudinal coordinates will be given as this pos + the relative lost position in the collimator.  If the argument is not used then the default is zero.
   # *collimateBunch(Bunch bunch, Bunch lostbunch)*. The method to perform the collimation of the bunch. 
      * bunch: The Bunch to be collimated.
      * lostbunch: The Bunch to be populated with particles absorbed in the collimator. 
