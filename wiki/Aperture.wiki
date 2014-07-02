@@ -11,7 +11,7 @@ This class implements a method to check if particles are outside of a user-speci
      * shape: Shape type index. 1=circle, 2=ellipse, 3=rectangle. 
      * a: Radius for circular collimator, x-axis half length for ellipse and rectangle. 
      * b: Y-axis half length for elliptical and rectangle. Doesn't apply for circle. 
-     * pos: Position of aperture.  Will be overwritten if aperture is added to the lattice. Optional argument. 
+     * pos: Position of aperture.  Will be overwritten if aperture is added to a lattice. Optional argument. 
      * c: Horizontal offset.Optional argument. 
      * d: Vertical offset. Optional argument. 
   # *setPosition(double position)*. The method sets the position of the collimator in the lattice.
