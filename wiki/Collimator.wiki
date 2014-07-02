@@ -20,6 +20,8 @@ This class constructs a collimator and calls the materials scattering routines t
   # *collimateBunch(Bunch bunch, Bunch lostbunch)*. The method to perform the collimation of the bunch. 
      * bunch: The Bunch to be collimated.
      * lostbunch: The Bunch to be populated with particles absorbed in the collimator. 
+    # *setPosition(double position)*. The method sets the position of the collimator in the lattice.
+     * position: The start position of the collimator in the lattice. 
     
 = Example Scripts = 
 
