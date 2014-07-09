@@ -41,7 +41,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
      * j: Moment order in Y.
     
 = Python Accessible Methods and Variables from BunchTuneAnalysis =
- # *assignTwiss(double bx, double ax, double dx, double dpx, double by, double ay)*.  Explicitly assigns Twiss values at the location of the tune node.  The tune calculator requires Twiss input.  Note that pyORBIT and MAD definitions for dispersion differ by a factor of relativistic beta squared. Variables:
+ # *assignTwiss(double bx, double ax, double dx, double dpx, double by, double ay)*.  Explicitly assigns Twiss values at the location of the tune node.  The tune calculator requires Twiss input.  Note that pyORBIT and MAD definitions for dispersion differ by a factor of relativistic beta. Variables:
      * bx: Twiss X beta.
      * ax: Twiss X alpha.
      * dx: Twiss X dispersion.
