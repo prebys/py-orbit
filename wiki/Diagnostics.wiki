@@ -29,10 +29,16 @@ The diagnostics package includes routines for finding the statistical Twiss para
   # *getAverage(int ic)*. Returns the average value for coordinate with index ic.
   # *getGlobalCount()*. Returns the total number of analysed macroparticles.
   # *getGlobalMacrosize()*. Returns the total macrosize.
-  # *getEmittance(int ic)*. Returns the emittance for index 0,1,2 - x,y,z planes.
+  # *getEmittance(int ic)*. Returns the rms emittance for index 0,1,2 - x,y,z planes (the pure betatron emittance is calculated for x and y). 
   # *getAlpha(int ic)*. Returns Twiss alpha for index 0,1,2 - x,y,z planes.
   # *getBeta(int ic)*.  Returns Twiss beta for index 0,1,2 - x,y,z planes.
   # *getGamma(int ic)*. Returns Twiss gamma for index 0,1,2 - x,y,z planes.
+  # *getEffectiveEmittance(int ic)*. Returns the effective rms emittance for index 0,1 - x,y planes. 
+  # *getEffectiveAlpha(int ic)*. Returns effective Twiss alpha for index 0,1 - x,y planes.
+  # *getEffectiveBeta(int ic)*.  Returns effective Twiss beta for index 0,1 - x,y planes.
+  # *getEffectiveGamma(int ic)*. Returns effective Twiss gamma for index 0,1 - x,y planes.
+  # *getDispersion(int ic)*. Returns the Twiss dispersion for index 0,1 - x,y planes.
+  # *getDispersionDerivative(int ic)*. Returns the Twiss dispersion derivative for index 0,1 - x,y planes.
   # *computeBunchMoments(Bunch bunch, int order)*. Computes the XY moments of the bunch up to a prescribed order.  Does the computation but doesn't return any values. Variables:
      * bunch: A Bunch.
      * order: The highest order of the moments.
