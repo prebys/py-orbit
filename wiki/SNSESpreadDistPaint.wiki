@@ -4,6 +4,10 @@
 
 This class is identical to the [SNSESpreadDist] class with added functionality of time dependent zmin and zmax variables. Zmin and zmax must both be lists of no less than two pairs and functions (in the mathematical sense) of time. When getCoordinates() is called, the time of the synchronous particle is used and the given functions are interpolated for values. 
 
+The number of macro particles injected per turn is a function of the zmin and zmax values. The initial injection rate and value of zmax-zmin determine the macropaticle density that is to be used for the whole run. The number of macro particles injected per turn then becomes: macropaticleDensity*(zmax-zmin).
+
+Warning: If you decide to use the nmaxmacropartcles functionallity of the InjectParts class, you must take into account the paragraph above. It becomes rather burdensome. 
+
 
 = Python Accessible Methods and Variables=
 
