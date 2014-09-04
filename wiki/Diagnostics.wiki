@@ -66,14 +66,14 @@ The diagnostics package includes routines for finding the statistical Twiss para
      * bunch: A Bunch.
      * lattlength: The length of the lattice.  Not a required argument. Zero unless user specified.
   # *TeapotStatLatsNode(String filename)*.  From TeapotDiagnoticsNode.py. The constructor for a Teapot style StatLats class which can be added to a Teapot lattice using the method addTeapotDiagnosticsNode (see below).
-     * filename: String variable representing a filename to be written to. 
+     * filename: String variable representing a filenamee to be written to. 
   # *addTeapotStatLatsNodeSet(lattice, filename)*.  This routine is inside the class diagnosticsLatticeModifications.py.  It adds a set of StatLats nodes as child elements throughout the lattice. 
     * lattice: A Teapot lattice
     * filename: A string filename.  
   # *Moments(String filename, int order)*.  From diagnostics.py. The constructor for a Moments class.
     * filename: String variable representing a filename to be written to. 
     * order: Highest order moment.
-  # *writeMoments(double position, Bunch bunch, double lattlength)*.  A method in the Moments class. Writes the XY moments of the beam up to a user specified order.  Columns are: (1) position, (2) time, (3 and beyond) Bunch moment ({{{1, x_ave, y_ave, <x^2>, <xy?, <y^2>, etc...}}})
+  # *writeMoments(double position, Bunch bunch, double lattlength)*.  A method in the Moments class. Writes the XY moments of the beam up to a user specified order.  Columns are: (1) position, (2) time, (3 and beyond) Bunch moment ({{{1, x_ave, y_ave, <x^2>, <xy>, <y^2>, etc...}}})
      * position: The position in the lattice
      * bunch: A Bunch.
      * lattlength: The length of the lattice.  Not a required argument. Zero unless user specified.
