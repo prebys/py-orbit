@@ -61,7 +61,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
 
   # *StatLats(String filename)*.  From diagnostics.py. The constructor for a StatLats class.
      * filename: String variable representing a filename to be written to. 
-  # *writeStatLats(double position, Bunch bunch, double lattlength)*.  A method in StatLats class. Writes the statistical lattice parameters to the file. Columns are: (1) position, (2) time, (3) emitx, (4) emity, (5) betax, (6) betay, (7) alphax, (8) alphay. Variables:
+  # *writeStatLats(double position, Bunch bunch, double lattlength)*.  A method in StatLats class. Writes the statistical lattice parameters to the file. Columns are: (1) position, (2) turn (or time if lattice length not defined), (3) emitx, (4) emity, (5) betax, (6) betay, (7) alphax, (8) alphay. Variables:
      * position: The position in the lattice
      * bunch: A Bunch.
      * lattlength: The length of the lattice.  Not a required argument. Zero unless user specified.
@@ -73,7 +73,7 @@ The diagnostics package includes routines for finding the statistical Twiss para
   # *Moments(String filename, int order)*.  From diagnostics.py. The constructor for a Moments class.
     * filename: String variable representing a filename to be written to. 
     * order: Highest order moment.
-  # *writeMoments(double position, Bunch bunch, double lattlength)*.  A method in the Moments class. Writes the XY moments of the beam up to a user specified order.  Columns are: (1) position, (2) time, (3 and beyond) Bunch moment ({{{1, x_ave, y_ave, <x^2>, <xy>, <y^2>, etc...}}})
+  # *writeMoments(double position, Bunch bunch, double lattlength)*.  A method in the Moments class. Writes the XY moments of the beam up to a user specified order.  Columns are: (1) position, (2) turn (or time if lattice length is not defined), (3 and beyond) Bunch moment ({{{1, x_ave, y_ave, <x^2>, <xy>, <y^2>, etc...}}})
      * position: The position in the lattice
      * bunch: A Bunch.
      * lattlength: The length of the lattice.  Not a required argument. Zero unless user specified.
