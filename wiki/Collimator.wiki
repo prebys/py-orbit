@@ -10,10 +10,10 @@ This class constructs a collimator and calls the materials scattering routines t
      * ma: Material type index: 1=carbon, 2=aluminum, 3=iron, 4=copper, 5=tantalum, 6=tungstun, 7=platinum, 8=lead, 9 = black absorber.
      * density_fac: A multiplier on the density of chosen material. Defaults to 1. 
      * shape: Shape type index: 1=circle, 2=ellipse, 3=one sided flat, 4=two sided flat, 5=rectangular (outside is collimator), 6=rectangular (inside is collimator). 
-     * a: Radius for circular collimator, x-axis for elliptical, horizontal right side extent for flat and rectangular.
-     * b: Y-axis for elliptical, left side horizontal extent for two-sided flat or rectangular. 
-     * c: Upper side vertical extent for rectangular. 
-     * d: Lower side vertical extent for rectangular.
+     * a: Radius for circular collimator, x-axis for elliptical, horizontal minimum extent for flat and rectangular.
+     * b: Y-axis for elliptical, horizontal maximum extent for two-sided flat or rectangular. 
+     * c: Minimum vertical extent for rectangular. 
+     * d: Maximum vertical extent for rectangular.
      * angle: Tilt angle of the collimator defined in degrees.
      * pos: The optional argument of the starting z location of the collimator in the lattice.  If specified the lost particle longitudinal coordinates will be given as this pos + the relative lost position in the collimator.  If the argument is not used then the default is zero.
      * name: optional user specified name.  If the argument is left out of the list, then name is assigned to "collimator no name" 
